@@ -25,9 +25,13 @@ public class LoginTelaControladora implements Initializable {
 
 	private UsuariosLoginServico servico = new UsuariosLoginServico();
 	private static Stage menuStage = new Stage();
+	private static Scene menuScene;
 
-	public static Stage getMenuStage() {
+	public static Stage getMenuSage() {
 		return menuStage;
+	}
+	public static Scene getMenuScene() {
+		return menuScene;
 	}
 
 	@FXML
@@ -65,7 +69,7 @@ public class LoginTelaControladora implements Initializable {
 			scrollPane.setFitToHeight(true);
 			scrollPane.setFitToWidth(true);
 
-			Scene menuScene = new Scene(scrollPane);
+			menuScene = new Scene(scrollPane);
 			menuStage.setScene(menuScene);
 			menuStage.setTitle("Menu");
 			menuStage.show();

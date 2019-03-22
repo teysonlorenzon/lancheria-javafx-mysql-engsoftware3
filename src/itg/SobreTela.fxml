@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Label layoutX="63.0" layoutY="44.0" text="Lancheria Olympus" AnchorPane.leftAnchor="63.0" AnchorPane.topAnchor="44.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="63.0" layoutY="71.0" text="Criador: Teyson Lorenzon" AnchorPane.leftAnchor="63.0" AnchorPane.topAnchor="71.0" />
+            <Label layoutX="63.0" layoutY="88.0" prefHeight="17.0" prefWidth="135.0" text="Telefone: (54)991834839 " AnchorPane.leftAnchor="63.0" />
+            <Label layoutX="63.0" layoutY="105.0" text="Email: teyson_lorenzon@hotmail.com" AnchorPane.leftAnchor="63.0" />
+            <Label layoutX="63.0" layoutY="122.0" prefHeight="28.0" prefWidth="178.0" text="\@copyright all rights reserved" textFill="#978686" AnchorPane.leftAnchor="63.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>
