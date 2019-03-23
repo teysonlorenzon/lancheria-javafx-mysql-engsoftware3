@@ -7,7 +7,7 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+      <AnchorPane prefHeight="291.0" prefWidth="600.0">
          <children>
             <Label layoutX="63.0" layoutY="44.0" text="Lancheria Olympus" AnchorPane.leftAnchor="63.0" AnchorPane.topAnchor="44.0">
                <font>

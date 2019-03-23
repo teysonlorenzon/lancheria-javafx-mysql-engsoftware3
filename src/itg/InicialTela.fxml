@@ -6,7 +6,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="467.0" prefWidth="658.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itg.TelaInicialControladora">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="467.0" prefWidth="658.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itg.InicialTelaControladora">
    <content>
       <VBox prefHeight="240.0" prefWidth="727.0">
          <children>
@@ -33,9 +33,15 @@
                         <MenuItem mnemonicParsing="false" text="Lucro" />
                     </items>
                   </Menu>
+                  <Menu mnemonicParsing="false" text="Administrador">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Novo Usuário" />
+                    </items>
+                  </Menu>
                 <Menu mnemonicParsing="false" text="Ajuda">
                   <items>
                     <MenuItem fx:id="miSobre" mnemonicParsing="false" onAction="#onMenuItemSobre" text="Sobre" />
+                        <MenuItem fx:id="miTrocarSenha" mnemonicParsing="false" onAction="#onMenuItemTrocarSenha" text="Trocar Senha" />
                   </items>
                 </Menu>
               </menus>

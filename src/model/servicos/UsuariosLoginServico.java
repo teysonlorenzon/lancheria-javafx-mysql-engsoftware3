@@ -17,4 +17,16 @@ public class UsuariosLoginServico {
 	public UsuariosLogin buscarUsuarioSenha(String usuario, String senha) {
 		return contrato.verificaUsuarioSenha(usuario, senha);
 	}
+
+	public UsuariosLogin buscarId(Integer id) {
+		return contrato.acharPorId(id);
+	}
+	
+	public void iniciarUpdateOuIserir(UsuariosLogin obj) {
+		if (obj.getId() == null) {
+			contrato.inserir(obj);
+		} else {
+			contrato.atualizar(obj);
+		}
+	}
 }

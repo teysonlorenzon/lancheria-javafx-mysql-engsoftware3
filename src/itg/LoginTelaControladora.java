@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 import application.Main;
 import itg.util.Alertas;
 import itg.util.Restricao;
-import javafx.collections.ObservableList;
+import itg.util.Utilitarios;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -26,6 +26,11 @@ public class LoginTelaControladora implements Initializable {
 	private UsuariosLoginServico servico = new UsuariosLoginServico();
 	private static Stage menuStage = new Stage();
 	private static Scene menuScene;
+	private static Integer guardaid;
+	
+	public static Integer getIdUsuarioLogado() {
+		return guardaid;
+	}
 
 	public static Stage getMenuSage() {
 		return menuStage;
@@ -49,7 +54,7 @@ public class LoginTelaControladora implements Initializable {
 		
 		if (verificaConta() == true) {
 			carregarTelaInicial("/itg/InicialTela.fxml");
-			fecharLogin();
+			Utilitarios.fecharTela(Main.getLoginScene());
 		} else {
 			Alertas.showAlert("Erro", "por favor insira um login correto!!", "Usuário ou senha incorretos", AlertType.ERROR);
 		}
@@ -57,7 +62,7 @@ public class LoginTelaControladora implements Initializable {
 
 	@FXML
 	public void botaoConcelarAcao() {
-		fecharLogin();
+		Utilitarios.fecharTela(Main.getLoginScene());
 	}
 
 	public synchronized void carregarTelaInicial(String nomeFXML) {
@@ -74,7 +79,6 @@ public class LoginTelaControladora implements Initializable {
 			menuStage.setTitle("Menu");
 			menuStage.show();
 
-			fecharLogin();
 
 		} catch (IOException e) {
 			Alertas.showAlert("Erro", null, "Erro ao carregar a tela inicial", AlertType.ERROR);
@@ -82,15 +86,11 @@ public class LoginTelaControladora implements Initializable {
 
 	}
 
-	public static void fecharLogin() {
-		Scene loginScene = Main.getLoginScene();
-		Stage stage = (Stage) loginScene.getWindow();
-		stage.close();
-	}
 	
 	public boolean verificaConta() {
 		UsuariosLogin ul = servico.buscarUsuarioSenha(txtUsuario.getText(), txtSenha.getText());
 		if (ul != null && ul.getUsuario() != null && ul.getSenha() != null) {
+			this.guardaid = ul.getId();
 			return true;
 		} else {
 			return false;

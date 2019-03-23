@@ -14,22 +14,62 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
-public class TelaInicialControladora implements Initializable {
+public class InicialTelaControladora implements Initializable {
 
 	private static Scene telainicialScene;
+	private static Stage telaTrocarSenhaStage;
+	private static Scene telaTrocarSenhaScene;
 
 	public static Scene getTelaInicialScene() {
 		return telainicialScene;
 	}
 
+	public static Stage getTelaTrocarSenhaStage() {
+		return telaTrocarSenhaStage;
+	}
+
+	public static Scene getTelaTrocarSenhaScene() {
+		return telaTrocarSenhaScene;
+	}
+
 	@FXML
 	private MenuItem miSobre;
+	@FXML
+	private MenuItem miTrocarSenha;
 
 	@FXML
 	public void onMenuItemSobre() {
-		carregarTela("/itg/SobreTela.fxml", x -> {});
+		carregarTela("/itg/SobreTela.fxml", x -> {
+		});
+	}
+
+	@FXML
+	public void onMenuItemTrocarSenha() {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/itg/TrocarSenhaTela.fxml"));
+			AnchorPane anchorPane = loader.load();
+			
+			telaTrocarSenhaStage = new Stage();
+			telaTrocarSenhaStage.initStyle(StageStyle.DECORATED);
+			telaTrocarSenhaStage.setMinHeight(245.0);
+			telaTrocarSenhaStage.setMinWidth(451.0);
+			telaTrocarSenhaStage.resizableProperty().setValue(Boolean.FALSE);
+
+			telaTrocarSenhaScene = new Scene(anchorPane);
+			telaTrocarSenhaStage.setScene(telaTrocarSenhaScene);
+			telaTrocarSenhaStage.setTitle("Trocar Senha");
+			telaTrocarSenhaStage.show();
+
+		} catch (
+
+		IOException e) {
+			Alertas.showAlert("IO exception", "Erro ao carregar tela", e.getMessage(), AlertType.ERROR);
+		}
 	}
 
 	public synchronized <T> void carregarTela(String absoluteName, Consumer<T> initializingAction) {
