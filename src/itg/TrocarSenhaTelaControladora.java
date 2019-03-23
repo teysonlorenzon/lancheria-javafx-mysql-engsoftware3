@@ -32,7 +32,7 @@ public class TrocarSenhaTelaControladora implements Initializable{
 	public void onButtonConfirmar() {
 
 		trocarSenha();
-		Utilitarios.fecharTela(InicialTelaControladora.getTelaTrocarSenhaScene());
+		
 
 	}
 
@@ -52,6 +52,7 @@ public class TrocarSenhaTelaControladora implements Initializable{
 				ul.setSenha(senha);
 				sv.iniciarUpdateOuIserir(ul);
 				Alertas.showAlert("Senha Alterada", "Senha alterada com sucesso", null, AlertType.INFORMATION);
+				Utilitarios.fecharTela(InicialTelaControladora.getTelaTrocarSenhaScene());
 			}else {
 				Alertas.showAlert("Erro", "Confirmação de senha nao confere com senha nova", null, AlertType.ERROR);
 			}

@@ -41,6 +41,8 @@ public class InicialTelaControladora implements Initializable {
 	private MenuItem miSobre;
 	@FXML
 	private MenuItem miTrocarSenha;
+	@FXML
+	private MenuItem miNovoUsuario;
 
 	@FXML
 	public void onMenuItemSobre() {
@@ -53,7 +55,7 @@ public class InicialTelaControladora implements Initializable {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/itg/TrocarSenhaTela.fxml"));
 			AnchorPane anchorPane = loader.load();
-			
+
 			telaTrocarSenhaStage = new Stage();
 			telaTrocarSenhaStage.initStyle(StageStyle.DECORATED);
 			telaTrocarSenhaStage.setMinHeight(245.0);
@@ -70,6 +72,12 @@ public class InicialTelaControladora implements Initializable {
 		IOException e) {
 			Alertas.showAlert("IO exception", "Erro ao carregar tela", e.getMessage(), AlertType.ERROR);
 		}
+	}
+
+	@FXML
+	public void onMenuNovoUsuario() {
+		carregarTela("/itg/NovoUsuarioTela.fxml", x -> {
+		});
 	}
 
 	public synchronized <T> void carregarTela(String absoluteName, Consumer<T> initializingAction) {

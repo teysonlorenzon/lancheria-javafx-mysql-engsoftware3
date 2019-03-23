@@ -35,7 +35,7 @@
                   </Menu>
                   <Menu mnemonicParsing="false" text="Administrador">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Novo Usuário" />
+                      <MenuItem fx:id="miNovoUsuario" mnemonicParsing="false" onAction="#onMenuNovoUsuario" text="Novo Usuário" />
                     </items>
                   </Menu>
                 <Menu mnemonicParsing="false" text="Ajuda">
