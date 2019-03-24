@@ -18,6 +18,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import model.servicos.UsuariosLoginServico;
 
 public class InicialTelaControladora implements Initializable {
 
@@ -76,8 +77,11 @@ public class InicialTelaControladora implements Initializable {
 
 	@FXML
 	public void onMenuNovoUsuario() {
-		carregarTela("/itg/NovoUsuarioTela.fxml", x -> {
+		carregarTela("/itg/NovoUsuarioTela.fxml", (NovoUsuarioTelaListControladora controller) -> {
+			controller.setUsuariosLoginService(new UsuariosLoginServico());
+			controller.updateTableView();
 		});
+		
 	}
 
 	public synchronized <T> void carregarTela(String absoluteName, Consumer<T> initializingAction) {

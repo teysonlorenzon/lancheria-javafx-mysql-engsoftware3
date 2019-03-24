@@ -11,6 +11,7 @@ public interface UsuariosLoginMYSQL {
 	void deletarPorId(Integer id);
 	UsuariosLogin verificaUsuarioSenha(String usuario, String senha);
 	UsuariosLogin acharPorId(Integer id);
+	UsuariosLogin acharPorUsuario(String usuario);
 	List<UsuariosLogin> acharTudo();
 
 }

@@ -17,6 +17,10 @@ public class UsuariosLoginServico {
 	public UsuariosLogin buscarUsuarioSenha(String usuario, String senha) {
 		return contrato.verificaUsuarioSenha(usuario, senha);
 	}
+	
+	public UsuariosLogin buscarUsuario(String usuario) {
+		return contrato.acharPorUsuario(usuario);
+	}
 
 	public UsuariosLogin buscarId(Integer id) {
 		return contrato.acharPorId(id);
@@ -29,4 +33,10 @@ public class UsuariosLoginServico {
 			contrato.atualizar(obj);
 		}
 	}
+	
+	public void excluir(UsuariosLogin obj) {
+		contrato.deletarPorId(obj.getId());
+	}
+	
+	
 }

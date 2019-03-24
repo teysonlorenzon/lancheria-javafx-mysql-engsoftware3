@@ -10,6 +10,7 @@ import java.util.List;
 
 import db.DB;
 import db.DbException;
+import db.DbIntegrityException;
 import itg.util.Alertas;
 import model.entidades.UsuariosLogin;
 import model.mysql.UsuariosLoginMYSQL;
@@ -76,9 +77,23 @@ public class UsuariosLoginJDBC implements UsuariosLoginMYSQL {
 
 	@Override
 	public void deletarPorId(Integer id) {
-		// TODO Auto-generated method stub
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+				"DELETE FROM login WHERE Id = ?");
 
+			st.setInt(1, id);
+
+			st.executeUpdate();
+		}
+		catch (SQLException e) {
+			throw new DbIntegrityException(e.getMessage());
+		} 
+		finally {
+			DB.closeStatement(st);
+		}
 	}
+
 
 	@Override
 	public UsuariosLogin acharPorId(Integer id) {
@@ -144,6 +159,33 @@ public class UsuariosLoginJDBC implements UsuariosLoginMYSQL {
 			st = conn.prepareStatement("SELECT * FROM login WHERE Usuario = ? and Senha = ?");
 			st.setString(1, nome);
 			st.setString(2, senha);
+			rs = st.executeQuery();
+			if (rs.next()) {
+				UsuariosLogin obj = new UsuariosLogin();
+				obj.setId(rs.getInt("Id"));
+				obj.setUsuario(rs.getString("Usuario"));
+				obj.setSenha(rs.getString("Senha"));
+				obj.setGrau(rs.getInt("Grau"));
+				return obj;
+			}
+			return null;
+		} catch (SQLException e) {
+
+			throw new DbException("Erro ao buscar Lista de Dados da tabela login no banco");
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+
+		}
+	}
+
+	@Override
+	public UsuariosLogin acharPorUsuario(String usuario) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("SELECT * FROM login WHERE Usuario = ?");
+			st.setString(1, usuario);
 			rs = st.executeQuery();
 			if (rs.next()) {
 				UsuariosLogin obj = new UsuariosLogin();
