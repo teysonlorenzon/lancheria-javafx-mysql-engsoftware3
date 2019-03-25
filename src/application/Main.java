@@ -33,7 +33,7 @@ public class Main extends Application {
 
 			loginScene = new Scene(anchorPane);
 			stage.setScene(loginScene);
-			stage.setTitle("Tela de Login");
+			stage.setTitle("Login");
 			stage.show();
 			
 		} catch (IOException e) {

@@ -56,7 +56,7 @@ public class LoginTelaControladora implements Initializable {
 			carregarTelaInicial("/itg/InicialTela.fxml");
 			Utilitarios.fecharTela(Main.getLoginScene());
 		} else {
-			Alertas.showAlert("Erro", "por favor insira um login correto!!", "Usuário ou senha incorretos", AlertType.ERROR);
+			Alertas.showAlert("Erro", null, "Usuário ou senha incorretos", AlertType.ERROR);
 		}
 	}
 

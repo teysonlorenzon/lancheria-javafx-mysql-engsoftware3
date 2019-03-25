@@ -31,7 +31,7 @@ public class NovoUsuarioTelaFormControladora implements Initializable {
 
 	private UsuariosLoginServico servico;
 
-	private String nivel;
+	private String nivel = "";
 
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
@@ -104,6 +104,7 @@ public class NovoUsuarioTelaFormControladora implements Initializable {
 		if (txtId.getText() == null || txtId.getText().trim().equals("")) {
 		} else {
 			obj.setId(Integer.parseInt(txtId.getText()));
+
 		}
 
 		if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {
@@ -127,8 +128,10 @@ public class NovoUsuarioTelaFormControladora implements Initializable {
 
 		obj.setUsuario(txtNome.getText());
 
+		
 		if (nivel == null || nivel.equals("")) {
 			Alertas.showAlert("Informação", null, "Selecione o nível de usuário", AlertType.INFORMATION);
+			throw exception;
 		} else {
 			if (nivel.equals("admin")) {
 				obj.setGrau(1);
@@ -146,13 +149,18 @@ public class NovoUsuarioTelaFormControladora implements Initializable {
 
 	public boolean compara() {
 		List<UsuariosLogin> lista = servico.buscarTudo();
+		boolean ok = false;
 
 		for (UsuariosLogin ul : lista) {
 			if (txtNome.getText().trim().equals(ul.getUsuario())) {
-				return true;
+				ok = true;
+			}
+			if (txtId.getText() == null) {
+				ok = false;
 			}
 		}
-		return false;
+
+		return ok;
 	}
 
 	@FXML
