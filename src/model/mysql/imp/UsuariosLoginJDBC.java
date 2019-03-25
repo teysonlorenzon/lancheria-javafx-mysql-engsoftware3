@@ -27,12 +27,12 @@ public class UsuariosLoginJDBC implements UsuariosLoginMYSQL {
 	public void inserir(UsuariosLogin obj) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("INSERT INTO login " + "(Usuario, Senha, Grau) " + "VALUES " + "(?, ?, ?)",
+			st = conn.prepareStatement("INSERT INTO login " + "(Usuario, Senha, Nivel) " + "VALUES " + "(?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
 
 			st.setString(1, obj.getUsuario());
 			st.setString(2, obj.getSenha());
-			st.setInt(3, obj.getGrau());
+			st.setString(3, obj.getNivel());
 
 			int rowsAffected = st.executeUpdate();
 
@@ -58,12 +58,12 @@ public class UsuariosLoginJDBC implements UsuariosLoginMYSQL {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement("UPDATE login " +
-			"SET Usuario = ?, Senha = ?, Grau = ? " + 
+			"SET Usuario = ?, Senha = ?, Nivel = ? " + 
 			"WHERE Id = ?");
 
 			st.setString(1, obj.getUsuario());
 			st.setString(2, obj.getSenha());
-			st.setInt(3, obj.getGrau());
+			st.setString(3, obj.getNivel());
 			st.setInt(4, obj.getId());
 
 			st.executeUpdate();
@@ -108,7 +108,7 @@ public class UsuariosLoginJDBC implements UsuariosLoginMYSQL {
 				obj.setId(rs.getInt("Id"));
 				obj.setUsuario(rs.getString("Usuario"));
 				obj.setSenha(rs.getString("Senha"));
-				obj.setGrau(rs.getInt("Grau"));
+				obj.setNivel(rs.getString("Nivel"));
 				return obj;
 			}
 			return null;
@@ -138,7 +138,7 @@ public class UsuariosLoginJDBC implements UsuariosLoginMYSQL {
 				obj.setId(rs.getInt("Id"));
 				obj.setUsuario(rs.getString("Usuario"));
 				obj.setSenha(rs.getString("Senha"));
-				obj.setGrau(rs.getInt("Grau"));
+				obj.setNivel(rs.getString("Nivel"));
 				list.add(obj);
 			}
 			return list;
@@ -165,7 +165,7 @@ public class UsuariosLoginJDBC implements UsuariosLoginMYSQL {
 				obj.setId(rs.getInt("Id"));
 				obj.setUsuario(rs.getString("Usuario"));
 				obj.setSenha(rs.getString("Senha"));
-				obj.setGrau(rs.getInt("Grau"));
+				obj.setNivel(rs.getString("Nivel"));
 				return obj;
 			}
 			return null;
@@ -192,7 +192,7 @@ public class UsuariosLoginJDBC implements UsuariosLoginMYSQL {
 				obj.setId(rs.getInt("Id"));
 				obj.setUsuario(rs.getString("Usuario"));
 				obj.setSenha(rs.getString("Senha"));
-				obj.setGrau(rs.getInt("Grau"));
+				obj.setNivel(rs.getString("Nivel"));
 				return obj;
 			}
 			return null;

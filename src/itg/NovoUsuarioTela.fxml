@@ -26,12 +26,12 @@
       </ToolBar>
       <TableView fx:id="tbNovoUsuario" prefHeight="200.0" prefWidth="200.0">
         <columns>
-          <TableColumn fx:id="tcId" prefWidth="75.0" text="Id" />
-          <TableColumn fx:id="tcUsuario" prefWidth="75.0" text="Usuário" />
-            <TableColumn fx:id="tcSenha" prefWidth="75.0" text="Senha" />
-            <TableColumn fx:id="tcNivel" prefWidth="75.0" text="Nível" />
-            <TableColumn fx:id="tcEditar" prefWidth="75.0" />
-            <TableColumn fx:id="tcExcluir" prefWidth="75.0" />
+          <TableColumn fx:id="tcId" prefWidth="33.0" text="Id" />
+          <TableColumn fx:id="tcUsuario" prefWidth="89.0" text="Usuário" />
+            <TableColumn fx:id="tcSenha" prefWidth="103.0" text="Senha" />
+            <TableColumn fx:id="tcNivel" text="Nível" />
+            <TableColumn fx:id="tcEditar" prefWidth="66.0" />
+            <TableColumn fx:id="tcExcluir" prefWidth="67.0" />
         </columns>
       </TableView>
    </children>

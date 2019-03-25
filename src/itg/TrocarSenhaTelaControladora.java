@@ -75,7 +75,7 @@ public class TrocarSenhaTelaControladora implements Initializable {
 		if (pswSenhaAntiga.getText() == null || pswSenhaAntiga.getText().trim().equals("")) {
 			exception.addError("antiga", "campo vazio");
 		} else {
-			if (pswSenhaAntiga.getText().trim().equals(obj.getSenha())) {
+			if (Utilitarios.cripMd5(pswSenhaAntiga.getText()).trim().equals(obj.getSenha())) {
 
 				if (pswSenhaNova.getText() == null || pswSenhaNova.getText().trim().equals("")) {
 					exception.addError("senha", "campo vazio");
@@ -86,7 +86,7 @@ public class TrocarSenhaTelaControladora implements Initializable {
 					} else {
 
 						if (pswSenhaNova.getText().trim().equals(pswConfirmaSenha.getText())) {
-							obj.setSenha(pswSenhaNova.getText());
+							obj.setSenha(Utilitarios.cripMd5(pswSenhaNova.getText()));
 							Alertas.showAlert("Informação", null, "Senha alterada com sucesso", AlertType.INFORMATION);
 						} else {
 							Alertas.showAlert("Erro", null, "Senhas não conferem", AlertType.ERROR);

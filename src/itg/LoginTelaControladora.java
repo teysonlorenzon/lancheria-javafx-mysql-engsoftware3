@@ -88,7 +88,7 @@ public class LoginTelaControladora implements Initializable {
 
 	
 	public boolean verificaConta() {
-		UsuariosLogin ul = servico.buscarUsuarioSenha(txtUsuario.getText(), txtSenha.getText());
+		UsuariosLogin ul = servico.buscarUsuarioSenha(txtUsuario.getText(), Utilitarios.cripMd5(txtSenha.getText()));
 		if (ul != null && ul.getUsuario() != null && ul.getSenha() != null) {
 			this.guardaid = ul.getId();
 			return true;

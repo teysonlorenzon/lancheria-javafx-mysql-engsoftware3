@@ -28,6 +28,7 @@ public class UsuariosLoginServico {
 	
 	public void iniciarUpdateOuIserir(UsuariosLogin obj) {
 		if (obj.getId() == null) {
+			
 			contrato.inserir(obj);
 		} else {
 			contrato.atualizar(obj);
@@ -37,6 +38,7 @@ public class UsuariosLoginServico {
 	public void excluir(UsuariosLogin obj) {
 		contrato.deletarPorId(obj.getId());
 	}
+	
 	
 	
 }

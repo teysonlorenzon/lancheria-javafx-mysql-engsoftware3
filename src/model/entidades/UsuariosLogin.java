@@ -10,17 +10,17 @@ public class UsuariosLogin implements Serializable {
 	private Integer id;
 	private String usuario;
 	private String senha;
-	private Integer grau;
+	private String nivel;
 
 	public UsuariosLogin() {
 
 	}
 
-	public UsuariosLogin(Integer id, String nome, String senha, Integer grau) {
+	public UsuariosLogin(Integer id, String nome, String senha, String nivel) {
 		this.id = id;
 		this.usuario = nome;
 		this.senha = senha;
-		this.grau = grau;
+		this.nivel = nivel;
 	}
 
 	public Integer getId() {
@@ -47,12 +47,12 @@ public class UsuariosLogin implements Serializable {
 		this.senha = senha;
 	}
 
-	public Integer getGrau() {
-		return grau;
+	public String getNivel() {
+		return nivel;
 	}
 
-	public void setGrau(Integer grau) {
-		this.grau = grau;
+	public void setNivel(String nivel) {
+		this.nivel = nivel;
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class UsuariosLogin implements Serializable {
 
 	@Override
 	public String toString() {
-		return "UsuariosLogin [id=" + id + ", nome=" + usuario + ", senha=" + senha + ", grau=" + grau + "]";
+		return "UsuariosLogin [id=" + id + ", nome=" + usuario + ", senha=" + senha + ", nivel=" + nivel + "]";
 	}
 
 }

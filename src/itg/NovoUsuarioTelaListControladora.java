@@ -45,7 +45,7 @@ public class NovoUsuarioTelaListControladora implements Initializable, DataChang
 	@FXML
 	private TableColumn<UsuariosLogin, String> tcSenha;
 	@FXML
-	private TableColumn<UsuariosLogin, Integer> tcNivel;
+	private TableColumn<UsuariosLogin, String> tcNivel;
 	@FXML
 	private TableColumn<UsuariosLogin, UsuariosLogin> tcEditar;
 	@FXML
@@ -77,7 +77,7 @@ public class NovoUsuarioTelaListControladora implements Initializable, DataChang
 		tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		tcUsuario.setCellValueFactory(new PropertyValueFactory<>("usuario"));
 		tcSenha.setCellValueFactory(new PropertyValueFactory<>("senha"));
-		tcNivel.setCellValueFactory(new PropertyValueFactory<>("grau"));
+		tcNivel.setCellValueFactory(new PropertyValueFactory<>("nivel"));
 
 		Stage stage = (Stage) LoginTelaControladora.getMenuScene().getWindow();
 		tbNovoUsuario.prefHeightProperty().bind(stage.heightProperty());

@@ -78,6 +78,8 @@ public class NovoUsuarioTelaFormControladora implements Initializable {
 				servico.iniciarUpdateOuIserir(entidade);
 				notifyDataChangeListeners();
 				Utilitarios.currentStage(event).close();
+				Alertas.showAlert("Informação", null, "Operação realizada com sucesso", AlertType.INFORMATION);
+
 			} else {
 				Alertas.showAlert("Alerta", null, "Usuário existente", AlertType.WARNING);
 			}
@@ -119,7 +121,7 @@ public class NovoUsuarioTelaFormControladora implements Initializable {
 			exception.addError("resenha", "campo vazio");
 		} else {
 			if (pswSenha.getText().trim().equals(pswReSenha.getText())) {
-				obj.setSenha(pswSenha.getText());
+				obj.setSenha(Utilitarios.cripMd5(pswSenha.getText()));
 			} else {
 				Alertas.showAlert("Erro", null, "Senhas não conferem", AlertType.ERROR);
 			}
@@ -128,15 +130,14 @@ public class NovoUsuarioTelaFormControladora implements Initializable {
 
 		obj.setUsuario(txtNome.getText());
 
-		
 		if (nivel == null || nivel.equals("")) {
 			Alertas.showAlert("Informação", null, "Selecione o nível de usuário", AlertType.INFORMATION);
 			throw exception;
 		} else {
 			if (nivel.equals("admin")) {
-				obj.setGrau(1);
+				obj.setNivel("Admin");
 			} else {
-				obj.setGrau(2);
+				obj.setNivel("Usuario");
 			}
 		}
 
@@ -149,18 +150,14 @@ public class NovoUsuarioTelaFormControladora implements Initializable {
 
 	public boolean compara() {
 		List<UsuariosLogin> lista = servico.buscarTudo();
-		boolean ok = false;
-
 		for (UsuariosLogin ul : lista) {
-			if (txtNome.getText().trim().equals(ul.getUsuario())) {
-				ok = true;
-			}
-			if (txtId.getText() == null) {
-				ok = false;
+			if (txtId.getText() == null || txtId.getText().equals("")) {
+				if (txtNome.getText().trim().equals(ul.getUsuario())) {
+					return true;
+				}
 			}
 		}
-
-		return ok;
+		return false;
 	}
 
 	@FXML
