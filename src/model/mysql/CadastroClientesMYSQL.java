@@ -8,10 +8,14 @@ import model.entidades.Pessoa;
 
 public interface CadastroClientesMYSQL {
 
-	void inserirPessoaFisicaJuridica(Fisica obj, Juridica obj2);
-	void atualizar(Pessoa obj);
-	void deletarPorId(Integer id);
-	Pessoa acharPorId(Integer id);
+	void inserirPessoaFisica(Fisica obj);
+	void inserirPessoaJuridica(Juridica obj);
+	void atualizarPessoaFisica(Fisica obj);
+	void atualizarPessoaJuridica(Juridica obj);
+	void deletarPorIdFisica(Integer id);
+	void deletarPorIdJuridica(Integer id);
+	Fisica acharPorNomeFisica(String nome);
+	Juridica acharPorNomeJuridica(String nome);
 	List<Pessoa> acharTudoFisica();
 	List<Pessoa> acharTudoJuridica();
 

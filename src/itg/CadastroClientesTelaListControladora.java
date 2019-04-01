@@ -1,26 +1,47 @@
 package itg;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
+import db.DbIntegrityException;
+import itg.listeners.DataChangeListener;
+import itg.util.Alertas;
+import itg.util.Utilitarios;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.entidades.Fisica;
+import model.entidades.Juridica;
 import model.entidades.Pessoa;
+import model.entidades.UsuariosLogin;
 import model.servicos.CadastroClientesServico;
 
-public class CadastroClientesTelaListControladora implements Initializable {
+public class CadastroClientesTelaListControladora implements Initializable, DataChangeListener {
 
 	private CadastroClientesServico servico;
 	private ObservableList<Pessoa> obsList;
 	private String condicao = "fisica";
+	private Pessoa entidade;
 
 	public String setCondicao(String condicao) {
 		return this.condicao = condicao;
@@ -65,11 +86,27 @@ public class CadastroClientesTelaListControladora implements Initializable {
 	private TableColumn<Pessoa, String> tcTelefoneCelular;
 	@FXML
 	private TableColumn<Pessoa, String> tcEmail;
+	@FXML
+	private TableColumn<Pessoa, Pessoa> tcSelecionar;
 
 	@FXML
 	private RadioButton rbFisica;
 	@FXML
 	private RadioButton rbJuridica;
+
+	@FXML
+	private Button btNovo;
+	@FXML
+	private Button btEditar;
+	@FXML
+	private Button btExcluir;
+
+	@FXML
+	public void onBtNovoAction(ActionEvent event) {
+		Stage parentStage = Utilitarios.currentStage(event);
+		criarForm("/itg/CadastroClientesFormTela.fxml", parentStage);
+
+	}
 
 	@FXML
 	public void onRbFisicaAction() {
@@ -85,6 +122,7 @@ public class CadastroClientesTelaListControladora implements Initializable {
 		setCondicao("juridica");
 		updateTableView();
 		initializarNodes();
+
 	}
 
 	public void setCadastroClientesServico(CadastroClientesServico servico) {
@@ -99,10 +137,14 @@ public class CadastroClientesTelaListControladora implements Initializable {
 			List<Pessoa> list = servico.buscaClientesFisico();
 			obsList = FXCollections.observableArrayList(list);
 			tbCadastroClientes.setItems(obsList);
+			initSelecionarCheckBox();
+
 		} else {
 			List<Pessoa> list = servico.buscaClientesJuridico();
 			obsList = FXCollections.observableArrayList(list);
 			tbCadastroClientes.setItems(obsList);
+			initSelecionarCheckBox();
+
 		}
 	}
 
@@ -161,6 +203,125 @@ public class CadastroClientesTelaListControladora implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		initializarNodes();
+
+	}
+
+	@Override
+	public void onDataChanged() {
+		updateTableView();
+	}
+
+	@FXML
+	public void onBtEditarAction(ActionEvent event) {
+		Stage parentStage = Utilitarios.currentStage(event);
+		if (entidade == null) {
+			Alertas.showAlert("Atenção", null, "Selecione um cliente", AlertType.WARNING);
+		} else {
+
+			criarFormFisicaJuridica(entidade, "/itg/CadastroClientesFormTela.fxml", parentStage, getCondicao());
+		}
+	}
+
+	@FXML
+	public void onBtExcluirAction() {
+
+		if (entidade == null) {
+			Alertas.showAlert("Atenção", null, "Selecione um cliente", AlertType.WARNING);
+		} else {
+
+			removeEntity(entidade);
+		}
+	}
+
+	private void criarFormFisicaJuridica(Pessoa obj, String absoluteName, Stage parentStage,String tipo) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load();
+
+			CadastroClientesTelaFormControladora controller = loader.getController();
+			controller.setCadastroClientesServico(new CadastroClientesServico());
+			controller.subscribeDataChangeListener(this);
+			controller.setPessoa(obj);
+			controller.setTipo(tipo);
+			controller.updateFormDataFisicaJuridica();
+
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Entre com as informações");
+			dialogStage.setScene(new Scene(pane));
+			dialogStage.setResizable(false);
+			dialogStage.initOwner(parentStage);
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.showAndWait();
+
+		} catch (IOException e) {
+			Alertas.showAlert("IO Exception", "Error loding view", e.getMessage(), AlertType.ERROR);
+		}
+	}
+
+	private void criarForm(String absoluteName, Stage parentStage) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load();
+
+			CadastroClientesTelaFormControladora controller = loader.getController();
+			controller.setCadastroClientesServico(new CadastroClientesServico());
+			controller.subscribeDataChangeListener(this);
+
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Entre com as informações");
+			dialogStage.setScene(new Scene(pane));
+			dialogStage.setResizable(false);
+			dialogStage.initOwner(parentStage);
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.showAndWait();
+
+		} catch (IOException e) {
+			Alertas.showAlert("IO Exception", "Error loding view", e.getMessage(), AlertType.ERROR);
+		}
+	}
+
+	private void initSelecionarCheckBox() {
+
+		tcSelecionar.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tcSelecionar.setCellFactory(param -> new TableCell<Pessoa, Pessoa>() {
+			private final CheckBox selecionar = new CheckBox("");
+
+			@Override
+			protected void updateItem(Pessoa obj, boolean empty) {
+				super.updateItem(obj, empty);
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(selecionar);
+				selecionar.setOnAction(event -> entidade = obj);
+			}
+
+		});
+
+	}
+
+	private void removeEntity(Pessoa obj) {
+
+		Optional<ButtonType> result = Alertas.showConfirmation("Confirmação", "Tem certeza em excluir o item?");
+
+		if (result.get() == ButtonType.OK) {
+
+			if (servico == null) {
+				throw new IllegalStateException("Servico está nulo");
+			}
+			try {
+				if (getCondicao().equals("fisica")) {
+					servico.excluirPessoaFisica(obj);
+					updateTableView();
+				} else {
+					servico.excluirPessoaJuridica(obj);
+					updateTableView();
+				}
+			} catch (DbIntegrityException e) {
+				Alertas.showAlert("Erro ao remover objeto", null, e.getMessage(), AlertType.ERROR);
+			}
+		}
 
 	}
 

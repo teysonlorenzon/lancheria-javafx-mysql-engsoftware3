@@ -23,7 +23,7 @@
       </Label>
       <ToolBar prefHeight="40.0" prefWidth="535.0">
         <items>
-          <Button mnemonicParsing="false" text="Novo" />
+          <Button fx:id="btNovo" mnemonicParsing="false" onAction="#onBtNovoAction" text="Novo" />
             <Button mnemonicParsing="false" text="Pesquisar">
                <opaqueInsets>
                   <Insets />
@@ -33,10 +33,13 @@
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
             </RadioButton>
             <RadioButton fx:id="rbJuridica" mnemonicParsing="false" onAction="#onRbJuridicaAction" text="Jurídica">
                <padding>
-                  <Insets left="20.0" />
+                  <Insets left="10.0" />
                </padding>
             </RadioButton>
         </items>
@@ -45,8 +48,9 @@
          <content>
             <TableView fx:id="tbCadastroClientes" prefHeight="200.0" prefWidth="1207.0">
               <columns>
-                <TableColumn fx:id="tcIdPessoa" prefWidth="75.0" text="Id" />
-                <TableColumn fx:id="tcNome" prefWidth="75.0" text="Nome" />
+                  <TableColumn fx:id="tcSelecionar" prefWidth="42.0" />
+                <TableColumn fx:id="tcIdPessoa" prefWidth="91.0" text="Id" />
+                <TableColumn fx:id="tcNome" prefWidth="127.0" text="Nome" />
                   <TableColumn fx:id="tcNomeFantasia" prefWidth="95.0" text="Nome Fantasia" />
                   <TableColumn fx:id="tcCpf" prefWidth="55.0" text="Cpf" />
                   <TableColumn fx:id="tcCnpj" prefWidth="75.0" text="Cnpj" />
@@ -65,5 +69,11 @@
             </TableView>
          </content>
       </ScrollPane>
+      <ToolBar prefHeight="40.0" prefWidth="200.0">
+        <items>
+          <Button fx:id="btEditar" mnemonicParsing="false" onAction="#onBtEditarAction" text="Editar" />
+            <Button fx:id="btExcluir" mnemonicParsing="false" onAction="#onBtExcluirAction" text="Excluir" />
+        </items>
+      </ToolBar>
    </children>
 </VBox>

@@ -6,7 +6,8 @@ import java.util.Date;
 public class Fisica extends Pessoa implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-
+	
+	private Integer idFisica;
 	private String cpf;
 	private Integer rg;
 	private String dataNascimento;
@@ -16,15 +17,23 @@ public class Fisica extends Pessoa implements Serializable{
 	}
 	
 	public Fisica(Integer idPessoa, String nome, String cidade, String edereco, Integer numero, String bairro, String cep,
-			String uf, String complemento, String email, String telefoneFixo, String telefoneCelular, Integer id, String cpf,
+			String uf, String complemento, String email, String telefoneFixo, String telefoneCelular, Integer idFisica, String cpf,
 			Integer rg, String dataNascimento) {
 		super(idPessoa, nome, cidade, edereco, numero, bairro, cep, uf, complemento, email, telefoneFixo, telefoneCelular);
 
+		this.idFisica = idFisica;
 		this.cpf = cpf;
 		this.rg = rg;
 		this.dataNascimento = dataNascimento;
 	}
-	
+
+	public Integer getIdFisica() {
+		return idFisica;
+	}
+
+	public void setIdFisica(Integer idFisica) {
+		this.idFisica = idFisica;
+	}
 
 	public String getCpf() {
 		return cpf;
@@ -52,9 +61,12 @@ public class Fisica extends Pessoa implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Fisica [cpf=" + cpf + ", rg=" + rg + ", dataNascimento=" + dataNascimento + "]";
+		return "Fisica [idFisica=" + idFisica + ", cpf=" + cpf + ", rg=" + rg + ", dataNascimento=" + dataNascimento
+				+ "]";
 	}
 	
+
+
 	
 
 }
