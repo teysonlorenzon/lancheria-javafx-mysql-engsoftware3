@@ -23,6 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -30,10 +31,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.entidades.Fisica;
-import model.entidades.Juridica;
 import model.entidades.Pessoa;
-import model.entidades.UsuariosLogin;
 import model.servicos.CadastroClientesServico;
 
 public class CadastroClientesTelaListControladora implements Initializable, DataChangeListener {
@@ -43,12 +41,20 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 	private String condicao = "fisica";
 	private Pessoa entidade;
 
-	public String setCondicao(String condicao) {
-		return this.condicao = condicao;
+	public void setCondicao(String condicao) {
+		this.condicao = condicao;
 	}
 
 	public String getCondicao() {
 		return condicao;
+	}
+
+	public Pessoa getEntidade() {
+		return entidade;
+	}
+
+	public void setEntidadeNula(Pessoa entidade) {
+		this.entidade = entidade;
 	}
 
 	@FXML
@@ -75,6 +81,8 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 	@FXML
 	private TableColumn<Pessoa, String> tcEndereco;
 	@FXML
+	private TableColumn<Pessoa, String> tcComplemento;
+	@FXML
 	private TableColumn<Pessoa, Integer> tcNumero;
 	@FXML
 	private TableColumn<Pessoa, String> tcCep;
@@ -88,6 +96,8 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 	private TableColumn<Pessoa, String> tcEmail;
 	@FXML
 	private TableColumn<Pessoa, Pessoa> tcSelecionar;
+	@FXML
+	private TableColumn<Pessoa, Boolean> tcSelecionar2;
 
 	@FXML
 	private RadioButton rbFisica;
@@ -165,6 +175,7 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 			tcTelefoneFixo.setCellValueFactory(new PropertyValueFactory<>("telefoneFixo"));
 			tcTelefoneCelular.setCellValueFactory(new PropertyValueFactory<>("telefoneCelular"));
 			tcEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+			tcComplemento.setCellValueFactory(new PropertyValueFactory<>("complemento"));
 
 			tcNomeFantasia.setVisible(false);
 			tcCnpj.setVisible(false);
@@ -187,6 +198,7 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 			tcTelefoneFixo.setCellValueFactory(new PropertyValueFactory<>("telefoneFixo"));
 			tcTelefoneCelular.setCellValueFactory(new PropertyValueFactory<>("telefoneCelular"));
 			tcEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+			tcComplemento.setCellValueFactory(new PropertyValueFactory<>("complemento"));
 
 			tcCpf.setVisible(false);
 			tcRg.setVisible(false);
@@ -203,6 +215,8 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		initializarNodes();
+		Pessoa pega = tbCadastroClientes.getSelectionModel().getSelectedItem();
+		entidade = pega;
 
 	}
 
@@ -214,7 +228,7 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 	@FXML
 	public void onBtEditarAction(ActionEvent event) {
 		Stage parentStage = Utilitarios.currentStage(event);
-		if (entidade == null) {
+		if (entidade == null || entidade.equals("")) {
 			Alertas.showAlert("Atenção", null, "Selecione um cliente", AlertType.WARNING);
 		} else {
 
@@ -233,7 +247,7 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 		}
 	}
 
-	private void criarFormFisicaJuridica(Pessoa obj, String absoluteName, Stage parentStage,String tipo) {
+	private void criarFormFisicaJuridica(Pessoa obj, String absoluteName, Stage parentStage, String tipo) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
@@ -244,6 +258,12 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 			controller.setPessoa(obj);
 			controller.setTipo(tipo);
 			controller.updateFormDataFisicaJuridica();
+
+			if (getCondicao().equals("fisica")) {
+				controller.onRbFisicaAction();
+			} else {
+				controller.onRbJuridicaAction();
+			}
 
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Entre com as informações");
@@ -266,6 +286,7 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 			CadastroClientesTelaFormControladora controller = loader.getController();
 			controller.setCadastroClientesServico(new CadastroClientesServico());
 			controller.subscribeDataChangeListener(this);
+			controller.onRbFisicaAction();
 
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Entre com as informações");
@@ -280,27 +301,39 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 		}
 	}
 
-	private void initSelecionarCheckBox() {
-
-		tcSelecionar.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-		tcSelecionar.setCellFactory(param -> new TableCell<Pessoa, Pessoa>() {
-			private final CheckBox selecionar = new CheckBox("");
+	private void initSelecionarCheckBox() {	
+		
+		tbCadastroClientes.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		tcSelecionar.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));		
+		tcSelecionar.setCellFactory(param -> new TableCell<Pessoa, Pessoa>()
+		{
+			
+			private final CheckBox chkSelecionar = new CheckBox("");
 
 			@Override
 			protected void updateItem(Pessoa obj, boolean empty) {
+							
+					
 				super.updateItem(obj, empty);
 				if (obj == null) {
 					setGraphic(null);
 					return;
 				}
-				setGraphic(selecionar);
-				selecionar.setOnAction(event -> entidade = obj);
+				setGraphic(chkSelecionar);
+				
+				chkSelecionar.setOnAction(event -> entidade = obj);
+				
+				
+
 			}
 
 		});
 
 	}
+	
+	
 
+	
 	private void removeEntity(Pessoa obj) {
 
 		Optional<ButtonType> result = Alertas.showConfirmation("Confirmação", "Tem certeza em excluir o item?");

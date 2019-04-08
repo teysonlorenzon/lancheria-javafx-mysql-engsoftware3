@@ -9,7 +9,7 @@ public class Fisica extends Pessoa implements Serializable{
 	
 	private Integer idFisica;
 	private String cpf;
-	private Integer rg;
+	private String rg;
 	private String dataNascimento;
 	
 	public Fisica() {
@@ -18,7 +18,7 @@ public class Fisica extends Pessoa implements Serializable{
 	
 	public Fisica(Integer idPessoa, String nome, String cidade, String edereco, Integer numero, String bairro, String cep,
 			String uf, String complemento, String email, String telefoneFixo, String telefoneCelular, Integer idFisica, String cpf,
-			Integer rg, String dataNascimento) {
+			String rg, String dataNascimento) {
 		super(idPessoa, nome, cidade, edereco, numero, bairro, cep, uf, complemento, email, telefoneFixo, telefoneCelular);
 
 		this.idFisica = idFisica;
@@ -43,11 +43,11 @@ public class Fisica extends Pessoa implements Serializable{
 		this.cpf = cpf;
 	}
 
-	public Integer getRg() {
+	public String getRg() {
 		return rg;
 	}
 
-	public void setRg(Integer rg) {
+	public void setRg(String rg) {
 		this.rg = rg;
 	}
 

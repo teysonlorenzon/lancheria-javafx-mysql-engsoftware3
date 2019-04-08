@@ -62,7 +62,7 @@ public class CadastroClientesJDBC implements CadastroClientesMYSQL {
 					"INSERT INTO fisico " + "(Cpf, Rg, DataNascimento, IdClientes) " + "VALUES " + "(?, ?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
 			st2.setString(1, obj.getCpf());
-			st2.setInt(2, obj.getRg());
+			st2.setString(2, obj.getRg());
 			st2.setString(3, obj.getDataNascimento());
 			st2.setInt(4, obj.getIdPessoa());
 
@@ -156,7 +156,7 @@ public class CadastroClientesJDBC implements CadastroClientesMYSQL {
 					"UPDATE fisico " + "SET Cpf = ?, Rg = ?, DataNascimento = ? " + "WHERE IdClientes = ?");
 
 			st.setString(1, obj.getCpf());
-			st.setInt(2, obj.getRg());
+			st.setString(2, obj.getRg());
 			st.setString(3, obj.getDataNascimento());
 			st.setInt(4, obj.getIdPessoa());
 			st.executeUpdate();
@@ -165,7 +165,7 @@ public class CadastroClientesJDBC implements CadastroClientesMYSQL {
 			
 			st2 = conn.prepareStatement("UPDATE clientes "
 					+ "SET Nome = ?, Cidade = ?, Cep = ?, Uf = ?, Bairro = ?, Endereco = ?, Numero = ?, TelefoneFixo = ?, TelefoneCelular = ?, Complemento = ?, Email = ?"
-					+ "WHERE idClientes = ? ");
+					+ "WHERE IdClientes = ?");
 
 			st2.setString(1, obj.getNome());
 			st2.setString(2, obj.getCidade());
@@ -201,13 +201,13 @@ public class CadastroClientesJDBC implements CadastroClientesMYSQL {
 
 			st.setString(1, obj.getCnpj());
 			st.setString(2, obj.getNomeFantasia());
-			st.setInt(4, obj.getIdPessoa());
+			st.setInt(3, obj.getIdPessoa());
 			st.executeUpdate();
 			
 			
 			st2 = conn.prepareStatement("UPDATE clientes "
 					+ "SET Nome = ?, Cidade = ?, Cep = ?, Uf = ?, Bairro = ?, Endereco = ?, Numero = ?, TelefoneFixo = ?, TelefoneCelular = ?, Complemento = ?, Email = ?"
-					+ "WHERE idClientes = ? ");
+					+ "WHERE IdClientes = ?");
 
 			st2.setString(1, obj.getNome());
 			st2.setString(2, obj.getCidade());
@@ -303,7 +303,7 @@ public class CadastroClientesJDBC implements CadastroClientesMYSQL {
 				obj.setTelefoneCelular(rs.getString("TelefoneCelular"));
 				obj.setComplemento(rs.getString("Complemento"));
 				obj.setEmail(rs.getString("Email"));
-				obj.setRg(rs.getInt("Rg"));
+				obj.setRg(rs.getString("Rg"));
 				obj.setCpf(rs.getString("Cpf"));
 				obj.setDataNascimento(rs.getString("DataNascimento"));
 				
@@ -390,7 +390,7 @@ public class CadastroClientesJDBC implements CadastroClientesMYSQL {
 				obj.setTelefoneCelular(rs.getString("TelefoneCelular"));
 				obj.setComplemento(rs.getString("Complemento"));
 				obj.setEmail(rs.getString("Email"));
-				obj.setRg(rs.getInt("Rg"));
+				obj.setRg(rs.getString("Rg"));
 				obj.setCpf(rs.getString("Cpf"));
 				obj.setDataNascimento(rs.getString("DataNascimento"));
 
