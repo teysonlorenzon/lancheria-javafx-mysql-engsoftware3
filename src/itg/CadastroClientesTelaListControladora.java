@@ -2,6 +2,7 @@ package itg;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -27,6 +28,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToolBar;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
@@ -40,6 +42,8 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 	private ObservableList<Pessoa> obsList;
 	private String condicao = "fisica";
 	private Pessoa entidade;
+	private List<CheckBox> chlist = new ArrayList<>();
+	boolean teste = false;
 
 	public void setCondicao(String condicao) {
 		this.condicao = condicao;
@@ -110,9 +114,45 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 	private Button btEditar;
 	@FXML
 	private Button btExcluir;
+	@FXML
+	private Button btCancelarSelecao;
+	@FXML
+	private ToolBar tbEditar;
+
+	@FXML
+	public void onBtCancelarSelecao() {
+		for (CheckBox listar : chlist) {
+			if (listar.isSelected() == false) {
+				listar.setDisable(false);
+				listar.setSelected(false);
+			} else {
+				listar.setDisable(false);
+				listar.setSelected(false);
+			}
+			btEditar.setVisible(false);
+			btExcluir.setVisible(false);
+			btCancelarSelecao.setVisible(false);
+			tbEditar.setVisible(false);
+		}
+	}
 
 	@FXML
 	public void onBtNovoAction(ActionEvent event) {
+
+		for (CheckBox listar : chlist) {
+			if (listar.isSelected() == false) {
+				listar.setDisable(false);
+				listar.setSelected(false);
+			} else {
+				listar.setDisable(false);
+				listar.setSelected(false);
+			}
+		}
+		btEditar.setVisible(false);
+		btExcluir.setVisible(false);
+		btCancelarSelecao.setVisible(false);
+		tbEditar.setVisible(false);
+
 		Stage parentStage = Utilitarios.currentStage(event);
 		criarForm("/itg/CadastroClientesFormTela.fxml", parentStage);
 
@@ -124,6 +164,11 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 		setCondicao("fisica");
 		updateTableView();
 		initializarNodes();
+
+		btEditar.setVisible(false);
+		btExcluir.setVisible(false);
+		btCancelarSelecao.setVisible(false);
+		tbEditar.setVisible(false);
 	}
 
 	@FXML
@@ -132,6 +177,11 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 		setCondicao("juridica");
 		updateTableView();
 		initializarNodes();
+
+		btEditar.setVisible(false);
+		btExcluir.setVisible(false);
+		btCancelarSelecao.setVisible(false);
+		tbEditar.setVisible(false);
 
 	}
 
@@ -215,8 +265,10 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		initializarNodes();
-		Pessoa pega = tbCadastroClientes.getSelectionModel().getSelectedItem();
-		entidade = pega;
+		btEditar.setVisible(false);
+		btExcluir.setVisible(false);
+		btCancelarSelecao.setVisible(false);
+		tbEditar.setVisible(false);
 
 	}
 
@@ -234,6 +286,10 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 
 			criarFormFisicaJuridica(entidade, "/itg/CadastroClientesFormTela.fxml", parentStage, getCondicao());
 		}
+		btEditar.setVisible(false);
+		btExcluir.setVisible(false);
+		btCancelarSelecao.setVisible(false);
+		tbEditar.setVisible(false);
 	}
 
 	@FXML
@@ -301,39 +357,59 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 		}
 	}
 
-	private void initSelecionarCheckBox() {	
-		
-		tbCadastroClientes.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		tcSelecionar.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));		
-		tcSelecionar.setCellFactory(param -> new TableCell<Pessoa, Pessoa>()
-		{
-			
+	private void initSelecionarCheckBox() {
+
+		tcSelecionar.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tcSelecionar.setCellFactory(param -> new TableCell<Pessoa, Pessoa>() {
+
 			private final CheckBox chkSelecionar = new CheckBox("");
 
 			@Override
 			protected void updateItem(Pessoa obj, boolean empty) {
-							
-					
+
 				super.updateItem(obj, empty);
 				if (obj == null) {
 					setGraphic(null);
 					return;
 				}
+				if (obj != null) {
+					chlist.add(chkSelecionar);
+				}
 				setGraphic(chkSelecionar);
-				
-				chkSelecionar.setOnAction(event -> entidade = obj);
-				
-				
+
+				chkSelecionar.setOnAction(event -> checkBoxSelecionado(obj));
 
 			}
 
 		});
 
 	}
-	
-	
 
-	
+	private void checkBoxSelecionado(Pessoa obj) {
+		entidade = obj;
+
+		for (CheckBox listar : chlist) {
+			if (listar.isSelected() == false) {
+				listar.setDisable(true);
+			}
+		}
+
+		for (CheckBox listar : chlist) {
+			if (listar.isSelected() == true) {
+				listar.setDisable(true);
+			} else {
+				listar.setDisable(true);
+				listar.setSelected(false);
+			}
+			btEditar.setVisible(true);
+			btExcluir.setVisible(true);
+			btCancelarSelecao.setVisible(true);
+			tbEditar.setVisible(true);
+
+		}
+
+	}
+
 	private void removeEntity(Pessoa obj) {
 
 		Optional<ButtonType> result = Alertas.showConfirmation("Confirmação", "Tem certeza em excluir o item?");
@@ -355,7 +431,10 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 				Alertas.showAlert("Erro ao remover objeto", null, e.getMessage(), AlertType.ERROR);
 			}
 		}
-
+		btEditar.setVisible(false);
+		btExcluir.setVisible(false);
+		btCancelarSelecao.setVisible(false);
+		tbEditar.setVisible(false);
 	}
 
 }

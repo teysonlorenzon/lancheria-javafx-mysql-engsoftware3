@@ -70,10 +70,11 @@
             </TableView>
          </content>
       </ScrollPane>
-      <ToolBar prefHeight="40.0" prefWidth="200.0">
+      <ToolBar fx:id="tbEditar" prefHeight="40.0" prefWidth="200.0">
         <items>
           <Button fx:id="btEditar" mnemonicParsing="false" onAction="#onBtEditarAction" text="Editar" />
             <Button fx:id="btExcluir" mnemonicParsing="false" onAction="#onBtExcluirAction" text="Excluir" />
+            <Button fx:id="btCancelarSelecao" mnemonicParsing="false" onAction="#onBtCancelarSelecao" text="Cancelar" />
         </items>
       </ToolBar>
    </children>
