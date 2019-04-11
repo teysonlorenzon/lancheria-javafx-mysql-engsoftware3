@@ -23,6 +23,7 @@ import javafx.scene.control.TextField;
 import model.entidades.Fisica;
 import model.entidades.Juridica;
 import model.entidades.Pessoa;
+import model.entidades.WebService;
 import model.exception.ValidationException;
 import model.servicos.CadastroClientesServico;
 
@@ -31,7 +32,7 @@ public class CadastroClientesTelaFormControladora implements Initializable {
 	private Fisica entidadeFisica = new Fisica();
 	private Juridica entidadeJuridica = new Juridica();
 	private Pessoa entidade;
-
+	private WebService ws;
 
 	private CadastroClientesServico servico;
 	private String tipo;
@@ -234,7 +235,7 @@ public class CadastroClientesTelaFormControladora implements Initializable {
 		lbCpf.setVisible(false);
 		lbErrorCpf.setDisable(true);
 		lbErrorCpf.setVisible(false);
-		
+
 		txtCpf.setDisable(true);
 		txtCpf.setVisible(false);
 
@@ -251,11 +252,22 @@ public class CadastroClientesTelaFormControladora implements Initializable {
 		}
 
 	}
-	
+
 	@FXML
-	public void onTxtCidadeAction() {
-		
-		
+	public void onTxtCepAction() {
+		if (txtCep.getText().length() == 9) {
+			consultarCEP();
+		}
+	}
+
+	private void consultarCEP() {
+		ws = new WebService();
+		ws.buscarCep(Utilitarios.removeMascara(txtCep.getText()));
+
+		txtCidade.setText(ws.getCidade());
+		txtUf.setText(ws.getUf());
+		txtBairro.setText(ws.getBairro());
+		txtEndereco.setText(ws.getLogradouro());
 	}
 
 	private Juridica getFormDataJuridica() {
@@ -299,14 +311,12 @@ public class CadastroClientesTelaFormControladora implements Initializable {
 			exception.addError("cnpj", "campo obrigatório");
 		}
 
-		
-		
 		if (exception.getErrors().size() > 0) {
 			throw exception;
 		}
-		
+
 		obj.setNome(txtNome.getText());
-		obj.setCidade(txtCidade.getText());	
+		obj.setCidade(txtCidade.getText());
 		obj.setCep(txtCep.getText());
 		obj.setUf(txtUf.getText());
 		obj.setBairro(txtBairro.getText());
@@ -385,12 +395,11 @@ public class CadastroClientesTelaFormControladora implements Initializable {
 		if (txtDataNascimento.getText() == null || txtDataNascimento.getText().trim().equals("")) {
 			exception.addError("datanascimento", "campo obrigatório");
 		}
-		
-		
+
 		if (exception.getErrors().size() > 0) {
 			throw exception;
 		}
-		
+
 		obj.setNome(txtNome.getText());
 		obj.setCidade(txtCidade.getText());
 		obj.setCep(txtCep.getText());
@@ -457,25 +466,25 @@ public class CadastroClientesTelaFormControladora implements Initializable {
 	}
 
 	private void initializeNodes() {
-
-		Mascaras.numericField(txtIdClientes);
-		Mascaras.maxField(txtNome, 40);
-		Mascaras.maxField(txtNomeFantasia, 50);
-		Mascaras.numericField(txtRg);
-		Mascaras.cpfField(txtCpf);
-		Mascaras.cnpjField(txtCnpj);
-		Mascaras.dateField(txtDataNascimento);
-		Mascaras.foneFixoField(txtTelefoneFixo);
-		Mascaras.foneField(txtTelefoneCelular);
-		Mascaras.maxField(txtEmail, 50);
-		Mascaras.cepField(txtCep);
-		Mascaras.maxField(txtCidade, 40);
-		Mascaras.maxField(txtUf, 2);
-		Mascaras.maxField(txtEndereco, 50);
-		Mascaras.numericField(txtNumero);
-		Mascaras.maxField(txtBairro, 30);
-		Mascaras.maxField(txtComplemento, 50);
-
+		
+			Mascaras.numericField(txtIdClientes);
+			Mascaras.maxField(txtNome, 40);
+			Mascaras.maxField(txtNomeFantasia, 50);
+			Mascaras.numericField(txtRg);
+			Mascaras.cpfField(txtCpf);
+			Mascaras.cnpjField(txtCnpj);
+			Mascaras.dateField(txtDataNascimento);
+			Mascaras.foneFixoField(txtTelefoneFixo);
+			Mascaras.foneField(txtTelefoneCelular);
+			Mascaras.maxField(txtEmail, 50);
+			Mascaras.cepField(txtCep);
+			Mascaras.maxField(txtCidade, 40);
+			Mascaras.maxField(txtUf, 2);
+			Mascaras.maxField(txtEndereco, 50);
+			Mascaras.numericField(txtNumero);
+			Mascaras.maxField(txtBairro, 30);
+			Mascaras.maxField(txtComplemento, 50);
+		
 	}
 
 	public void updateFormDataFisicaJuridica() {
@@ -590,4 +599,3 @@ public class CadastroClientesTelaFormControladora implements Initializable {
 	}
 
 }
-

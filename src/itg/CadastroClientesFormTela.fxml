@@ -66,8 +66,8 @@
             <TextField fx:id="txtTelefoneFixo" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <TextField fx:id="txtTelefoneCelular" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <TextField fx:id="txtEmail" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <TextField fx:id="txtCep" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-            <TextField fx:id="txtCidade" onAction="#onTxtCidadeAction" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <TextField fx:id="txtCep" onKeyPressed="#onTxtCepAction" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <TextField fx:id="txtCidade" onMouseClicked="#onTxtCepAction" GridPane.columnIndex="1" GridPane.rowIndex="9" />
             <TextField fx:id="txtUf" GridPane.columnIndex="1" GridPane.rowIndex="10" />
             <TextField fx:id="txtEndereco" GridPane.columnIndex="1" GridPane.rowIndex="11" />
             <TextField fx:id="txtNumero" GridPane.columnIndex="1" GridPane.rowIndex="12" />

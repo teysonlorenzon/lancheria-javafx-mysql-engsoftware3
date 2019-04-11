@@ -119,8 +119,14 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 	@FXML
 	private ToolBar tbEditar;
 
-	@FXML
-	public void onBtCancelarSelecao() {
+	public void actionToolBar() {
+		btEditar.setVisible(false);
+		btExcluir.setVisible(false);
+		btCancelarSelecao.setVisible(false);
+		tbEditar.setVisible(false);
+	}
+
+	public void actionBts() {
 		for (CheckBox listar : chlist) {
 			if (listar.isSelected() == false) {
 				listar.setDisable(false);
@@ -129,30 +135,20 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 				listar.setDisable(false);
 				listar.setSelected(false);
 			}
-			btEditar.setVisible(false);
-			btExcluir.setVisible(false);
-			btCancelarSelecao.setVisible(false);
-			tbEditar.setVisible(false);
 		}
+	}
+
+	@FXML
+	public void onBtCancelarSelecao() {
+		actionBts();
+		actionToolBar();
 	}
 
 	@FXML
 	public void onBtNovoAction(ActionEvent event) {
 
-		for (CheckBox listar : chlist) {
-			if (listar.isSelected() == false) {
-				listar.setDisable(false);
-				listar.setSelected(false);
-			} else {
-				listar.setDisable(false);
-				listar.setSelected(false);
-			}
-		}
-		btEditar.setVisible(false);
-		btExcluir.setVisible(false);
-		btCancelarSelecao.setVisible(false);
-		tbEditar.setVisible(false);
-
+		actionBts();
+		actionToolBar();
 		Stage parentStage = Utilitarios.currentStage(event);
 		criarForm("/itg/CadastroClientesFormTela.fxml", parentStage);
 
@@ -164,11 +160,7 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 		setCondicao("fisica");
 		updateTableView();
 		initializarNodes();
-
-		btEditar.setVisible(false);
-		btExcluir.setVisible(false);
-		btCancelarSelecao.setVisible(false);
-		tbEditar.setVisible(false);
+		actionToolBar();
 	}
 
 	@FXML
@@ -177,11 +169,7 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 		setCondicao("juridica");
 		updateTableView();
 		initializarNodes();
-
-		btEditar.setVisible(false);
-		btExcluir.setVisible(false);
-		btCancelarSelecao.setVisible(false);
-		tbEditar.setVisible(false);
+		actionToolBar();
 
 	}
 
@@ -265,11 +253,7 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		initializarNodes();
-		btEditar.setVisible(false);
-		btExcluir.setVisible(false);
-		btCancelarSelecao.setVisible(false);
-		tbEditar.setVisible(false);
-
+		actionToolBar();
 	}
 
 	@Override
@@ -286,10 +270,8 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 
 			criarFormFisicaJuridica(entidade, "/itg/CadastroClientesFormTela.fxml", parentStage, getCondicao());
 		}
-		btEditar.setVisible(false);
-		btExcluir.setVisible(false);
-		btCancelarSelecao.setVisible(false);
-		tbEditar.setVisible(false);
+		
+		actionToolBar();
 	}
 
 	@FXML
@@ -431,10 +413,7 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 				Alertas.showAlert("Erro ao remover objeto", null, e.getMessage(), AlertType.ERROR);
 			}
 		}
-		btEditar.setVisible(false);
-		btExcluir.setVisible(false);
-		btCancelarSelecao.setVisible(false);
-		tbEditar.setVisible(false);
+		actionToolBar();
 	}
 
 }

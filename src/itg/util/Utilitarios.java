@@ -164,6 +164,7 @@ public class Utilitarios {
 
 	}
 
+
 	public static boolean validarEmail(String email) {
 		Matcher matcher = pattern.matcher(email);
 		return matcher.matches();
