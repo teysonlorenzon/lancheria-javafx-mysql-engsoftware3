@@ -29,12 +29,12 @@ import model.servicos.CadastroClientesServico;
 
 public class CadastroClientesTelaFormControladora implements Initializable {
 
-	private Fisica entidadeFisica = new Fisica();
-	private Juridica entidadeJuridica = new Juridica();
+	private Fisica entidadeFisica;
+	private Juridica entidadeJuridica;
 	private Pessoa entidade;
 	private WebService ws;
 
-	private CadastroClientesServico servico;
+	private CadastroClientesServico servico = new CadastroClientesServico();
 	private String tipo;
 
 	public void setTipo(String tipo) {
@@ -138,12 +138,6 @@ public class CadastroClientesTelaFormControladora implements Initializable {
 
 	@FXML
 	public void onBtConfirmarAction(ActionEvent event) {
-		if (entidadeJuridica == null) {
-			throw new IllegalStateException("Entidade está nullo");
-		}
-		if (entidadeFisica == null) {
-			throw new IllegalStateException("Entidade está nullo");
-		}
 		if (servico == null) {
 			throw new IllegalStateException("Serviço está nullo");
 		}
@@ -466,37 +460,34 @@ public class CadastroClientesTelaFormControladora implements Initializable {
 	}
 
 	private void initializeNodes() {
-		
-			Mascaras.numericField(txtIdClientes);
-			Mascaras.maxField(txtNome, 40);
-			Mascaras.maxField(txtNomeFantasia, 50);
-			Mascaras.numericField(txtRg);
-			Mascaras.cpfField(txtCpf);
-			Mascaras.cnpjField(txtCnpj);
-			Mascaras.dateField(txtDataNascimento);
-			Mascaras.foneFixoField(txtTelefoneFixo);
-			Mascaras.foneField(txtTelefoneCelular);
-			Mascaras.maxField(txtEmail, 50);
-			Mascaras.cepField(txtCep);
-			Mascaras.maxField(txtCidade, 40);
-			Mascaras.maxField(txtUf, 2);
-			Mascaras.maxField(txtEndereco, 50);
-			Mascaras.numericField(txtNumero);
-			Mascaras.maxField(txtBairro, 30);
-			Mascaras.maxField(txtComplemento, 50);
-		
+
+		Mascaras.numericField(txtIdClientes);
+		Mascaras.maxField(txtNome, 40);
+		Mascaras.maxField(txtNomeFantasia, 50);
+		Mascaras.numericField(txtRg);
+		Mascaras.cpfField(txtCpf);
+		Mascaras.cnpjField(txtCnpj);
+		Mascaras.dateField(txtDataNascimento);
+		Mascaras.foneFixoField(txtTelefoneFixo);
+		Mascaras.foneField(txtTelefoneCelular);
+		Mascaras.maxField(txtEmail, 50);
+		Mascaras.cepField(txtCep);
+		Mascaras.maxField(txtCidade, 40);
+		Mascaras.maxField(txtUf, 2);
+		Mascaras.maxField(txtEndereco, 50);
+		Mascaras.numericField(txtNumero);
+		Mascaras.maxField(txtBairro, 30);
+		Mascaras.maxField(txtComplemento, 50);
+
 	}
 
 	public void updateFormDataFisicaJuridica() {
-		if (entidadeFisica == null) {
-			throw new IllegalStateException("Entidade está nulo");
-		}
 
+		
 		if (getTipo().equals("fisica")) {
-			entidadeFisica = servico.buscarNomeFisica(entidade.getNome());
 
 			txtIdClientes.setText(String.valueOf(entidade.getIdPessoa()));
-			txtNome.setText(entidade.getNome());
+			txtNome.setText(entidadeFisica.getNome());
 			txtRg.setText(entidadeFisica.getRg());
 			txtCpf.setText(entidadeFisica.getCpf());
 			txtDataNascimento.setText(entidadeFisica.getDataNascimento());
@@ -516,10 +507,10 @@ public class CadastroClientesTelaFormControladora implements Initializable {
 			rbFisica.setDisable(true);
 
 		} else {
-			entidadeJuridica = servico.buscarNomeJuridica(entidade.getNome());
-
+			
+			
 			txtIdClientes.setText(String.valueOf(entidade.getIdPessoa()));
-			txtNome.setText(entidade.getNome());
+			txtNome.setText(entidadeJuridica.getNome());
 			txtCnpj.setText(entidadeJuridica.getCnpj());
 			txtNomeFantasia.setText(entidadeJuridica.getNomeFantasia());
 			txtTelefoneFixo.setText(entidadeJuridica.getTelefoneFixo());

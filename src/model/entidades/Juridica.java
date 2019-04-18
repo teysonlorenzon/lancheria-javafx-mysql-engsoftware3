@@ -9,6 +9,8 @@ public class Juridica extends Pessoa implements Serializable {
 	private Integer IdJuridica;
 	private String cnpj;
 	private String nomeFantasia;
+	
+	
 
 	public Juridica() {
 

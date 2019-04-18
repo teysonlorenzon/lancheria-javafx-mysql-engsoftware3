@@ -12,11 +12,12 @@ public interface CadastroClientesMYSQL {
 	void inserirPessoaJuridica(Juridica obj);
 	void atualizarPessoaFisica(Fisica obj);
 	void atualizarPessoaJuridica(Juridica obj);
-	void deletarPorIdFisica(Integer id);
-	void deletarPorIdJuridica(Integer id);
-	Fisica acharPorNomeFisica(String nome);
-	Juridica acharPorNomeJuridica(String nome);
-	List<Pessoa> acharTudoFisica();
-	List<Pessoa> acharTudoJuridica();
+	void deletarClientes(Integer id);
+	Pessoa acharPorNome(String nome);
+	Pessoa acharPorId(Integer id);
+	List<Pessoa> acharCPF(String cpf);
+	List<Pessoa> acharCNPJ(String cnpj);
+	List<Pessoa> acharTudo(char tipo);
+
 
 }

@@ -24,7 +24,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -33,6 +32,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.entidades.Fisica;
+import model.entidades.Juridica;
 import model.entidades.Pessoa;
 import model.servicos.CadastroClientesServico;
 
@@ -40,10 +41,18 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 
 	private CadastroClientesServico servico;
 	private ObservableList<Pessoa> obsList;
-	private String condicao = "fisica";
+	private String condicao = "tudo";
 	private Pessoa entidade;
 	private List<CheckBox> chlist = new ArrayList<>();
-	boolean teste = false;
+	private List<Pessoa> list = new ArrayList<>();
+
+	public List<Pessoa> getList() {
+		return list;
+	}
+
+	public void setList(List<Pessoa> list) {
+		this.list = list;
+	}
 
 	public void setCondicao(String condicao) {
 		this.condicao = condicao;
@@ -107,9 +116,13 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 	private RadioButton rbFisica;
 	@FXML
 	private RadioButton rbJuridica;
+	@FXML
+	private RadioButton rbTudo;
 
 	@FXML
 	private Button btNovo;
+	@FXML
+	private Button btPesquisar;
 	@FXML
 	private Button btEditar;
 	@FXML
@@ -118,6 +131,14 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 	private Button btCancelarSelecao;
 	@FXML
 	private ToolBar tbEditar;
+
+	@FXML
+	public void onBtPesquisarAction(ActionEvent event) {
+
+		Stage parentStage = Utilitarios.currentStage(event);
+		criarFormPesquisar("/itg/PesquisarFormClientesTela.fxml", parentStage);
+
+	}
 
 	public void actionToolBar() {
 		btEditar.setVisible(false);
@@ -149,6 +170,10 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 
 		actionBts();
 		actionToolBar();
+		rbTudo.setSelected(true);
+		rbFisica.setSelected(false);
+		rbJuridica.setSelected(false);
+		onRbTudoAction();
 		Stage parentStage = Utilitarios.currentStage(event);
 		criarForm("/itg/CadastroClientesFormTela.fxml", parentStage);
 
@@ -157,6 +182,7 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 	@FXML
 	public void onRbFisicaAction() {
 		rbJuridica.setSelected(false);
+		rbTudo.setSelected(false);
 		setCondicao("fisica");
 		updateTableView();
 		initializarNodes();
@@ -166,6 +192,7 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 	@FXML
 	public void onRbJuridicaAction() {
 		rbFisica.setSelected(false);
+		rbTudo.setSelected(false);
 		setCondicao("juridica");
 		updateTableView();
 		initializarNodes();
@@ -173,32 +200,72 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 
 	}
 
+	@FXML
+	public void onRbTudoAction() {
+		rbFisica.setSelected(false);
+		rbJuridica.setSelected(false);
+		setCondicao("tudo");
+		updateTableView();
+		initializarNodes();
+		actionToolBar();
+	}
+
 	public void setCadastroClientesServico(CadastroClientesServico servico) {
 		this.servico = servico;
 	}
 
 	public void updateTableView() {
-		if (servico == null) {
-			throw new IllegalStateException("Servico está nulo");
-		}
+
+		
 		if (getCondicao().equals("fisica")) {
-			List<Pessoa> list = servico.buscaClientesFisico();
+
+			list = servico.buscarClientes('F');
 			obsList = FXCollections.observableArrayList(list);
 			tbCadastroClientes.setItems(obsList);
 			initSelecionarCheckBox();
 
-		} else {
-			List<Pessoa> list = servico.buscaClientesJuridico();
+		} else if (getCondicao().equals("juridica")) {
+			list = servico.buscarClientes('J');
 			obsList = FXCollections.observableArrayList(list);
 			tbCadastroClientes.setItems(obsList);
 			initSelecionarCheckBox();
 
+		} else if (getCondicao().equals("tudo")) {
+			list = servico.buscarClientes('T');
+			obsList = FXCollections.observableArrayList(list);
+			tbCadastroClientes.setItems(obsList);
+			initSelecionarCheckBox();
+		} else if (getCondicao().equals("cpf")) {
+			
+			for(Pessoa lista : list) {
+				System.out.println(lista.getNome());
+			}
+			obsList = FXCollections.observableArrayList(list);
+			tbCadastroClientes.setItems(obsList);
+			initSelecionarCheckBox();
+		
+		} else if (getCondicao().equals("cnpj")) {
+			list = servico.buscarCNPJ("cnpj");
+			obsList = FXCollections.observableArrayList(list);
+			tbCadastroClientes.setItems(obsList);
+			initSelecionarCheckBox();
+		} else if (getCondicao().equals("nome")) {
+			//list = servico.buscaClientes();
+			obsList = FXCollections.observableArrayList(list);
+			tbCadastroClientes.setItems(obsList);
+			initSelecionarCheckBox();
+		} else if (getCondicao().equals("id")) {
+			//list = servico.buscaClientes();
+			obsList = FXCollections.observableArrayList(list);
+			tbCadastroClientes.setItems(obsList);
+			initSelecionarCheckBox();
 		}
+
 	}
 
-	private void initializarNodes() {
+	public void initializarNodes() {
 
-		if (getCondicao().equals("fisica")) {
+		if (getCondicao().equals("fisica") || getCondicao().equals("cpf")) {
 			tcIdPessoa.setCellValueFactory(new PropertyValueFactory<>("idPessoa"));
 			tcNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
 			tcCpf.setCellValueFactory(new PropertyValueFactory<>("cpf"));
@@ -221,7 +288,7 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 			tcRg.setVisible(true);
 			tcDataNascimento.setVisible(true);
 
-		} else {
+		} else if (getCondicao().equals("juridica") || getCondicao().equals("cnpj")) {
 
 			tcIdPessoa.setCellValueFactory(new PropertyValueFactory<>("idPessoa"));
 			tcNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
@@ -243,6 +310,40 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 			tcDataNascimento.setVisible(false);
 			tcNomeFantasia.setVisible(true);
 			tcCnpj.setVisible(true);
+
+		} else if (getCondicao().equals("tudo")) {
+
+			tcIdPessoa.setCellValueFactory(new PropertyValueFactory<>("idPessoa"));
+			tcNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+			tcCpf.setCellValueFactory(new PropertyValueFactory<>("cpf"));
+			tcRg.setCellValueFactory(new PropertyValueFactory<>("rg"));
+			tcDataNascimento.setCellValueFactory(new
+			PropertyValueFactory<>("dataNascimento"));
+			tcCidade.setCellValueFactory(new PropertyValueFactory<>("cidade"));
+			tcBairro.setCellValueFactory(new PropertyValueFactory<>("bairro"));
+			tcEndereco.setCellValueFactory(new PropertyValueFactory<>("endereco"));
+			tcNumero.setCellValueFactory(new PropertyValueFactory<>("numero"));
+			tcCep.setCellValueFactory(new PropertyValueFactory<>("cep"));
+			tcUf.setCellValueFactory(new PropertyValueFactory<>("uf"));
+			tcTelefoneFixo.setCellValueFactory(new PropertyValueFactory<>("telefoneFixo"));
+			tcTelefoneCelular.setCellValueFactory(new PropertyValueFactory<>("telefoneCelular"));
+			tcEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+			tcComplemento.setCellValueFactory(new PropertyValueFactory<>("complemento"));
+
+			tcNomeFantasia.setCellValueFactory(new PropertyValueFactory<>("nomeFantasia"));
+			tcCnpj.setCellValueFactory(new PropertyValueFactory<>("cnpj"));
+
+			tcCpf.setVisible(true);
+			tcRg.setVisible(true);
+			tcDataNascimento.setVisible(true);
+			tcNomeFantasia.setVisible(true);
+			tcCnpj.setVisible(true);
+			tcNomeFantasia.setVisible(true);
+			tcCnpj.setVisible(true);
+			tcCpf.setVisible(true);
+			tcRg.setVisible(true);
+			tcDataNascimento.setVisible(true);
+
 		}
 
 		Stage stage = (Stage) LoginTelaControladora.getMenuScene().getWindow();
@@ -252,13 +353,17 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+
 		initializarNodes();
 		actionToolBar();
+		actionBts();
 	}
 
 	@Override
 	public void onDataChanged() {
 		updateTableView();
+		actionToolBar();
+		actionBts();
 	}
 
 	@FXML
@@ -266,12 +371,18 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 		Stage parentStage = Utilitarios.currentStage(event);
 		if (entidade == null || entidade.equals("")) {
 			Alertas.showAlert("Atenção", null, "Selecione um cliente", AlertType.WARNING);
+		}
+		Fisica obj = new Fisica();
+		
+		if (obj.getClass().equals(entidade.getClass())) {
+			setCondicao("fisica");
+			criarFormFisicaJuridica(entidade, "/itg/CadastroClientesFormTela.fxml", parentStage, getCondicao());
 		} else {
-
+			setCondicao("juridica");
 			criarFormFisicaJuridica(entidade, "/itg/CadastroClientesFormTela.fxml", parentStage, getCondicao());
 		}
 		
-		actionToolBar();
+
 	}
 
 	@FXML
@@ -287,22 +398,30 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 
 	private void criarFormFisicaJuridica(Pessoa obj, String absoluteName, Stage parentStage, String tipo) {
 		try {
+			
+			
+			
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
 			CadastroClientesTelaFormControladora controller = loader.getController();
-			controller.setCadastroClientesServico(new CadastroClientesServico());
+
+			
 			controller.subscribeDataChangeListener(this);
+			
 			controller.setPessoa(obj);
 			controller.setTipo(tipo);
-			controller.updateFormDataFisicaJuridica();
 
 			if (getCondicao().equals("fisica")) {
+				controller.setPessoaFisica((Fisica) servico.buscarId(entidade.getIdPessoa()));
 				controller.onRbFisicaAction();
 			} else {
 				controller.onRbJuridicaAction();
+				controller.setPessoaJuridica((Juridica) servico.buscarId(entidade.getIdPessoa()));
 			}
+			controller.updateFormDataFisicaJuridica();
 
+			setCondicao("tudo");
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Entre com as informações");
 			dialogStage.setScene(new Scene(pane));
@@ -325,6 +444,29 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 			controller.setCadastroClientesServico(new CadastroClientesServico());
 			controller.subscribeDataChangeListener(this);
 			controller.onRbFisicaAction();
+
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Entre com as informações");
+			dialogStage.setScene(new Scene(pane));
+			dialogStage.setResizable(false);
+			dialogStage.initOwner(parentStage);
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.showAndWait();
+
+		} catch (IOException e) {
+			Alertas.showAlert("IO Exception", "Error loding view", e.getMessage(), AlertType.ERROR);
+		}
+	}
+
+	private void criarFormPesquisar(String absoluteName, Stage parentStage) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load();
+
+			CadastroClientesTelaPesquisarFormControladora controller = loader.getController();
+			// controller.setCadastroClientesServico(new CadastroClientesServico());
+			// controller.subscribeDataChangeListener(this);
+			// controller.onRbFisicaAction();
 
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Entre com as informações");
@@ -402,18 +544,34 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 				throw new IllegalStateException("Servico está nulo");
 			}
 			try {
+
+				Fisica obj2 = new Fisica();
+
+				if (obj2.getClass().equals(entidade.getClass())) {
+
+					setCondicao("juridica");
+				} else {
+					setCondicao("fisica");
+				}
+
 				if (getCondicao().equals("fisica")) {
-					servico.excluirPessoaFisica(obj);
+					setCondicao("tudo");
+					servico.excluirPessoa(obj);
 					updateTableView();
 				} else {
-					servico.excluirPessoaJuridica(obj);
+					setCondicao("tudo");
+					servico.excluirPessoa(obj);
 					updateTableView();
 				}
+
 			} catch (DbIntegrityException e) {
 				Alertas.showAlert("Erro ao remover objeto", null, e.getMessage(), AlertType.ERROR);
 			}
+			actionToolBar();
+			actionBts();
+
 		}
-		actionToolBar();
+
 	}
 
 }

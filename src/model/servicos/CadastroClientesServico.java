@@ -30,29 +30,32 @@ public class CadastroClientesServico {
 		}
 	}
 
-	public void excluirPessoaFisica(Pessoa obj) {
-		contrato.deletarPorIdFisica(obj.getIdPessoa());
+	public void excluirPessoa(Pessoa obj) {
+		contrato.deletarClientes(obj.getIdPessoa());
 	}
 
-	public void excluirPessoaJuridica(Pessoa obj) {
-		contrato.deletarPorIdJuridica(obj.getIdPessoa());
-	}
 
-	public List<Pessoa> buscaClientesFisico() {
-		return contrato.acharTudoFisica();
+
+	public List<Pessoa> buscarClientes(char tipo) {
+		return contrato.acharTudo(tipo);
 
 	}
 
-	public List<Pessoa> buscaClientesJuridico() {
-		return contrato.acharTudoJuridica();
-
-	}
-	public Fisica buscarNomeFisica(String nome) {
-		return contrato.acharPorNomeFisica(nome);
+	public Pessoa buscarNome(String nome) {
+		return contrato.acharPorNome(nome);
 	}
 	
-	public Juridica buscarNomeJuridica(String nome) {
-		return contrato.acharPorNomeJuridica(nome);
+	
+	public Pessoa buscarId(Integer id) {
+		return contrato.acharPorId(id);
+	}
+
+	public List<Pessoa> buscarCNPJ(String cnpj) {
+		return contrato.acharCNPJ(cnpj);
+	}
+
+	public List<Pessoa> buscarCPF(String cpf) {
+		return contrato.acharCPF(cpf);
 	}
 
 }

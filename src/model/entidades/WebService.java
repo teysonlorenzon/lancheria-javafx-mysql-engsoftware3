@@ -81,7 +81,9 @@ public class WebService implements Serializable {
 	            URL url = new URL("http://viacep.com.br/ws/"+ cep +"/json");
 	            URLConnection urlConnection = url.openConnection();
 	            InputStream is = urlConnection.getInputStream();
-	            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+	            BufferedReader br = new BufferedReader(new InputStreamReader(is,"UTF-8"));
+	            
+	           
 
 	         
 	            StringBuilder jsonSb = new StringBuilder();
@@ -90,7 +92,8 @@ public class WebService implements Serializable {
 	            json = jsonSb.toString();
 	            	            	            
 	            json = json.replaceAll("[{},:]", "");
-	            json = json.replaceAll("\"", "\n");                       
+	            json = json.replaceAll("\"", "\n");  
+	            
 	            String array[] = new String[30];
 	            array = json.split("\n");
 	            	                               

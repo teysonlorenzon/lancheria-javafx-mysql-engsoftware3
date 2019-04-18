@@ -27,12 +27,11 @@ public class CadastroClientesJDBC implements CadastroClientesMYSQL {
 
 	public void inserirPessoaFisica(Fisica obj) {
 		PreparedStatement st = null;
-		PreparedStatement st2 = null;
 
 		try {
 			st = conn.prepareStatement("INSERT INTO clientes "
-					+ "(Nome, Cidade, Cep, Uf, Bairro, Endereco, Numero, TelefoneFixo, TelefoneCelular, Complemento, Email) "
-					+ "VALUES " + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+					+ "(Nome, Cidade, Cep, Uf, Bairro, Endereco, Numero, TelefoneFixo, TelefoneCelular, Complemento, Email, Cpf, Rg, DataNascimento, Cnpj, NomeFantasia) "
+					+ "VALUES " + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 
 			st.setString(1, obj.getNome());
 			st.setString(2, obj.getCidade());
@@ -45,6 +44,11 @@ public class CadastroClientesJDBC implements CadastroClientesMYSQL {
 			st.setString(9, obj.getTelefoneCelular());
 			st.setString(10, obj.getComplemento());
 			st.setString(11, obj.getEmail());
+			st.setString(12, obj.getCpf());
+			st.setString(13, obj.getRg());
+			st.setString(14, obj.getDataNascimento());
+			st.setString(15, null);
+			st.setString(16, null);
 
 			int rowsAffected = st.executeUpdate();
 
@@ -58,30 +62,10 @@ public class CadastroClientesJDBC implements CadastroClientesMYSQL {
 				throw new DbException("Unexpected error! No rows affected!");
 			}
 
-			st2 = conn.prepareStatement(
-					"INSERT INTO fisico " + "(Cpf, Rg, DataNascimento, IdClientes) " + "VALUES " + "(?, ?, ?, ?)",
-					Statement.RETURN_GENERATED_KEYS);
-			st2.setString(1, obj.getCpf());
-			st2.setString(2, obj.getRg());
-			st2.setString(3, obj.getDataNascimento());
-			st2.setInt(4, obj.getIdPessoa());
-
-			int rowsAffected2 = st2.executeUpdate();
-
-			if (rowsAffected2 > 0) {
-				ResultSet rs = st2.getGeneratedKeys();
-				if (rs.next()) {
-					int id = rs.getInt(1);
-					obj.setIdFisica(id);
-				}
-			} else {
-				throw new DbException("Unexpected error! No rows affected!");
-			}
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
-			DB.closeStatement(st2);
 		}
 
 	}
@@ -89,12 +73,11 @@ public class CadastroClientesJDBC implements CadastroClientesMYSQL {
 	@Override
 	public void inserirPessoaJuridica(Juridica obj) {
 		PreparedStatement st = null;
-		PreparedStatement st2 = null;
 
 		try {
 			st = conn.prepareStatement("INSERT INTO clientes "
-					+ "(Nome, Cidade, Cep, Uf, Bairro, Endereco, Numero, TelefoneFixo, TelefoneCelular, Complemento, Email) "
-					+ "VALUES " + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+					+ "(Nome, Cidade, Cep, Uf, Bairro, Endereco, Numero, TelefoneFixo, TelefoneCelular, Complemento, Email, Cpf, Rg, DataNascimento, Cnpj, NomeFantasia) "
+					+ "VALUES " + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 
 			st.setString(1, obj.getNome());
 			st.setString(2, obj.getCidade());
@@ -107,6 +90,11 @@ public class CadastroClientesJDBC implements CadastroClientesMYSQL {
 			st.setString(9, obj.getTelefoneCelular());
 			st.setString(10, obj.getComplemento());
 			st.setString(11, obj.getEmail());
+			st.setString(12, null);
+			st.setString(13, null);
+			st.setString(14, null);
+			st.setString(15, obj.getCnpj());
+			st.setString(16, obj.getNomeFantasia());
 
 			int rowsAffected = st.executeUpdate();
 
@@ -120,73 +108,45 @@ public class CadastroClientesJDBC implements CadastroClientesMYSQL {
 				throw new DbException("Unexpected error! No rows affected!");
 			}
 
-			st2 = conn.prepareStatement(
-					"INSERT INTO juridico " + "(Cnpj, NomeFantasia, IdClientes) " + "VALUES " + "(?, ?, ?)",
-					Statement.RETURN_GENERATED_KEYS);
-			st2.setString(1, obj.getCnpj());
-			st2.setString(2, obj.getNomeFantasia());
-			st2.setInt(3, obj.getIdPessoa());
-
-			int rowsAffected2 = st2.executeUpdate();
-
-			if (rowsAffected2 > 0) {
-				ResultSet rs = st2.getGeneratedKeys();
-				if (rs.next()) {
-					int id = rs.getInt(1);
-					obj.setIdJuridica(id);
-				}
-			} else {
-				throw new DbException("Unexpected error! No rows affected!");
-			}
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
-			DB.closeStatement(st2);
 		}
 	}
 
 	@Override
 	public void atualizarPessoaFisica(Fisica obj) {
 		PreparedStatement st = null;
-		PreparedStatement st2 = null;
 		try {
 
-			st = conn.prepareStatement(
-					"UPDATE fisico " + "SET Cpf = ?, Rg = ?, DataNascimento = ? " + "WHERE IdClientes = ?");
-
-			st.setString(1, obj.getCpf());
-			st.setString(2, obj.getRg());
-			st.setString(3, obj.getDataNascimento());
-			st.setInt(4, obj.getIdPessoa());
-			st.executeUpdate();
-			
-			
-			
-			st2 = conn.prepareStatement("UPDATE clientes "
-					+ "SET Nome = ?, Cidade = ?, Cep = ?, Uf = ?, Bairro = ?, Endereco = ?, Numero = ?, TelefoneFixo = ?, TelefoneCelular = ?, Complemento = ?, Email = ?"
+			st = conn.prepareStatement("UPDATE clientes "
+					+ "SET Nome = ?, Cidade = ?, Cep = ?, Uf = ?, Bairro = ?, Endereco = ?, Numero = ?, TelefoneFixo = ?, TelefoneCelular = ?, Complemento = ?, Email = ?, Cpf = ?, Rg = ?, DataNascimento = ?, Cnpj = ?, NomeFantasia = ? "
 					+ "WHERE IdClientes = ?");
 
-			st2.setString(1, obj.getNome());
-			st2.setString(2, obj.getCidade());
-			st2.setString(3, obj.getCep());
-			st2.setString(4, obj.getUf());
-			st2.setString(5, obj.getBairro());
-			st2.setString(6, obj.getEndereco());
-			st2.setInt(7, obj.getNumero());
-			st2.setString(8, obj.getTelefoneFixo());
-			st2.setString(9, obj.getTelefoneCelular());
-			st2.setString(10, obj.getComplemento());
-			st2.setString(11, obj.getEmail());
-			st2.setInt(12, obj.getIdPessoa());
-			st2.executeUpdate();
-
+			st.setString(1, obj.getNome());
+			st.setString(2, obj.getCidade());
+			st.setString(3, obj.getCep());
+			st.setString(4, obj.getUf());
+			st.setString(5, obj.getBairro());
+			st.setString(6, obj.getEndereco());
+			st.setInt(7, obj.getNumero());
+			st.setString(8, obj.getTelefoneFixo());
+			st.setString(9, obj.getTelefoneCelular());
+			st.setString(10, obj.getComplemento());
+			st.setString(11, obj.getEmail());
+			st.setString(12, obj.getCpf());
+			st.setString(13, obj.getRg());
+			st.setString(14, obj.getDataNascimento());
+			st.setString(15, null);
+			st.setString(16, null);
+			st.setInt(17, obj.getIdPessoa());
+			st.executeUpdate();
 
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
-			DB.closeStatement(st2);
 		}
 
 	}
@@ -194,120 +154,102 @@ public class CadastroClientesJDBC implements CadastroClientesMYSQL {
 	@Override
 	public void atualizarPessoaJuridica(Juridica obj) {
 		PreparedStatement st = null;
-		PreparedStatement st2 = null;
 		try {
 
-			st = conn.prepareStatement("UPDATE juridico " + "SET Cnpj = ?, NomeFantasia = ? " + "WHERE IdClientes = ?");
-
-			st.setString(1, obj.getCnpj());
-			st.setString(2, obj.getNomeFantasia());
-			st.setInt(3, obj.getIdPessoa());
-			st.executeUpdate();
-			
-			
-			st2 = conn.prepareStatement("UPDATE clientes "
-					+ "SET Nome = ?, Cidade = ?, Cep = ?, Uf = ?, Bairro = ?, Endereco = ?, Numero = ?, TelefoneFixo = ?, TelefoneCelular = ?, Complemento = ?, Email = ?"
+			st = conn.prepareStatement("UPDATE clientes "
+					+ "SET Nome = ?, Cidade = ?, Cep = ?, Uf = ?, Bairro = ?, Endereco = ?, Numero = ?, TelefoneFixo = ?, TelefoneCelular = ?, Complemento = ?, Email = ?, Cpf = ?, Rg = ?, DataNascimento = ?, Cnpj = ?, NomeFantasia = ? "
 					+ "WHERE IdClientes = ?");
 
-			st2.setString(1, obj.getNome());
-			st2.setString(2, obj.getCidade());
-			st2.setString(3, obj.getCep());
-			st2.setString(4, obj.getUf());
-			st2.setString(5, obj.getBairro());
-			st2.setString(6, obj.getEndereco());
-			st2.setInt(7, obj.getNumero());
-			st2.setString(8, obj.getTelefoneFixo());
-			st2.setString(9, obj.getTelefoneCelular());
-			st2.setString(10, obj.getComplemento());
-			st2.setString(11, obj.getEmail());
-			st2.setInt(12, obj.getIdPessoa());
-			st2.executeUpdate();
-
+			st.setString(1, obj.getNome());
+			st.setString(2, obj.getCidade());
+			st.setString(3, obj.getCep());
+			st.setString(4, obj.getUf());
+			st.setString(5, obj.getBairro());
+			st.setString(6, obj.getEndereco());
+			st.setInt(7, obj.getNumero());
+			st.setString(8, obj.getTelefoneFixo());
+			st.setString(9, obj.getTelefoneCelular());
+			st.setString(10, obj.getComplemento());
+			st.setString(11, obj.getEmail());
+			st.setString(12, null);
+			st.setString(13, null);
+			st.setString(14, null);
+			st.setString(15, obj.getCnpj());
+			st.setString(16, obj.getNomeFantasia());
+			st.setInt(17, obj.getIdPessoa());
+			st.executeUpdate();
 
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
-			DB.closeStatement(st2);
 		}
-
 	}
 
 	@Override
-	public void deletarPorIdFisica(Integer id) {
+	public void deletarClientes(Integer id) {
 		PreparedStatement st = null;
 		PreparedStatement st2 = null;
 		try {
-			st = conn.prepareStatement("DELETE FROM fisico WHERE IdClientes = ?");
+			st = conn.prepareStatement("DELETE FROM clientes WHERE IdClientes= ?");
 			st.setInt(1, id);
 			st.executeUpdate();
-			
-			st2 = conn.prepareStatement("DELETE FROM clientes WHERE IdClientes= ?");
-			st2.setInt(1, id);
-			st2.executeUpdate();
+
 		} catch (SQLException e) {
 			throw new DbIntegrityException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
-			DB.closeStatement(st2);
 		}
 
 	}
 
 	@Override
-	public void deletarPorIdJuridica(Integer id) {
-		PreparedStatement st = null;
-		PreparedStatement  st2 = null;
-		try {
-			st = conn.prepareStatement("DELETE FROM juridico WHERE IdClientes = ?");
-			st.setInt(1, id);
-			st.executeUpdate();
-			
-			st2 = conn.prepareStatement("DELETE FROM clientes WHERE IdClientes = ?");
-			st2.setInt(1, id);
-			st2.executeUpdate();
-		} catch (SQLException e) {
-			throw new DbIntegrityException(e.getMessage());
-		} finally {
-			DB.closeStatement(st);
-			DB.closeStatement(st2);
-		}
-
-	}
-
-	@Override
-	public Fisica acharPorNomeFisica(String nome) {
+	public Pessoa acharPorNome(String nome) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement(
-					"SELECT cli.IdClientes, cli.Nome, cli.Cidade, cli.Cep, cli.Uf, cli.Bairro, cli.Endereco, cli.Numero, cli.TelefoneFixo, cli.TelefoneCelular, cli.Complemento, cli.Email, clif.Cpf, clif.Rg, clif.DataNascimento "
-							+ "FROM clientes as cli " + "INNER JOIN fisico as clif "
-							+ "on cli.IdClientes = clif.IdClientes " + "WHERE Nome = ?");
-			
+			st = conn.prepareStatement("SELECT * FROM clientes " + "WHERE Nome = ?");
+
 			st.setString(1, nome);
 			rs = st.executeQuery();
-	
 
 			while (rs.next()) {
-				Fisica obj = new Fisica();
-				obj.setIdPessoa(rs.getInt("IdClientes"));
-				obj.setNome(rs.getString("Nome"));
-				obj.setCidade(rs.getString("Cidade"));
-				obj.setCep(rs.getString("Cep"));
-				obj.setUf(rs.getString("Uf"));
-				obj.setBairro(rs.getString("Bairro"));
-				obj.setEndereco(rs.getString("Endereco"));
-				obj.setNumero(rs.getInt("Numero"));
-				obj.setTelefoneFixo(rs.getString("TelefoneFixo"));
-				obj.setTelefoneCelular(rs.getString("TelefoneCelular"));
-				obj.setComplemento(rs.getString("Complemento"));
-				obj.setEmail(rs.getString("Email"));
-				obj.setRg(rs.getString("Rg"));
-				obj.setCpf(rs.getString("Cpf"));
-				obj.setDataNascimento(rs.getString("DataNascimento"));
-				
-				return obj;
+				if (rs.getString("Cnpj") == null || rs.getString("Cnpj").equals("")) {
+					Fisica obj = new Fisica();
+					obj.setIdPessoa(rs.getInt("IdClientes"));
+					obj.setNome(rs.getString("Nome"));
+					obj.setCidade(rs.getString("Cidade"));
+					obj.setCep(rs.getString("Cep"));
+					obj.setUf(rs.getString("Uf"));
+					obj.setBairro(rs.getString("Bairro"));
+					obj.setEndereco(rs.getString("Endereco"));
+					obj.setNumero(rs.getInt("Numero"));
+					obj.setTelefoneFixo(rs.getString("TelefoneFixo"));
+					obj.setTelefoneCelular(rs.getString("TelefoneCelular"));
+					obj.setComplemento(rs.getString("Complemento"));
+					obj.setEmail(rs.getString("Email"));
+					obj.setRg(rs.getString("Rg"));
+					obj.setCpf(rs.getString("Cpf"));
+					obj.setDataNascimento(rs.getString("DataNascimento"));
+					return obj;
+				} else {
+					Juridica obj = new Juridica();
+					obj.setIdPessoa(rs.getInt("IdClientes"));
+					obj.setNome(rs.getString("Nome"));
+					obj.setCidade(rs.getString("Cidade"));
+					obj.setCep(rs.getString("Cep"));
+					obj.setUf(rs.getString("Uf"));
+					obj.setBairro(rs.getString("Bairro"));
+					obj.setEndereco(rs.getString("Endereco"));
+					obj.setNumero(rs.getInt("Numero"));
+					obj.setTelefoneFixo(rs.getString("TelefoneFixo"));
+					obj.setTelefoneCelular(rs.getString("TelefoneCelular"));
+					obj.setComplemento(rs.getString("Complemento"));
+					obj.setEmail(rs.getString("Email"));
+					obj.setNomeFantasia(rs.getString("NomeFantasia"));
+					obj.setCnpj(rs.getString("Cnpj"));
+					return obj;
+				}
 			}
 			return null;
 
@@ -319,63 +261,93 @@ public class CadastroClientesJDBC implements CadastroClientesMYSQL {
 
 		}
 	}
-	
+
+
 	@Override
-	public Juridica acharPorNomeJuridica(String nome) {
+	public List<Pessoa> acharTudo(char tipo) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement(
-					"SELECT cli.IdClientes, cli.Nome, cli.Cidade, cli.Cep, cli.Uf, cli.Bairro, cli.Endereco, cli.Numero, cli.TelefoneFixo, cli.TelefoneCelular, cli.Complemento, cli.Email, clij.Cnpj, clij.NomeFantasia "
-							+ "FROM clientes as cli " + "INNER JOIN juridico as clij "
-							+ "on cli.IdClientes = clij.IdClientes " + "WHERE Nome = ?");
-			st.setString(1, nome);
-			rs = st.executeQuery();
-
-
-			while (rs.next()) {
-				Juridica obj = new Juridica();
-				obj.setIdPessoa(rs.getInt("IdClientes"));
-				obj.setNome(rs.getString("Nome"));
-				obj.setCidade(rs.getString("Cidade"));
-				obj.setCep(rs.getString("Cep"));
-				obj.setUf(rs.getString("Uf"));
-				obj.setBairro(rs.getString("Bairro"));
-				obj.setEndereco(rs.getString("Endereco"));
-				obj.setNumero(rs.getInt("Numero"));
-				obj.setTelefoneFixo(rs.getString("TelefoneFixo"));
-				obj.setTelefoneCelular(rs.getString("TelefoneCelular"));
-				obj.setComplemento(rs.getString("Complemento"));
-				obj.setEmail(rs.getString("Email"));
-				obj.setNomeFantasia(rs.getString("NomeFantasia"));
-				obj.setCnpj(rs.getString("Cnpj"));
-
-				return obj;
-
-			}
-			return null;
-		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
-		} finally {
-			DB.closeStatement(st);
-			DB.closeResultSet(rs);
-
-		}
-	}
-
-	@Override
-	public List<Pessoa> acharTudoFisica() {
-		PreparedStatement st = null;
-		ResultSet rs = null;
-		try {
-			st = conn.prepareStatement(
-					"SELECT cli.IdClientes, cli.Nome, cli.Cidade, cli.Cep, cli.Uf, cli.Bairro, cli.Endereco, cli.Numero, cli.TelefoneFixo, cli.TelefoneCelular, cli.Complemento, cli.Email, clif.Cpf, clif.Rg, clif.DataNascimento "
-							+ "FROM clientes as cli " + "INNER JOIN fisico as clif "
-							+ "on cli.IdClientes = clif.IdClientes " + "ORDER BY Nome");
+			st = conn.prepareStatement("SELECT * FROM clientes");
 			rs = st.executeQuery();
 
 			List<Pessoa> listFisica = new ArrayList<>();
+			List<Pessoa> listJuridica = new ArrayList<>();
 
+			while (rs.next()) {
+
+				if (rs.getString("Cnpj") == null || rs.getString("Cnpj").equals("")) {
+					Fisica obj = new Fisica();
+					obj.setIdPessoa(rs.getInt("IdClientes"));
+					obj.setNome(rs.getString("Nome"));
+					obj.setCidade(rs.getString("Cidade"));
+					obj.setCep(rs.getString("Cep"));
+					obj.setUf(rs.getString("Uf"));
+					obj.setBairro(rs.getString("Bairro"));
+					obj.setEndereco(rs.getString("Endereco"));
+					obj.setNumero(rs.getInt("Numero"));
+					obj.setTelefoneFixo(rs.getString("TelefoneFixo"));
+					obj.setTelefoneCelular(rs.getString("TelefoneCelular"));
+					obj.setComplemento(rs.getString("Complemento"));
+					obj.setEmail(rs.getString("Email"));
+					obj.setRg(rs.getString("Rg"));
+					obj.setCpf(rs.getString("Cpf"));
+					obj.setDataNascimento(rs.getString("DataNascimento"));
+
+					listFisica.add(obj);
+				} else {
+					Juridica obj = new Juridica();
+					obj.setIdPessoa(rs.getInt("IdClientes"));
+					obj.setNome(rs.getString("Nome"));
+					obj.setCidade(rs.getString("Cidade"));
+					obj.setCep(rs.getString("Cep"));
+					obj.setUf(rs.getString("Uf"));
+					obj.setBairro(rs.getString("Bairro"));
+					obj.setEndereco(rs.getString("Endereco"));
+					obj.setNumero(rs.getInt("Numero"));
+					obj.setTelefoneFixo(rs.getString("TelefoneFixo"));
+					obj.setTelefoneCelular(rs.getString("TelefoneCelular"));
+					obj.setComplemento(rs.getString("Complemento"));
+					obj.setEmail(rs.getString("Email"));
+					obj.setCnpj(rs.getString("Cnpj"));
+					obj.setNomeFantasia(rs.getString("NomeFantasia"));
+
+					listJuridica.add(obj);
+				}
+			}
+
+			if (tipo == 'F') {
+				return listFisica;
+			} else if (tipo == 'J') {
+
+				return listJuridica;
+			} else {
+				List<Pessoa> listTodos = new ArrayList<Pessoa>(listFisica);
+				listTodos.addAll(listJuridica);
+
+				return listTodos;
+			}
+
+		} catch (SQLException e) {
+			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+
+		}
+	}
+
+	@Override
+	public List<Pessoa> acharCPF(String cpf) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("SELECT * FROM clientes " + "WHERE Cpf = ?");
+
+			st.setString(1, cpf);
+			rs = st.executeQuery();
+
+			List<Fisica> listF = new ArrayList<>();
 			while (rs.next()) {
 				Fisica obj = new Fisica();
 				obj.setIdPessoa(rs.getInt("IdClientes"));
@@ -394,11 +366,12 @@ public class CadastroClientesJDBC implements CadastroClientesMYSQL {
 				obj.setCpf(rs.getString("Cpf"));
 				obj.setDataNascimento(rs.getString("DataNascimento"));
 
-				listFisica.add(obj);
+				listF.add(obj);
 			}
-			;
 
-			return listFisica;
+			List<Pessoa> list = new ArrayList<>(listF);
+
+			return list;
 
 		} catch (SQLException e) {
 			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
@@ -410,18 +383,15 @@ public class CadastroClientesJDBC implements CadastroClientesMYSQL {
 	}
 
 	@Override
-	public List<Pessoa> acharTudoJuridica() {
+	public List<Pessoa> acharCNPJ(String cnpj) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement(
-					"SELECT cli.IdClientes, cli.Nome, cli.Cidade, cli.Cep, cli.Uf, cli.Bairro, cli.Endereco, cli.Numero, cli.TelefoneFixo, cli.TelefoneCelular, cli.Complemento, cli.Email, clij.Cnpj, clij.NomeFantasia "
-							+ "FROM clientes as cli " + "INNER JOIN juridico as clij "
-							+ "on cli.IdClientes = clij.IdClientes " + "ORDER BY Nome");
+			st = conn.prepareStatement("SELECT * FROM clientes " + "WHERE Cnpj = ?");
+			st.setString(1, cnpj);
 			rs = st.executeQuery();
 
-			List<Pessoa> listJuridica = new ArrayList<>();
-
+			List<Juridica> listJ = new ArrayList<>();
 			while (rs.next()) {
 				Juridica obj = new Juridica();
 				obj.setIdPessoa(rs.getInt("IdClientes"));
@@ -439,11 +409,71 @@ public class CadastroClientesJDBC implements CadastroClientesMYSQL {
 				obj.setNomeFantasia(rs.getString("NomeFantasia"));
 				obj.setCnpj(rs.getString("Cnpj"));
 
-				listJuridica.add(obj);
+				listJ.add(obj);
 
 			}
-			;
-			return listJuridica;
+			List<Pessoa> list = new ArrayList<>(listJ);
+
+			return list;
+
+		} catch (SQLException e) {
+			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+
+		}
+	}
+
+	@Override
+	public Pessoa acharPorId(Integer id) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("SELECT * FROM clientes " + "WHERE IdClientes = ?");
+
+			st.setInt(1, id);
+			rs = st.executeQuery();
+
+			while (rs.next()) {
+				if (rs.getString("Cnpj") == null || rs.getString("Cnpj").equals("")) {
+					Fisica obj = new Fisica();
+					obj.setIdPessoa(rs.getInt("IdClientes"));
+					obj.setNome(rs.getString("Nome"));
+					obj.setCidade(rs.getString("Cidade"));
+					obj.setCep(rs.getString("Cep"));
+					obj.setUf(rs.getString("Uf"));
+					obj.setBairro(rs.getString("Bairro"));
+					obj.setEndereco(rs.getString("Endereco"));
+					obj.setNumero(rs.getInt("Numero"));
+					obj.setTelefoneFixo(rs.getString("TelefoneFixo"));
+					obj.setTelefoneCelular(rs.getString("TelefoneCelular"));
+					obj.setComplemento(rs.getString("Complemento"));
+					obj.setEmail(rs.getString("Email"));
+					obj.setRg(rs.getString("Rg"));
+					obj.setCpf(rs.getString("Cpf"));
+					obj.setDataNascimento(rs.getString("DataNascimento"));
+					return obj;
+				} else {
+					Juridica obj = new Juridica();
+					obj.setIdPessoa(rs.getInt("IdClientes"));
+					obj.setNome(rs.getString("Nome"));
+					obj.setCidade(rs.getString("Cidade"));
+					obj.setCep(rs.getString("Cep"));
+					obj.setUf(rs.getString("Uf"));
+					obj.setBairro(rs.getString("Bairro"));
+					obj.setEndereco(rs.getString("Endereco"));
+					obj.setNumero(rs.getInt("Numero"));
+					obj.setTelefoneFixo(rs.getString("TelefoneFixo"));
+					obj.setTelefoneCelular(rs.getString("TelefoneCelular"));
+					obj.setComplemento(rs.getString("Complemento"));
+					obj.setEmail(rs.getString("Email"));
+					obj.setNomeFantasia(rs.getString("NomeFantasia"));
+					obj.setCnpj(rs.getString("Cnpj"));
+					return obj;
+				}
+			}
+			return null;
 
 		} catch (SQLException e) {
 			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
