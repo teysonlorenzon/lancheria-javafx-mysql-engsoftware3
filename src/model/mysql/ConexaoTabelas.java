@@ -2,6 +2,7 @@ package model.mysql;
 
 import db.DB;
 import model.mysql.imp.CadastroClientesJDBC;
+import model.mysql.imp.CadastroFuncionariosJDBC;
 import model.mysql.imp.UsuariosLoginJDBC;
 
 public class ConexaoTabelas {
@@ -13,6 +14,11 @@ public class ConexaoTabelas {
 	public static CadastroClientesMYSQL criarCadastroClientesMYSQL()
 	{
 		return new CadastroClientesJDBC(DB.getConnection());
+	}
+	
+	public static CadastroFucionariosMYSQL criarCadastroFuncionariosMYSQL()
+	{
+		return new CadastroFuncionariosJDBC(DB.getConnection());
 	}
 	
 

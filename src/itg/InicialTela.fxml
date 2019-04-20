@@ -22,7 +22,7 @@
                     <MenuItem mnemonicParsing="false" onAction="#onMenuClientes" text="Categorias" />
                         <MenuItem fx:id="miCadClientes" mnemonicParsing="false" onAction="#onMenuClientes" text="Clientes" />
                         <MenuItem mnemonicParsing="false" text="Fornecedores" />
-                        <MenuItem mnemonicParsing="false" text="Funcionários" />
+                        <MenuItem fx:id="miCadFuncionarios" mnemonicParsing="false" onAction="#onMenuFuncionarios" text="Funcionários" />
                         <MenuItem mnemonicParsing="false" text="Produtos" />
                         <MenuItem mnemonicParsing="false" text="Lanches" />
                   </items>
