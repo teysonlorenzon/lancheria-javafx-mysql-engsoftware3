@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="538.0" prefWidth="1415.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itg.CadastroFornecedoresTelaListControladora">
+   <children>
+      <Label text="Fornecedores">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+         <padding>
+            <Insets left="5.0" top="5.0" />
+         </padding>
+      </Label>
+      <ToolBar prefHeight="40.0" prefWidth="535.0">
+        <items>
+          <Button fx:id="btNovo" mnemonicParsing="false" onAction="#onBtNovoAction" text="Novo" />
+            <Button fx:id="btPesquisar" mnemonicParsing="false" onAction="#onBtPesquisarAction" text="Pesquisar">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Button>
+        </items>
+      </ToolBar>
+      <TableView fx:id="tbCadastroFornecedores" prefHeight="200.0" prefWidth="1239.0">
+        <columns>
+            <TableColumn fx:id="tcSelecionar" prefWidth="35.0" />
+          <TableColumn fx:id="tcIdPessoa" prefWidth="36.0" text="Id" />
+          <TableColumn fx:id="tcNome" prefWidth="106.0" text="Nome" />
+            <TableColumn fx:id="tcNomeFantasia" prefWidth="108.99996948242188" text="Nome Fantasia" />
+            <TableColumn fx:id="tcCnpj" prefWidth="60.0" text="Cnpj" />
+            <TableColumn fx:id="tcCidade" prefWidth="84.0" text="Cidade" />
+            <TableColumn fx:id="tcBairro" prefWidth="75.0" text="Bairro" />
+            <TableColumn fx:id="tcEndereco" prefWidth="75.0" text="Rua" />
+            <TableColumn fx:id="tcNumero" prefWidth="75.0" text="Numero" />
+            <TableColumn fx:id="tcCep" prefWidth="75.0" text="Cep" />
+            <TableColumn fx:id="tcUf" prefWidth="75.0" text="Uf" />
+            <TableColumn fx:id="tcTelefoneFixo" prefWidth="75.0" text="Telefone" />
+            <TableColumn fx:id="tcTelefoneCelular" prefWidth="75.0" text="Celular" />
+            <TableColumn fx:id="tcEmail" prefWidth="75.0" text="Email" />
+            <TableColumn fx:id="tcComplemento" prefWidth="94.0" text="Complemento" />
+        </columns>
+      </TableView>
+      <ToolBar fx:id="tbEditar" prefHeight="40.0" prefWidth="200.0">
+        <items>
+          <Button fx:id="btEditar" mnemonicParsing="false" onAction="#onBtEditarAction" text="Editar" />
+            <Button fx:id="btExcluir" mnemonicParsing="false" onAction="#onBtExcluirAction" text="Excluir" />
+            <Button fx:id="btCancelarSelecao" mnemonicParsing="false" onAction="#onBtCancelarSelecao" text="Cancelar" />
+        </items>
+      </ToolBar>
+   </children>
+</VBox>

@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.servicos.CadastroClientesServico;
+import model.servicos.CadastroFornecedoresServico;
 import model.servicos.CadastroFuncionariosServico;
 import model.servicos.UsuariosLoginServico;
 
@@ -50,6 +51,8 @@ public class InicialTelaControladora implements Initializable {
 	private MenuItem miCadClientes;
 	@FXML
 	private MenuItem miCadFuncionarios;
+	@FXML
+	private MenuItem miCadFornecedores;
 
 	@FXML
 	public void onMenuItemSobre() {
@@ -102,6 +105,14 @@ public class InicialTelaControladora implements Initializable {
 	public void onMenuFuncionarios() {
 		carregarTela("/itg/CadastroFuncionariosTela.fxml", (CadastroFuncionariosTelaListControladora controller) -> {
 			controller.setCadastroFuncionariosServico(new CadastroFuncionariosServico());
+			controller.updateTableView();
+		});
+	}
+	
+	@FXML
+	public void onMenuFornecedores() {
+		carregarTela("/itg/CadastroFornecedoresTela.fxml", (CadastroFornecedoresTelaListControladora controller) -> {
+			controller.setCadastroFornecedoresServico(new CadastroFornecedoresServico());
 			controller.updateTableView();
 		});
 	}

@@ -18,52 +18,24 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import model.entidades.Fisica;
 import model.entidades.Juridica;
 import model.entidades.Pessoa;
 import model.entidades.WebService;
 import model.exception.ValidationException;
-import model.servicos.CadastroClientesServico;
-import model.servicos.CadastroFuncionariosServico;
+import model.servicos.CadastroFornecedoresServico;
 
-public class CadastroFuncionariosTelaFormControladora implements Initializable {
+public class CadastroFornecedoresTelaFormControladora implements Initializable {
 
-	private Fisica entidadeFisica;
+	private Juridica entidadeJuridica;
 	private Pessoa entidade;
 	private WebService ws;
-	private CadastroFuncionariosServico servico = new CadastroFuncionariosServico();
+
+	private CadastroFornecedoresServico servico = new CadastroFornecedoresServico();
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
-	
-	
-	public CadastroFuncionariosServico getServico() {
-		return servico;
-	}
-
-	public void setCadastroFuncionariosServico(CadastroFuncionariosServico servico) {
-		this.servico = servico;
-	}
-
-	public Fisica getEntidadeFisica() {
-		return entidadeFisica;
-	}
-
-	public void setEntidadeFisica(Fisica entidadeFisica) {
-		this.entidadeFisica = entidadeFisica;
-	}
-
-	public Pessoa getEntidade() {
-		return entidade;
-	}
-
-	public void setEntidade(Pessoa entidade) {
-		this.entidade = entidade;
-	}
-
 
 	@FXML
-	private TextField txtIdFuncionarios;
+	private TextField txtIdFornecedores;
 	@FXML
 	private TextField txtNome;
 	@FXML
@@ -87,33 +59,26 @@ public class CadastroFuncionariosTelaFormControladora implements Initializable {
 	@FXML
 	private TextField txtEmail;
 	@FXML
-	private TextField txtRg;
+	private TextField txtCnpj;
 	@FXML
-	private TextField txtCpf;
-	@FXML
-	private TextField txtDataNascimento;
+	private TextField txtNomeFantasia;
 
-	@FXML
-	private Label lbCpf;
 	@FXML
 	private Label lbCnpj;
 	@FXML
-	private Label lbDataNascimento;
-	
+	private Label lbNomeFantasia;
+
 	@FXML
 	private Button btConfirmar;
 	@FXML
 	private Button btCancelar;
 
-
 	@FXML
 	private Label lbErrorNome;
 	@FXML
-	private Label lbErrorCpf;
+	private Label lbErrorCnpj;
 	@FXML
-	private Label lbErrorRg;
-	@FXML
-	private Label lbErrorDatanascimento;
+	private Label lbErrorNomeFantasia;
 	@FXML
 	private Label lbErrorCidade;
 	@FXML
@@ -143,8 +108,8 @@ public class CadastroFuncionariosTelaFormControladora implements Initializable {
 
 		try {
 
-			entidadeFisica = getFormDataFisica();
-			servico.iniciarUpdateOuIserirPessoaFisica(entidadeFisica);
+			entidadeJuridica = getFormDataJuridica();
+			servico.iniciarUpdateOuIserirPessoaJuridica(entidadeJuridica);
 			notifyDataChangeListeners();
 			Utilitarios.currentStage(event).close();
 			Alertas.showAlert("Informação", null, "Operação realizada com sucesso", AlertType.INFORMATION);
@@ -180,15 +145,13 @@ public class CadastroFuncionariosTelaFormControladora implements Initializable {
 		txtEndereco.setText(ws.getLogradouro());
 	}
 
-	private Fisica getFormDataFisica() {
-
-		Fisica obj = new Fisica();
-
+	private Juridica getFormDataJuridica() {
+		Juridica obj = new Juridica();
 		ValidationException exception = new ValidationException("Erro de Validação");
 
-		if (txtIdFuncionarios.getText() == null || txtIdFuncionarios.getText().trim().equals("")) {
+		if (txtIdFornecedores.getText() == null || txtIdFornecedores.getText().trim().equals("")) {
 		} else {
-			obj.setIdPessoa(Integer.parseInt(txtIdFuncionarios.getText()));
+			obj.setIdPessoa(Integer.parseInt(txtIdFornecedores.getText()));
 		}
 
 		if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {
@@ -219,14 +182,8 @@ public class CadastroFuncionariosTelaFormControladora implements Initializable {
 			exception.addError("telefonecelular", "campo obrigatório");
 		}
 
-		if (txtRg.getText() == null || txtRg.getText().trim().equals("")) {
-			exception.addError("rg", "campo obrigatório");
-		}
-		if (txtCpf.getText() == null || txtCpf.getText().trim().equals("")) {
-			exception.addError("cpf", "campo obrigatório");
-		}
-		if (txtDataNascimento.getText() == null || txtDataNascimento.getText().trim().equals("")) {
-			exception.addError("datanascimento", "campo obrigatório");
+		if (txtCnpj.getText() == null || txtCnpj.getText().trim().equals("")) {
+			exception.addError("cnpj", "campo obrigatório");
 		}
 
 		if (exception.getErrors().size() > 0) {
@@ -253,17 +210,16 @@ public class CadastroFuncionariosTelaFormControladora implements Initializable {
 				throw exception;
 			}
 		}
-		obj.setRg(txtRg.getText());
-		if (Utilitarios.ValidaCPF(Utilitarios.removeMascara(txtCpf.getText())) == true) {
-			obj.setCpf(txtCpf.getText());
+		if (Utilitarios.ValidaCNPJ(Utilitarios.removeMascara(txtCnpj.getText())) == true) {
+			obj.setCnpj(txtCnpj.getText());
 		} else {
-
-			Alertas.showAlert("Cpf Invalido", null, "Por favor informe um cpf valido", AlertType.INFORMATION);
+			Alertas.showAlert("Cnpj Invalido", null, "Por favor informe um cnpj valido", AlertType.INFORMATION);
 			throw exception;
 		}
-		obj.setDataNascimento(txtDataNascimento.getText());
+		obj.setNomeFantasia(txtNomeFantasia.getText());
 
 		return obj;
+
 	}
 
 	@FXML
@@ -272,12 +228,16 @@ public class CadastroFuncionariosTelaFormControladora implements Initializable {
 
 	}
 
-	public void setPessoaFisica(Fisica entidadeFisica) {
-		this.entidadeFisica = entidadeFisica;
-	}
-
 	public void setPessoa(Pessoa entidade) {
 		this.entidade = entidade;
+	}
+
+	public void setPessoaJuridica(Juridica entidadeJuridica) {
+		this.entidadeJuridica = entidadeJuridica;
+	}
+
+	public void setCadastroFornecedoresServico(CadastroFornecedoresServico servico) {
+		this.servico = servico;
 	}
 
 	public void subscribeDataChangeListener(DataChangeListener listener) {
@@ -292,11 +252,10 @@ public class CadastroFuncionariosTelaFormControladora implements Initializable {
 
 	private void initializeNodes() {
 
-		Mascaras.numericField(txtIdFuncionarios);
+		Mascaras.numericField(txtIdFornecedores);
 		Mascaras.maxField(txtNome, 40);
-		Mascaras.numericField(txtRg);
-		Mascaras.cpfField(txtCpf);
-		Mascaras.dateField(txtDataNascimento);
+		Mascaras.maxField(txtNomeFantasia, 50);
+		Mascaras.cnpjField(txtCnpj);
 		Mascaras.foneFixoField(txtTelefoneFixo);
 		Mascaras.foneField(txtTelefoneCelular);
 		Mascaras.maxField(txtEmail, 50);
@@ -310,23 +269,24 @@ public class CadastroFuncionariosTelaFormControladora implements Initializable {
 
 	}
 
-	public void updateFormDataFisica() {
+	public void updateFormDataJuridica() {
 
-		txtIdFuncionarios.setText(String.valueOf(entidade.getIdPessoa()));
-		txtNome.setText(entidadeFisica.getNome());
-		txtRg.setText(entidadeFisica.getRg());
-		txtCpf.setText(entidadeFisica.getCpf());
-		txtDataNascimento.setText(entidadeFisica.getDataNascimento());
-		txtTelefoneFixo.setText(entidadeFisica.getTelefoneFixo());
-		txtTelefoneCelular.setText(entidadeFisica.getTelefoneCelular());
-		txtEmail.setText(entidadeFisica.getEmail());
-		txtCep.setText(entidadeFisica.getCep());
-		txtCidade.setText(entidadeFisica.getCidade());
-		txtUf.setText(entidadeFisica.getUf());
-		txtEndereco.setText(entidadeFisica.getEndereco());
-		txtBairro.setText(entidadeFisica.getBairro());
-		txtNumero.setText(Integer.toString(entidadeFisica.getNumero()));
-		txtComplemento.setText(entidadeFisica.getComplemento());
+		txtIdFornecedores.setText(String.valueOf(entidade.getIdPessoa()));
+		txtNome.setText(entidadeJuridica.getNome());
+		txtCnpj.setText(entidadeJuridica.getCnpj());
+		txtNomeFantasia.setText(entidadeJuridica.getNomeFantasia());
+		txtTelefoneFixo.setText(entidadeJuridica.getTelefoneFixo());
+		txtTelefoneCelular.setText(entidadeJuridica.getTelefoneCelular());
+		txtEmail.setText(entidadeJuridica.getEmail());
+		txtCep.setText(entidadeJuridica.getCep());
+		txtCidade.setText(entidadeJuridica.getCidade());
+		txtUf.setText(entidadeJuridica.getUf());
+		txtEndereco.setText(entidadeJuridica.getEndereco());
+		txtBairro.setText(entidadeJuridica.getBairro());
+		txtNumero.setText(Integer.toString(entidadeJuridica.getNumero()));
+		txtComplemento.setText(entidadeJuridica.getComplemento());
+		txtCnpj.setText(entidadeJuridica.getCnpj());
+		txtNomeFantasia.setText(entidadeJuridica.getNomeFantasia());
 
 	}
 
@@ -364,16 +324,12 @@ public class CadastroFuncionariosTelaFormControladora implements Initializable {
 			lbErrorTelefoneCelular.setText(errors.get("telefonecelular"));
 
 		}
-		if (fields.contains("rg")) {
-			lbErrorRg.setText(errors.get("rg"));
+		if (fields.contains("cnpj")) {
+			lbErrorCnpj.setText(errors.get("cnpj"));
 
 		}
-		if (fields.contains("cpf")) {
-			lbErrorCpf.setText(errors.get("cpf"));
-
-		}
-		if (fields.contains("datanascimento")) {
-			lbErrorDatanascimento.setText(errors.get("datanascimento"));
+		if (fields.contains("nomefantasia")) {
+			lbErrorNomeFantasia.setText(errors.get("nomefantaia"));
 
 		}
 	}
