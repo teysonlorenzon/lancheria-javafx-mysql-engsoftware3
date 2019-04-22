@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import db.DbIntegrityException;
 import itg.listeners.DataChangeListener;
 import itg.util.Alertas;
+import itg.util.Mascaras;
 import itg.util.Utilitarios;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -23,11 +24,17 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -42,6 +49,15 @@ public class CadastroFornecedoresTelaListControladora implements Initializable, 
 	private Pessoa entidade;
 	private List<CheckBox> chlist = new ArrayList<>();
 	private List<Pessoa> list = new ArrayList<>();
+	private String condicao = "tudo";
+
+	public void setCondicao(String condicao) {
+		this.condicao = condicao;
+	}
+
+	public String getCondicao() {
+		return condicao;
+	}
 
 	public List<Pessoa> getList() {
 		return list;
@@ -95,8 +111,25 @@ public class CadastroFornecedoresTelaListControladora implements Initializable, 
 
 	@FXML
 	private Button btNovo;
+
 	@FXML
-	private Button btPesquisar;
+	private MenuButton mbtPesquisar;
+	@FXML
+	private MenuItem miCnpj;
+	@FXML
+	private MenuItem miNome;
+	@FXML
+	private MenuItem miId;
+	@FXML
+	private MenuItem miTudo;
+
+	@FXML
+	private TextField txtPesquisarId;
+	@FXML
+	private TextField txtPesquisarNome;
+	@FXML
+	private TextField txtPesquisarCnpj;
+
 	@FXML
 	private Button btEditar;
 	@FXML
@@ -107,11 +140,48 @@ public class CadastroFornecedoresTelaListControladora implements Initializable, 
 	private ToolBar tbEditar;
 
 	@FXML
-	public void onBtPesquisarAction(ActionEvent event) {
+	public void onBtPesquisarAction() {
+		updateTableView();
+		initializarNodes();
+		actionToolBar();
+	}
 
-		Stage parentStage = Utilitarios.currentStage(event);
-		criarFormPesquisar("/itg/PesquisarFormClientesTela.fxml", parentStage);
+	@FXML
+	public void onBtMenuItemTudo() {
+		setarInicioTxtPesquisar(txtPesquisarId);
+		setarInicioTxtPesquisar(txtPesquisarNome);
+		setarInicioTxtPesquisar(txtPesquisarCnpj);
+		setCondicao("tudo");
+		onBtPesquisarAction();
+	}
 
+	@FXML
+	public void onBtMenuItemCnpj() {
+		setarInicioTxtPesquisar(txtPesquisarId);
+		setarInicioTxtPesquisar(txtPesquisarNome);
+		txtPesquisarCnpj.setVisible(true);
+		setCondicao("cnpj");
+	}
+
+	@FXML
+	public void onBtMenuItemNome() {
+		setarInicioTxtPesquisar(txtPesquisarId);
+		setarInicioTxtPesquisar(txtPesquisarCnpj);
+		txtPesquisarNome.setVisible(true);
+		setCondicao("nome");
+	}
+
+	@FXML
+	public void onBtMenuItemId() {
+		setarInicioTxtPesquisar(txtPesquisarNome);
+		setarInicioTxtPesquisar(txtPesquisarCnpj);
+		txtPesquisarId.setVisible(true);
+		setCondicao("id");
+	}
+
+	private void setarInicioTxtPesquisar(TextField txt) {
+		txt.setVisible(false);
+		txt.setText("");
 	}
 
 	public void actionToolBar() {
@@ -155,10 +225,30 @@ public class CadastroFornecedoresTelaListControladora implements Initializable, 
 
 	public void updateTableView() {
 
-		list = servico.buscarFornecedores();
-		obsList = FXCollections.observableArrayList(list);
-		tbCadastroFornecedores.setItems(obsList);
-		initSelecionarCheckBox();
+		if (getCondicao().equals("tudo")) {
+			list = servico.buscarFornecedores();
+			obsList = FXCollections.observableArrayList(list);
+			tbCadastroFornecedores.setItems(obsList);
+			initSelecionarCheckBox();
+		}
+		if (getCondicao().equals("id")) {
+			list = servico.buscarListPorId(Integer.parseInt(txtPesquisarId.getText()));
+			obsList = FXCollections.observableArrayList(list);
+			tbCadastroFornecedores.setItems(obsList);
+			initSelecionarCheckBox();
+		}
+		if (getCondicao().equals("nome")) {
+			list = servico.buscarListPorNome(txtPesquisarNome.getText());
+			obsList = FXCollections.observableArrayList(list);
+			tbCadastroFornecedores.setItems(obsList);
+			initSelecionarCheckBox();
+		}
+		if (getCondicao().equals("cnpj")) {
+			list = servico.buscarCNPJ(txtPesquisarCnpj.getText());
+			obsList = FXCollections.observableArrayList(list);
+			tbCadastroFornecedores.setItems(obsList);
+			initSelecionarCheckBox();
+		}
 	}
 
 	public void initializarNodes() {
@@ -183,8 +273,26 @@ public class CadastroFornecedoresTelaListControladora implements Initializable, 
 
 	}
 
+	
+	private void tecladoEnter(TextField txt) {
+		txt.setVisible(false);
+		txt.setOnKeyPressed(k -> {
+			final KeyCombination ENTER = new KeyCodeCombination(KeyCode.ENTER);
+			if (ENTER.match(k)) {
+				onBtPesquisarAction();
+			}
+		});
+	}
+
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		Mascaras.maxField(txtPesquisarNome, 60);
+		Mascaras.cnpjField(txtPesquisarCnpj);
+		Mascaras.numericField(txtPesquisarId);
+
+		tecladoEnter(txtPesquisarId);
+		tecladoEnter(txtPesquisarNome);
+		tecladoEnter(txtPesquisarCnpj);
 
 		initializarNodes();
 		actionToolBar();
@@ -231,7 +339,7 @@ public class CadastroFornecedoresTelaListControladora implements Initializable, 
 			controller.setPessoa(obj);
 			controller.setPessoaJuridica((Juridica) servico.buscarId(entidade.getIdPessoa()));
 			controller.updateFormDataJuridica();
-			
+
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Entre com as informações");
 			dialogStage.setScene(new Scene(pane));
@@ -253,29 +361,6 @@ public class CadastroFornecedoresTelaListControladora implements Initializable, 
 			CadastroFornecedoresTelaFormControladora controller = loader.getController();
 			controller.setCadastroFornecedoresServico(new CadastroFornecedoresServico());
 			controller.subscribeDataChangeListener(this);
-
-			Stage dialogStage = new Stage();
-			dialogStage.setTitle("Entre com as informações");
-			dialogStage.setScene(new Scene(pane));
-			dialogStage.setResizable(false);
-			dialogStage.initOwner(parentStage);
-			dialogStage.initModality(Modality.WINDOW_MODAL);
-			dialogStage.showAndWait();
-
-		} catch (IOException e) {
-			Alertas.showAlert("IO Exception", "Error loding view", e.getMessage(), AlertType.ERROR);
-		}
-	}
-
-	private void criarFormPesquisar(String absoluteName, Stage parentStage) {
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			Pane pane = loader.load();
-
-			CadastroClientesTelaPesquisarFormControladora controller = loader.getController();
-			// controller.setCadastroClientesServico(new CadastroClientesServico());
-			// controller.subscribeDataChangeListener(this);
-			// controller.onRbFisicaAction();
 
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Entre com as informações");
@@ -354,9 +439,8 @@ public class CadastroFornecedoresTelaListControladora implements Initializable, 
 			}
 			try {
 
-					servico.excluirPessoa(obj);
-					updateTableView();
-				
+				servico.excluirPessoa(obj);
+				updateTableView();
 
 			} catch (DbIntegrityException e) {
 				Alertas.showAlert("Erro ao remover objeto", null, e.getMessage(), AlertType.ERROR);

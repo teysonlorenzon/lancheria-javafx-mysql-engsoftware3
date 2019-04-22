@@ -165,23 +165,23 @@ public class CadastroFornecedoresJDBC implements CadastroFornecedoresMYSQL {
 			rs = st.executeQuery();
 
 			while (rs.next()) {
-					Juridica obj = new Juridica();
-					obj.setIdPessoa(rs.getInt("IdFornecedores"));
-					obj.setNome(rs.getString("Nome"));
-					obj.setCidade(rs.getString("Cidade"));
-					obj.setCep(rs.getString("Cep"));
-					obj.setUf(rs.getString("Uf"));
-					obj.setBairro(rs.getString("Bairro"));
-					obj.setEndereco(rs.getString("Endereco"));
-					obj.setNumero(rs.getInt("Numero"));
-					obj.setTelefoneFixo(rs.getString("TelefoneFixo"));
-					obj.setTelefoneCelular(rs.getString("TelefoneCelular"));
-					obj.setComplemento(rs.getString("Complemento"));
-					obj.setEmail(rs.getString("Email"));
-					obj.setNomeFantasia(rs.getString("NomeFantasia"));
-					obj.setCnpj(rs.getString("Cnpj"));
-					return obj;
-				
+				Juridica obj = new Juridica();
+				obj.setIdPessoa(rs.getInt("IdFornecedores"));
+				obj.setNome(rs.getString("Nome"));
+				obj.setCidade(rs.getString("Cidade"));
+				obj.setCep(rs.getString("Cep"));
+				obj.setUf(rs.getString("Uf"));
+				obj.setBairro(rs.getString("Bairro"));
+				obj.setEndereco(rs.getString("Endereco"));
+				obj.setNumero(rs.getInt("Numero"));
+				obj.setTelefoneFixo(rs.getString("TelefoneFixo"));
+				obj.setTelefoneCelular(rs.getString("TelefoneCelular"));
+				obj.setComplemento(rs.getString("Complemento"));
+				obj.setEmail(rs.getString("Email"));
+				obj.setNomeFantasia(rs.getString("NomeFantasia"));
+				obj.setCnpj(rs.getString("Cnpj"));
+				return obj;
+
 			}
 			return null;
 
@@ -265,6 +265,94 @@ public class CadastroFornecedoresJDBC implements CadastroFornecedoresMYSQL {
 				obj.setCnpj(rs.getString("Cnpj"));
 				obj.setNomeFantasia(rs.getString("NomeFantasia"));
 
+				listJuridica.add(obj);
+
+			}
+
+			return listJuridica;
+
+		} catch (SQLException e) {
+			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+
+		}
+	}
+
+	@Override
+	public List<Pessoa> acharListPorNome(String nome) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("SELECT * FROM fornecedores " + "WHERE Nome = ?");
+
+			st.setString(1, nome);
+			rs = st.executeQuery();
+
+			List<Pessoa> listJuridica = new ArrayList<>();
+
+			while (rs.next()) {
+
+				Juridica obj = new Juridica();
+				obj.setIdPessoa(rs.getInt("IdFornecedores"));
+				obj.setNome(rs.getString("Nome"));
+				obj.setCidade(rs.getString("Cidade"));
+				obj.setCep(rs.getString("Cep"));
+				obj.setUf(rs.getString("Uf"));
+				obj.setBairro(rs.getString("Bairro"));
+				obj.setEndereco(rs.getString("Endereco"));
+				obj.setNumero(rs.getInt("Numero"));
+				obj.setTelefoneFixo(rs.getString("TelefoneFixo"));
+				obj.setTelefoneCelular(rs.getString("TelefoneCelular"));
+				obj.setComplemento(rs.getString("Complemento"));
+				obj.setEmail(rs.getString("Email"));
+				obj.setNomeFantasia(rs.getString("NomeFantasia"));
+				obj.setCnpj(rs.getString("Cnpj"));
+				listJuridica.add(obj);
+
+			}
+
+			return listJuridica;
+
+		} catch (SQLException e) {
+			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+
+		}
+	}
+
+	@Override
+	public List<Pessoa> acharListPorId(Integer id) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("SELECT * FROM fornecedores " + "WHERE IdFornecedores = ?");
+
+			st.setInt(1, id);
+			rs = st.executeQuery();
+
+			List<Pessoa> listJuridica = new ArrayList<>();
+
+			while (rs.next()) {
+
+				Juridica obj = new Juridica();
+				obj.setIdPessoa(rs.getInt("IdFornecedores"));
+				obj.setNome(rs.getString("Nome"));
+				obj.setCidade(rs.getString("Cidade"));
+				obj.setCep(rs.getString("Cep"));
+				obj.setUf(rs.getString("Uf"));
+				obj.setBairro(rs.getString("Bairro"));
+				obj.setEndereco(rs.getString("Endereco"));
+				obj.setNumero(rs.getInt("Numero"));
+				obj.setTelefoneFixo(rs.getString("TelefoneFixo"));
+				obj.setTelefoneCelular(rs.getString("TelefoneCelular"));
+				obj.setComplemento(rs.getString("Complemento"));
+				obj.setEmail(rs.getString("Email"));
+				obj.setNomeFantasia(rs.getString("NomeFantasia"));
+				obj.setCnpj(rs.getString("Cnpj"));
 				listJuridica.add(obj);
 
 			}

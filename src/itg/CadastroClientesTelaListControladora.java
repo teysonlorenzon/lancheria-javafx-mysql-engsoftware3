@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import db.DbIntegrityException;
 import itg.listeners.DataChangeListener;
 import itg.util.Alertas;
+import itg.util.Mascaras;
 import itg.util.Utilitarios;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -23,12 +24,18 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -121,8 +128,27 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 
 	@FXML
 	private Button btNovo;
+
 	@FXML
-	private Button btPesquisar;
+	private MenuButton mbtPesquisar;
+	@FXML
+	private MenuItem miCpf;
+	@FXML
+	private MenuItem miCnpj;
+	@FXML
+	private MenuItem miNome;
+	@FXML
+	private MenuItem miId;
+
+	@FXML
+	private TextField txtPesquisarId;
+	@FXML
+	private TextField txtPesquisarNome;
+	@FXML
+	private TextField txtPesquisarCpf;
+	@FXML
+	private TextField txtPesquisarCnpj;
+
 	@FXML
 	private Button btEditar;
 	@FXML
@@ -132,12 +158,63 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 	@FXML
 	private ToolBar tbEditar;
 
+	private void desabilitarRB() {
+		rbFisica.setSelected(false);
+		rbJuridica.setSelected(false);
+		rbTudo.setSelected(false);
+	}
+	
 	@FXML
-	public void onBtPesquisarAction(ActionEvent event) {
+	public void onBtPesquisarAction() {
+		updateTableView();
+		initializarNodes();
+		actionToolBar();
+	}
 
-		Stage parentStage = Utilitarios.currentStage(event);
-		criarFormPesquisar("/itg/PesquisarFormClientesTela.fxml", parentStage);
+	@FXML
+	public void onBtMenuItemCpf() {
+		desabilitarRB();
+		setarInicioTxtPesquisar(txtPesquisarId);
+		setarInicioTxtPesquisar(txtPesquisarNome);
+		setarInicioTxtPesquisar(txtPesquisarCnpj);
+		txtPesquisarCpf.setVisible(true);
+		txtPesquisarCpf.setText("");
+		setCondicao("cpf");
+	}
 
+	@FXML
+	public void onBtMenuItemCnpj() {
+		desabilitarRB();
+		setarInicioTxtPesquisar(txtPesquisarId);
+		setarInicioTxtPesquisar(txtPesquisarNome);
+		setarInicioTxtPesquisar(txtPesquisarCpf);
+		txtPesquisarCnpj.setVisible(true);
+		txtPesquisarCnpj.setText("");
+		setCondicao("cnpj");
+	}
+
+	@FXML
+	public void onBtMenuItemNome() {
+		desabilitarRB();
+		setarInicioTxtPesquisar(txtPesquisarId);
+		setarInicioTxtPesquisar(txtPesquisarCpf);
+		setarInicioTxtPesquisar(txtPesquisarCnpj);
+		txtPesquisarNome.setVisible(true);
+		txtPesquisarNome.setText("");
+		setCondicao("nome");
+	}
+
+	@FXML
+	public void onBtMenuItemId() {
+		desabilitarRB();
+		txtPesquisarId.setEditable(true);
+		txtPesquisarId.setDisable(false);
+		setarInicioTxtPesquisar(txtPesquisarNome);
+		setarInicioTxtPesquisar(txtPesquisarCpf);
+		setarInicioTxtPesquisar(txtPesquisarCnpj);
+		txtPesquisarId.setVisible(true);
+		txtPesquisarId.setText("");
+		setCondicao("id");
 	}
 
 	public void actionToolBar() {
@@ -181,6 +258,11 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 
 	@FXML
 	public void onRbFisicaAction() {
+		txtPesquisarId.setEditable(false);
+		txtPesquisarId.setDisable(true);
+		setarInicioTxtPesquisar(txtPesquisarNome);
+		setarInicioTxtPesquisar(txtPesquisarCpf);
+		setarInicioTxtPesquisar(txtPesquisarCnpj);
 		rbJuridica.setSelected(false);
 		rbTudo.setSelected(false);
 		setCondicao("fisica");
@@ -191,6 +273,11 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 
 	@FXML
 	public void onRbJuridicaAction() {
+		txtPesquisarId.setEditable(false);
+		txtPesquisarId.setDisable(true);
+		setarInicioTxtPesquisar(txtPesquisarNome);
+		setarInicioTxtPesquisar(txtPesquisarCpf);
+		setarInicioTxtPesquisar(txtPesquisarCnpj);
 		rbFisica.setSelected(false);
 		rbTudo.setSelected(false);
 		setCondicao("juridica");
@@ -202,12 +289,22 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 
 	@FXML
 	public void onRbTudoAction() {
+		txtPesquisarId.setEditable(false);
+		txtPesquisarId.setDisable(true);
+		setarInicioTxtPesquisar(txtPesquisarNome);
+		setarInicioTxtPesquisar(txtPesquisarCpf);
+		setarInicioTxtPesquisar(txtPesquisarCnpj);
 		rbFisica.setSelected(false);
 		rbJuridica.setSelected(false);
 		setCondicao("tudo");
 		updateTableView();
 		initializarNodes();
 		actionToolBar();
+	}
+	
+	private void setarInicioTxtPesquisar(TextField txt) {
+		txt.setVisible(false);
+		txt.setText("");
 	}
 
 	public void setCadastroClientesServico(CadastroClientesServico servico) {
@@ -216,7 +313,6 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 
 	public void updateTableView() {
 
-		
 		if (getCondicao().equals("fisica")) {
 
 			list = servico.buscarClientes('F');
@@ -236,26 +332,24 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 			tbCadastroClientes.setItems(obsList);
 			initSelecionarCheckBox();
 		} else if (getCondicao().equals("cpf")) {
-			
-			for(Pessoa lista : list) {
-				System.out.println(lista.getNome());
-			}
+
+			list = servico.buscarCPF(txtPesquisarCpf.getText());
 			obsList = FXCollections.observableArrayList(list);
 			tbCadastroClientes.setItems(obsList);
 			initSelecionarCheckBox();
-		
+
 		} else if (getCondicao().equals("cnpj")) {
-			list = servico.buscarCNPJ("cnpj");
+			list = servico.buscarCNPJ(txtPesquisarCnpj.getText());
 			obsList = FXCollections.observableArrayList(list);
 			tbCadastroClientes.setItems(obsList);
 			initSelecionarCheckBox();
 		} else if (getCondicao().equals("nome")) {
-			//list = servico.buscaClientes();
+			list = servico.buscarListPorNome(txtPesquisarNome.getText());
 			obsList = FXCollections.observableArrayList(list);
 			tbCadastroClientes.setItems(obsList);
 			initSelecionarCheckBox();
 		} else if (getCondicao().equals("id")) {
-			//list = servico.buscaClientes();
+			list = servico.buscarListPorId(Integer.parseInt(txtPesquisarId.getText()));
 			obsList = FXCollections.observableArrayList(list);
 			tbCadastroClientes.setItems(obsList);
 			initSelecionarCheckBox();
@@ -311,14 +405,13 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 			tcNomeFantasia.setVisible(true);
 			tcCnpj.setVisible(true);
 
-		} else if (getCondicao().equals("tudo")) {
+		} else if (getCondicao().equals("tudo") || getCondicao().equals("nome") || getCondicao().equals("id")) {
 
 			tcIdPessoa.setCellValueFactory(new PropertyValueFactory<>("idPessoa"));
 			tcNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
 			tcCpf.setCellValueFactory(new PropertyValueFactory<>("cpf"));
 			tcRg.setCellValueFactory(new PropertyValueFactory<>("rg"));
-			tcDataNascimento.setCellValueFactory(new
-			PropertyValueFactory<>("dataNascimento"));
+			tcDataNascimento.setCellValueFactory(new PropertyValueFactory<>("dataNascimento"));
 			tcCidade.setCellValueFactory(new PropertyValueFactory<>("cidade"));
 			tcBairro.setCellValueFactory(new PropertyValueFactory<>("bairro"));
 			tcEndereco.setCellValueFactory(new PropertyValueFactory<>("endereco"));
@@ -351,8 +444,32 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 
 	}
 
+	private void tecladoEnter(TextField txt) {
+		txt.setOnKeyPressed(k -> {
+			final KeyCombination ENTER = new KeyCodeCombination(KeyCode.ENTER);
+			if (ENTER.match(k)) {
+				onBtPesquisarAction();
+			}
+		});
+	}
+
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+
+		Mascaras.maxField(txtPesquisarNome, 60);
+		Mascaras.cpfField(txtPesquisarCpf);
+		Mascaras.cnpjField(txtPesquisarCnpj);
+		Mascaras.numericField(txtPesquisarId);
+
+		txtPesquisarId.setEditable(false);
+		txtPesquisarId.setDisable(true);
+		txtPesquisarNome.setVisible(false);
+		txtPesquisarCpf.setVisible(false);
+		txtPesquisarCnpj.setVisible(false);
+		tecladoEnter(txtPesquisarId);
+		tecladoEnter(txtPesquisarNome);
+		tecladoEnter(txtPesquisarCpf);
+		tecladoEnter(txtPesquisarCnpj);
 
 		initializarNodes();
 		actionToolBar();
@@ -373,7 +490,7 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 			Alertas.showAlert("Atenção", null, "Selecione um cliente", AlertType.WARNING);
 		}
 		Fisica obj = new Fisica();
-		
+
 		if (obj.getClass().equals(entidade.getClass())) {
 			setCondicao("fisica");
 			criarFormFisicaJuridica(entidade, "/itg/CadastroClientesFormTela.fxml", parentStage, getCondicao());
@@ -381,7 +498,6 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 			setCondicao("juridica");
 			criarFormFisicaJuridica(entidade, "/itg/CadastroClientesFormTela.fxml", parentStage, getCondicao());
 		}
-		
 
 	}
 
@@ -398,17 +514,14 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 
 	private void criarFormFisicaJuridica(Pessoa obj, String absoluteName, Stage parentStage, String tipo) {
 		try {
-			
-			
-			
+
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
 			CadastroClientesTelaFormControladora controller = loader.getController();
 
-			
 			controller.subscribeDataChangeListener(this);
-			
+
 			controller.setPessoa(obj);
 			controller.setTipo(tipo);
 
@@ -444,29 +557,6 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 			controller.setCadastroClientesServico(new CadastroClientesServico());
 			controller.subscribeDataChangeListener(this);
 			controller.onRbFisicaAction();
-
-			Stage dialogStage = new Stage();
-			dialogStage.setTitle("Entre com as informações");
-			dialogStage.setScene(new Scene(pane));
-			dialogStage.setResizable(false);
-			dialogStage.initOwner(parentStage);
-			dialogStage.initModality(Modality.WINDOW_MODAL);
-			dialogStage.showAndWait();
-
-		} catch (IOException e) {
-			Alertas.showAlert("IO Exception", "Error loding view", e.getMessage(), AlertType.ERROR);
-		}
-	}
-
-	private void criarFormPesquisar(String absoluteName, Stage parentStage) {
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			Pane pane = loader.load();
-
-			CadastroClientesTelaPesquisarFormControladora controller = loader.getController();
-			// controller.setCadastroClientesServico(new CadastroClientesServico());
-			// controller.subscribeDataChangeListener(this);
-			// controller.onRbFisicaAction();
 
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Entre com as informações");

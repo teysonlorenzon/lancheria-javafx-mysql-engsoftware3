@@ -12,6 +12,8 @@ public interface CadastroFornecedoresMYSQL {
 	Pessoa acharPorNome(String nome);
 	Pessoa acharPorId(Integer id);
 	List<Pessoa> acharCNPJ(String cnpj);
+	List<Pessoa> acharListPorNome(String nome);
+	List<Pessoa> acharListPorId(Integer id);
 	List<Pessoa> acharTudo();
 
 }

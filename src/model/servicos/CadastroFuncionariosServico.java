@@ -20,11 +20,9 @@ public class CadastroFuncionariosServico {
 		}
 	}
 
-
 	public void excluirPessoa(Pessoa obj) {
 		contrato.deletarFuncionarios(obj.getIdPessoa());
 	}
-
 
 	public List<Pessoa> buscarFuncionarios() {
 		return contrato.acharTudo();
@@ -34,14 +32,23 @@ public class CadastroFuncionariosServico {
 	public Pessoa buscarNome(String nome) {
 		return contrato.acharPorNome(nome);
 	}
-	
-	
+
 	public Pessoa buscarId(Integer id) {
 		return contrato.acharPorId(id);
 	}
 
 	public List<Pessoa> buscarCPF(String cpf) {
 		return contrato.acharCPF(cpf);
+	}
+
+	public List<Pessoa> buscarListPorNome(String nome) {
+		return contrato.acharListPorNome(nome);
+
+	}
+
+	public List<Pessoa> buscarListPorId(Integer id) {
+		return contrato.acharListPorId(id);
+
 	}
 
 }

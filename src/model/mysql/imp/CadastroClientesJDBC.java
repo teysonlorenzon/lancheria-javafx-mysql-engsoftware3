@@ -262,7 +262,6 @@ public class CadastroClientesJDBC implements CadastroClientesMYSQL {
 		}
 	}
 
-
 	@Override
 	public List<Pessoa> acharTudo(char tipo) {
 		PreparedStatement st = null;
@@ -474,6 +473,138 @@ public class CadastroClientesJDBC implements CadastroClientesMYSQL {
 				}
 			}
 			return null;
+
+		} catch (SQLException e) {
+			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+
+		}
+	}
+
+	@Override
+	public List<Pessoa> acharListPorNome(String nome) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("SELECT * FROM clientes " + "WHERE Nome = ?");
+
+			st.setString(1, nome);
+			rs = st.executeQuery();
+
+			List<Pessoa> listFisica = new ArrayList<>();
+			List<Pessoa> listJuridica = new ArrayList<>();
+
+			while (rs.next()) {
+				if (rs.getString("Cnpj") == null || rs.getString("Cnpj").equals("")) {
+					Fisica obj = new Fisica();
+					obj.setIdPessoa(rs.getInt("IdClientes"));
+					obj.setNome(rs.getString("Nome"));
+					obj.setCidade(rs.getString("Cidade"));
+					obj.setCep(rs.getString("Cep"));
+					obj.setUf(rs.getString("Uf"));
+					obj.setBairro(rs.getString("Bairro"));
+					obj.setEndereco(rs.getString("Endereco"));
+					obj.setNumero(rs.getInt("Numero"));
+					obj.setTelefoneFixo(rs.getString("TelefoneFixo"));
+					obj.setTelefoneCelular(rs.getString("TelefoneCelular"));
+					obj.setComplemento(rs.getString("Complemento"));
+					obj.setEmail(rs.getString("Email"));
+					obj.setRg(rs.getString("Rg"));
+					obj.setCpf(rs.getString("Cpf"));
+					obj.setDataNascimento(rs.getString("DataNascimento"));
+					listFisica.add(obj);
+				} else {
+					Juridica obj = new Juridica();
+					obj.setIdPessoa(rs.getInt("IdClientes"));
+					obj.setNome(rs.getString("Nome"));
+					obj.setCidade(rs.getString("Cidade"));
+					obj.setCep(rs.getString("Cep"));
+					obj.setUf(rs.getString("Uf"));
+					obj.setBairro(rs.getString("Bairro"));
+					obj.setEndereco(rs.getString("Endereco"));
+					obj.setNumero(rs.getInt("Numero"));
+					obj.setTelefoneFixo(rs.getString("TelefoneFixo"));
+					obj.setTelefoneCelular(rs.getString("TelefoneCelular"));
+					obj.setComplemento(rs.getString("Complemento"));
+					obj.setEmail(rs.getString("Email"));
+					obj.setNomeFantasia(rs.getString("NomeFantasia"));
+					obj.setCnpj(rs.getString("Cnpj"));
+					listJuridica.add(obj);
+				}
+			}
+
+			List<Pessoa> listTodos = new ArrayList<Pessoa>(listFisica);
+			listTodos.addAll(listJuridica);
+
+			return listTodos;
+
+		} catch (SQLException e) {
+			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+
+		}
+	}
+
+	@Override
+	public List<Pessoa> acharListPorId(Integer id) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("SELECT * FROM clientes " + "WHERE IdClientes = ?");
+
+			st.setInt(1, id);
+			rs = st.executeQuery();
+
+			List<Pessoa> listFisica = new ArrayList<>();
+			List<Pessoa> listJuridica = new ArrayList<>();
+
+			while (rs.next()) {
+				if (rs.getString("Cnpj") == null || rs.getString("Cnpj").equals("")) {
+					Fisica obj = new Fisica();
+					obj.setIdPessoa(rs.getInt("IdClientes"));
+					obj.setNome(rs.getString("Nome"));
+					obj.setCidade(rs.getString("Cidade"));
+					obj.setCep(rs.getString("Cep"));
+					obj.setUf(rs.getString("Uf"));
+					obj.setBairro(rs.getString("Bairro"));
+					obj.setEndereco(rs.getString("Endereco"));
+					obj.setNumero(rs.getInt("Numero"));
+					obj.setTelefoneFixo(rs.getString("TelefoneFixo"));
+					obj.setTelefoneCelular(rs.getString("TelefoneCelular"));
+					obj.setComplemento(rs.getString("Complemento"));
+					obj.setEmail(rs.getString("Email"));
+					obj.setRg(rs.getString("Rg"));
+					obj.setCpf(rs.getString("Cpf"));
+					obj.setDataNascimento(rs.getString("DataNascimento"));
+					listFisica.add(obj);
+				} else {
+					Juridica obj = new Juridica();
+					obj.setIdPessoa(rs.getInt("IdClientes"));
+					obj.setNome(rs.getString("Nome"));
+					obj.setCidade(rs.getString("Cidade"));
+					obj.setCep(rs.getString("Cep"));
+					obj.setUf(rs.getString("Uf"));
+					obj.setBairro(rs.getString("Bairro"));
+					obj.setEndereco(rs.getString("Endereco"));
+					obj.setNumero(rs.getInt("Numero"));
+					obj.setTelefoneFixo(rs.getString("TelefoneFixo"));
+					obj.setTelefoneCelular(rs.getString("TelefoneCelular"));
+					obj.setComplemento(rs.getString("Complemento"));
+					obj.setEmail(rs.getString("Email"));
+					obj.setNomeFantasia(rs.getString("NomeFantasia"));
+					obj.setCnpj(rs.getString("Cnpj"));
+					listJuridica.add(obj);
+				}
+			}
+
+			List<Pessoa> listTodos = new ArrayList<Pessoa>(listFisica);
+			listTodos.addAll(listJuridica);
+
+			return listTodos;
 
 		} catch (SQLException e) {
 			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");

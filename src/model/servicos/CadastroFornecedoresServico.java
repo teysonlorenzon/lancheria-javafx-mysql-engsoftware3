@@ -40,5 +40,15 @@ public class CadastroFornecedoresServico {
 	public List<Pessoa> buscarCNPJ(String cnpj) {
 		return contrato.acharCNPJ(cnpj);
 	}
+	
+	public List<Pessoa> buscarListPorNome(String nome) {
+		return contrato.acharListPorNome(nome);
+
+	}
+
+	public List<Pessoa> buscarListPorId(Integer id) {
+		return contrato.acharListPorId(id);
+
+	}
 
 }

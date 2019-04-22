@@ -288,4 +288,93 @@ public class CadastroFuncionariosJDBC implements CadastroFucionariosMYSQL {
 		}
 	}
 
+	@Override
+	public List<Pessoa> acharListPorNome(String nome) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("SELECT * FROM funcionarios " + "WHERE Nome = ?");
+
+			st.setString(1, nome);
+			rs = st.executeQuery();
+
+			List<Pessoa> listFisica = new ArrayList<>();
+
+			while (rs.next()) {
+
+				Fisica obj = new Fisica();
+				obj.setIdPessoa(rs.getInt("IdFuncionarios"));
+				obj.setNome(rs.getString("Nome"));
+				obj.setCidade(rs.getString("Cidade"));
+				obj.setCep(rs.getString("Cep"));
+				obj.setUf(rs.getString("Uf"));
+				obj.setBairro(rs.getString("Bairro"));
+				obj.setEndereco(rs.getString("Endereco"));
+				obj.setNumero(rs.getInt("Numero"));
+				obj.setTelefoneFixo(rs.getString("TelefoneFixo"));
+				obj.setTelefoneCelular(rs.getString("TelefoneCelular"));
+				obj.setComplemento(rs.getString("Complemento"));
+				obj.setEmail(rs.getString("Email"));
+				obj.setRg(rs.getString("Rg"));
+				obj.setCpf(rs.getString("Cpf"));
+				obj.setDataNascimento(rs.getString("DataNascimento"));
+				listFisica.add(obj);
+
+			}
+			return listFisica;
+
+		} catch (SQLException e) {
+			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+
+		}
+	}
+
+	@Override
+	public List<Pessoa> acharListPorId(Integer id) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("SELECT * FROM funcionarios " + "WHERE IdFuncionarios = ?");
+
+			st.setInt(1, id);
+			rs = st.executeQuery();
+
+			List<Pessoa> listFisica = new ArrayList<>();
+
+			while (rs.next()) {
+
+				Fisica obj = new Fisica();
+				obj.setIdPessoa(rs.getInt("IdFuncionarios"));
+				obj.setNome(rs.getString("Nome"));
+				obj.setCidade(rs.getString("Cidade"));
+				obj.setCep(rs.getString("Cep"));
+				obj.setUf(rs.getString("Uf"));
+				obj.setBairro(rs.getString("Bairro"));
+				obj.setEndereco(rs.getString("Endereco"));
+				obj.setNumero(rs.getInt("Numero"));
+				obj.setTelefoneFixo(rs.getString("TelefoneFixo"));
+				obj.setTelefoneCelular(rs.getString("TelefoneCelular"));
+				obj.setComplemento(rs.getString("Complemento"));
+				obj.setEmail(rs.getString("Email"));
+				obj.setRg(rs.getString("Rg"));
+				obj.setCpf(rs.getString("Cpf"));
+				obj.setDataNascimento(rs.getString("DataNascimento"));
+				listFisica.add(obj);
+
+			}
+
+			return listFisica;
+
+		} catch (SQLException e) {
+			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+
+		}
+	}
+
 }

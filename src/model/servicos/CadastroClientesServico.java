@@ -34,8 +34,6 @@ public class CadastroClientesServico {
 		contrato.deletarClientes(obj.getIdPessoa());
 	}
 
-
-
 	public List<Pessoa> buscarClientes(char tipo) {
 		return contrato.acharTudo(tipo);
 
@@ -44,8 +42,7 @@ public class CadastroClientesServico {
 	public Pessoa buscarNome(String nome) {
 		return contrato.acharPorNome(nome);
 	}
-	
-	
+
 	public Pessoa buscarId(Integer id) {
 		return contrato.acharPorId(id);
 	}
@@ -58,4 +55,13 @@ public class CadastroClientesServico {
 		return contrato.acharCPF(cpf);
 	}
 
+	public List<Pessoa> buscarListPorNome(String nome) {
+		return contrato.acharListPorNome(nome);
+
+	}
+
+	public List<Pessoa> buscarListPorId(Integer id) {
+		return contrato.acharListPorId(id);
+
+	}
 }
