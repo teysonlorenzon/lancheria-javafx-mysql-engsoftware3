@@ -116,8 +116,7 @@ public class CadastroClientesTelaListControladora implements Initializable, Data
 	private TableColumn<Pessoa, String> tcEmail;
 	@FXML
 	private TableColumn<Pessoa, Pessoa> tcSelecionar;
-	@FXML
-	private TableColumn<Pessoa, Boolean> tcSelecionar2;
+	
 
 	@FXML
 	private RadioButton rbFisica;

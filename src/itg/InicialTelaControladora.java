@@ -12,12 +12,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import model.servicos.CadastroCategoriasServico;
 import model.servicos.CadastroClientesServico;
 import model.servicos.CadastroFornecedoresServico;
 import model.servicos.CadastroFuncionariosServico;
@@ -26,11 +28,16 @@ import model.servicos.UsuariosLoginServico;
 public class InicialTelaControladora implements Initializable {
 
 	private static Scene telainicialScene;
+	private static Stage telainicialStage;
 	private static Stage telaTrocarSenhaStage;
 	private static Scene telaTrocarSenhaScene;
 
 	public static Scene getTelaInicialScene() {
 		return telainicialScene;
+	}
+
+	public static Stage getTelaInicialStage() {
+		return telainicialStage;
 	}
 
 	public static Stage getTelaTrocarSenhaStage() {
@@ -48,11 +55,23 @@ public class InicialTelaControladora implements Initializable {
 	@FXML
 	private MenuItem miNovoUsuario;
 	@FXML
+	private MenuItem miCadCategorias;
+	@FXML
 	private MenuItem miCadClientes;
 	@FXML
 	private MenuItem miCadFuncionarios;
 	@FXML
 	private MenuItem miCadFornecedores;
+
+	@FXML
+	private Menu mnInicio;
+
+	@FXML
+	public void onMenuInicio() {
+		//carregarTelaInicial("/itg/InicialTela.fxml");
+
+	}
+
 
 	@FXML
 	public void onMenuItemSobre() {
@@ -92,6 +111,15 @@ public class InicialTelaControladora implements Initializable {
 		});
 
 	}
+	
+	@FXML
+	public void onMenuCategorias() {
+		carregarTela("/itg/CadastroCategoriasTela.fxml", (CadastroCategoriasTelaListControladora controller) -> {
+			controller.setCadastroCategoriasServico(new CadastroCategoriasServico());
+			controller.updateTableView();
+		});
+
+	}
 
 	@FXML
 	public void onMenuClientes() {
@@ -100,7 +128,7 @@ public class InicialTelaControladora implements Initializable {
 			controller.updateTableView();
 		});
 	}
-	
+
 	@FXML
 	public void onMenuFuncionarios() {
 		carregarTela("/itg/CadastroFuncionariosTela.fxml", (CadastroFuncionariosTelaListControladora controller) -> {
@@ -108,7 +136,7 @@ public class InicialTelaControladora implements Initializable {
 			controller.updateTableView();
 		});
 	}
-	
+
 	@FXML
 	public void onMenuFornecedores() {
 		carregarTela("/itg/CadastroFornecedoresTela.fxml", (CadastroFornecedoresTelaListControladora controller) -> {

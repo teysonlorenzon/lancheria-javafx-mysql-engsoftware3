@@ -13,6 +13,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ScrollPane;
@@ -96,9 +99,22 @@ public class LoginTelaControladora implements Initializable {
 			return false;
 		}
 	}
+	
+	private void tecladoEnter(TextField txt) {
+		txt.setOnKeyPressed(k -> {
+			final KeyCombination ENTER = new KeyCodeCombination(KeyCode.ENTER);
+			if (ENTER.match(k)) {
+				botaoComfirmarAcao();
+			}
+		});
+	}
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		
+		tecladoEnter(txtUsuario);
+		tecladoEnter(txtSenha);
+		
 		Restricao.setTextFieldMaxLength(txtUsuario, 45);
 		Restricao.setTextFieldMaxLength(txtSenha, 70);
 	}

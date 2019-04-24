@@ -8,11 +8,11 @@
 
 <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="467.0" prefWidth="658.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itg.InicialTelaControladora">
    <content>
-      <VBox prefHeight="240.0" prefWidth="727.0">
+      <VBox prefHeight="396.0" prefWidth="665.0">
          <children>
             <MenuBar>
               <menus>
-                  <Menu mnemonicParsing="false" text="Início" />
+                  <Menu fx:id="mnInicio" mnemonicParsing="false" onAction="#onMenuInicio" text="Início" />
                 <Menu mnemonicParsing="false" text="Vendas">
                   <items>
                     <MenuItem mnemonicParsing="false" text="Lanches" />
@@ -20,7 +20,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Cadastros">
                   <items>
-                    <MenuItem mnemonicParsing="false" onAction="#onMenuClientes" text="Categorias" />
+                    <MenuItem fx:id="miCadCategorias" mnemonicParsing="false" onAction="#onMenuCategorias" text="Categorias" />
                         <MenuItem fx:id="miCadClientes" mnemonicParsing="false" onAction="#onMenuClientes" text="Clientes" />
                         <MenuItem fx:id="miCadFornecedores" mnemonicParsing="false" onAction="#onMenuFornecedores" text="Fornecedores" />
                         <MenuItem fx:id="miCadFuncionarios" mnemonicParsing="false" onAction="#onMenuFuncionarios" text="Funcionários" />
