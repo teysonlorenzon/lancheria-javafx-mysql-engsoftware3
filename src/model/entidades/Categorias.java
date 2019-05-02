@@ -36,7 +36,7 @@ public class Categorias implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Categorias [idCategorias=" + idCategorias + ", nome=" + nome + "]";
+		return "Categorias [idCategorias=" + idCategorias + ", nomeC=" + nome + "]";
 	}
 	
 	
