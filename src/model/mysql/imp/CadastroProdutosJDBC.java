@@ -118,7 +118,7 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 			return null;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela produtos no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
@@ -138,7 +138,7 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 			while (rs.next()) {
 
 				Produtos obj = new Produtos();
-				obj.setIdCategorias(rs.getInt("IdProdutos"));
+				obj.setIdProdutos(rs.getInt("IdProdutos"));
 				obj.setNome(rs.getString("Nome"));
 				obj.setQuantidade(rs.getInt("IdQuantidade"));
 				obj.setIdFornecedores(rs.getInt("IdFornecedores"));
@@ -150,7 +150,7 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 			return null;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela produtos no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
@@ -163,7 +163,10 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM produtos " + "WHERE Nome = ?");
+			st = conn.prepareStatement("SELECT p.IdProdutos, p.Nome, p.Quantidade, f.Nome as nomeF, c.Nome as nomeC " +
+					"FROM produtos p " + 
+					"LEFT JOIN fornecedores f on f.IdFornecedores = p.IdFornecedores "  + 
+					"LEFT JOIN categorias c on c.IdCategorias = p.IdCategorias " + "WHERE p.Nome = ?");
 
 			st.setString(1, nome);
 			rs = st.executeQuery();
@@ -173,11 +176,11 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 			while (rs.next()) {
 
 				Produtos obj = new Produtos();
-				obj.setIdCategorias(rs.getInt("IdProdutos"));
+				obj.setIdProdutos(rs.getInt("IdProdutos"));
 				obj.setNome(rs.getString("Nome"));
-				obj.setQuantidade(rs.getInt("IdQuantidade"));
-				obj.setIdFornecedores(rs.getInt("IdFornecedores"));
-				obj.setIdCategorias(rs.getInt("IdCategorias"));
+				obj.setQuantidade(rs.getInt("Quantidade"));
+				obj.setNomeFornecedores(rs.getString("nomeF"));
+				obj.setNomeCategorias(rs.getString("nomeC"));
 
 				list.add(obj);
 
@@ -186,7 +189,7 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 			return list;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela produtos no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
@@ -198,7 +201,10 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM produtos " + "WHERE IdProdutos = ?");
+			st = conn.prepareStatement("SELECT p.IdProdutos, p.Nome, p.Quantidade, f.Nome as nomeF, c.Nome as nomeC " +
+					"FROM produtos p " + 
+					"LEFT JOIN fornecedores f on f.IdFornecedores = p.IdFornecedores "  + 
+					"LEFT JOIN categorias c on c.IdCategorias = p.IdCategorias " + "WHERE p.idProdutos= ?");
 
 			st.setInt(1, id);
 			rs = st.executeQuery();
@@ -208,12 +214,11 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 			while (rs.next()) {
 
 				Produtos obj = new Produtos();
-				obj.setIdCategorias(rs.getInt("IdProdutos"));
+				obj.setIdProdutos(rs.getInt("IdProdutos"));
 				obj.setNome(rs.getString("Nome"));
-				obj.setQuantidade(rs.getInt("IdQuantidade"));
-				obj.setIdFornecedores(rs.getInt("IdFornecedores"));
-				obj.setIdCategorias(rs.getInt("IdCategorias"));
-
+				obj.setQuantidade(rs.getInt("Quantidade"));
+				obj.setNomeFornecedores(rs.getString("nomeF"));
+				obj.setNomeCategorias(rs.getString("nomeC"));
 				list.add(obj);
 
 			}
@@ -221,7 +226,7 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 			return list;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela produtos no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
@@ -256,7 +261,7 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 			return listProd;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela produtos no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);

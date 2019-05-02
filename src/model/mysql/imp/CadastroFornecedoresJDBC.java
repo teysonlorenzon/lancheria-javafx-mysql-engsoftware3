@@ -146,7 +146,7 @@ public class CadastroFornecedoresJDBC implements CadastroFornecedoresMYSQL {
 			return null;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela fornecedores no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
@@ -186,7 +186,7 @@ public class CadastroFornecedoresJDBC implements CadastroFornecedoresMYSQL {
 			return null;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela fornecedores no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
@@ -229,7 +229,7 @@ public class CadastroFornecedoresJDBC implements CadastroFornecedoresMYSQL {
 			return list;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela fornecedores no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
@@ -272,7 +272,7 @@ public class CadastroFornecedoresJDBC implements CadastroFornecedoresMYSQL {
 			return listJuridica;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela fornecedores no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
@@ -316,7 +316,7 @@ public class CadastroFornecedoresJDBC implements CadastroFornecedoresMYSQL {
 			return listJuridica;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela fornecedores no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
@@ -360,7 +360,7 @@ public class CadastroFornecedoresJDBC implements CadastroFornecedoresMYSQL {
 			return listJuridica;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela fornecedores no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);

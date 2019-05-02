@@ -44,7 +44,6 @@
                </rowConstraints>
                <children>
                   <TextField fx:id="txtPesquisarId" />
-                  <TextField fx:id="txtPesquisarCpf" />
                   <TextField fx:id="txtPesquisarNome" />
                </children>
             </GridPane>

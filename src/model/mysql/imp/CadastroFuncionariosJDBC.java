@@ -150,7 +150,7 @@ public class CadastroFuncionariosJDBC implements CadastroFucionariosMYSQL {
 			return null;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela funcionarios no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
@@ -191,7 +191,7 @@ public class CadastroFuncionariosJDBC implements CadastroFucionariosMYSQL {
 			return null;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela funcionarios no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
@@ -236,7 +236,7 @@ public class CadastroFuncionariosJDBC implements CadastroFucionariosMYSQL {
 			return list;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela funcionarios no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
@@ -280,7 +280,7 @@ public class CadastroFuncionariosJDBC implements CadastroFucionariosMYSQL {
 		} catch (
 
 		SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela funcionarios no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
@@ -324,7 +324,7 @@ public class CadastroFuncionariosJDBC implements CadastroFucionariosMYSQL {
 			return listFisica;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela funcionarios no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
@@ -369,7 +369,7 @@ public class CadastroFuncionariosJDBC implements CadastroFucionariosMYSQL {
 			return listFisica;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela funcionarios no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);

@@ -109,7 +109,7 @@ public class CadastroCategoriasJDBC implements CadastroCategoriasMYSQL {
 			return null;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela categorias no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
@@ -138,7 +138,7 @@ public class CadastroCategoriasJDBC implements CadastroCategoriasMYSQL {
 			return null;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela categorias no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
@@ -171,7 +171,7 @@ public class CadastroCategoriasJDBC implements CadastroCategoriasMYSQL {
 			return list;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela categorias no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
@@ -201,7 +201,7 @@ public class CadastroCategoriasJDBC implements CadastroCategoriasMYSQL {
 			return list;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela categorias no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
@@ -230,7 +230,7 @@ public class CadastroCategoriasJDBC implements CadastroCategoriasMYSQL {
 			return list;
 
 		} catch (SQLException e) {
-			throw new DbException("Erro ao buscar Lista de Dados da tabela clientes no banco");
+			throw new DbException("Erro ao buscar Lista de Dados da tabela categorias no banco");
 		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
