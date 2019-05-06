@@ -8,20 +8,16 @@ public class Produtos implements Serializable {
 
 	private Integer idProdutos;
 	private String nome;
-	private Integer quantidade;
-	private Integer idFornecedores;
 	private Integer idCategorias;
-	private String nomeFornecedores;
 	private String nomeCategorias;
 
 	public Produtos() {
 	}
 
-	public Produtos(String nome, Integer quantidade, Integer idFornecedores, Integer idCategorias) {
+	public Produtos(String nome, Integer idCategorias, String nomeCategorias) {
 		this.nome = nome;
-		this.quantidade = quantidade;
-		this.idFornecedores = idFornecedores;
 		this.idCategorias = idCategorias;
+		this.nomeCategorias = nomeCategorias;
 	}
 
 	public Integer getIdProdutos() {
@@ -40,36 +36,12 @@ public class Produtos implements Serializable {
 		this.nome = nome;
 	}
 
-	public Integer getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
-	}
-
-	public Integer getIdFornecedores() {
-		return idFornecedores;
-	}
-
-	public void setIdFornecedores(Integer idFornecedores) {
-		this.idFornecedores = idFornecedores;
-	}
-
 	public Integer getIdCategorias() {
 		return idCategorias;
 	}
 
 	public void setIdCategorias(Integer idCategorias) {
 		this.idCategorias = idCategorias;
-	}
-
-	public String getNomeFornecedores() {
-		return nomeFornecedores;
-	}
-
-	public void setNomeFornecedores(String nomeFornecedores) {
-		this.nomeFornecedores = nomeFornecedores;
 	}
 
 	public String getNomeCategorias() {
@@ -82,11 +54,8 @@ public class Produtos implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Produtos [idProdutos=" + idProdutos + ", nome=" + nome + ", quantidade=" + quantidade
-				+ ", idFornecedores=" + idFornecedores + ", idCategorias=" + idCategorias + ", nomeFornecedores="
-				+ nomeFornecedores + ", nomeCategorias=" + nomeCategorias + "]";
+		return "Produtos [idProdutos=" + idProdutos + ", nome=" + nome + ", idCategorias=" + idCategorias
+				+ ", nomeCategorias=" + nomeCategorias + "]";
 	}
-
-	
 
 }

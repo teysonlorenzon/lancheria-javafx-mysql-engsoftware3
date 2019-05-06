@@ -105,6 +105,7 @@ public class InicialTelaControladora implements Initializable {
 			Alertas.showAlert("IO exception", "Erro ao carregar tela", e.getMessage(), AlertType.ERROR);
 		}
 	}
+	
 
 	@FXML
 	public void onMenuNovoUsuario() {

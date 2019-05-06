@@ -65,10 +65,6 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 	@FXML
 	private TableColumn<Produtos, Integer> tcIdProdutos;
 	@FXML
-	private TableColumn<Produtos, Integer> tcQuantidade;
-	@FXML
-	private TableColumn<Pessoa, String> tcFornecedores;
-	@FXML
 	private TableColumn<Categorias, String> tcCategorias;
 	@FXML
 	private TableColumn<Produtos, String> tcNome;
@@ -209,9 +205,7 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 
 		tcIdProdutos.setCellValueFactory(new PropertyValueFactory<>("idProdutos"));
 		tcNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
-		tcQuantidade.setCellValueFactory(new PropertyValueFactory<>("quantidade"));
 
-		tcFornecedores.setCellValueFactory(new PropertyValueFactory<>("nomeFornecedores"));
 		tcCategorias.setCellValueFactory(new PropertyValueFactory<>("nomeCategorias"));
 
 		Stage stage = (Stage) LoginTelaControladora.getMenuScene().getWindow();

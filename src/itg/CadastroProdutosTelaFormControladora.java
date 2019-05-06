@@ -36,17 +36,12 @@ public class CadastroProdutosTelaFormControladora implements Initializable {
 
 	private CadastroProdutosServico servico = new CadastroProdutosServico();
 	private CadastroCategoriasServico servicoCat = new CadastroCategoriasServico();
-	private CadastroFornecedoresServico servicoForn = new CadastroFornecedoresServico();
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
 	@FXML
 	private TextField txtIdProdutos;
 	@FXML
 	private TextField txtNome;
-	@FXML
-	private TextField txtQuantidade;
-	@FXML
-	private ComboBox cbFornecedor;
 	@FXML
 	private ComboBox cbCategoria;
 
@@ -58,11 +53,7 @@ public class CadastroProdutosTelaFormControladora implements Initializable {
 	@FXML
 	private Label lbErrorNome;
 	@FXML
-	private Label lbErrorQuantidade;
-	@FXML
 	private Label lbErrorFornecedor;
-	@FXML
-	private Label lbErrorCategoria;
 
 	@FXML
 	public void onBtConfirmarAction(ActionEvent event) {
@@ -94,7 +85,6 @@ public class CadastroProdutosTelaFormControladora implements Initializable {
 
 	private Produtos getFormDataProdutos() {
 		Produtos obj = new Produtos();
-		Pessoa obj2 = new Pessoa();
 		Categorias obj3 = new Categorias();
 		ValidationException exception = new ValidationException("Erro de Validação");
 
@@ -106,19 +96,11 @@ public class CadastroProdutosTelaFormControladora implements Initializable {
 		if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {
 			exception.addError("nome", "campo obrigatório");
 		}
-		if (txtQuantidade.getText() == null || txtQuantidade.getText().trim().equals("")) {
-			exception.addError("quantidade", "campo obrigatório");
-		}
-
-		if (cbFornecedor.valueProperty().get() == null || cbFornecedor.valueProperty().get().equals("")) {
-			exception.addError("fornecedores", "campo obrigatório");
-		}
 
 		if (cbCategoria.valueProperty().get() == null || cbCategoria.valueProperty().get().equals("")) {
 			exception.addError("categorias", "campo obrigatório");
 		}
 
-		obj2 = servicoForn.buscarNome((String) cbFornecedor.valueProperty().get());
 		obj3 = servicoCat.buscarNome((String) cbCategoria.valueProperty().get());
 
 		if (exception.getErrors().size() > 0) {
@@ -126,8 +108,6 @@ public class CadastroProdutosTelaFormControladora implements Initializable {
 		}
 
 		obj.setNome(txtNome.getText());
-		obj.setQuantidade(Integer.parseInt(txtQuantidade.getText()));
-		obj.setIdFornecedores(obj2.getIdPessoa());
 		obj.setIdCategorias(obj3.getIdCategorias());
 
 		return obj;
@@ -163,7 +143,6 @@ public class CadastroProdutosTelaFormControladora implements Initializable {
 
 		Mascaras.numericField(txtIdProdutos);
 		Mascaras.maxField(txtNome, 40);
-		Mascaras.numericField(txtQuantidade);
 
 	}
 
@@ -171,8 +150,6 @@ public class CadastroProdutosTelaFormControladora implements Initializable {
 
 		txtIdProdutos.setText(String.valueOf(entidade.getIdProdutos()));
 		txtNome.setText(entidade.getNome());
-		txtQuantidade.setText(Integer.toString(entidade.getQuantidade()));
-		cbFornecedor.valueProperty().set(entidade.getNomeFornecedores());
 		cbCategoria.valueProperty().set(entidade.getNomeCategorias());
 
 	}
@@ -184,16 +161,8 @@ public class CadastroProdutosTelaFormControladora implements Initializable {
 
 		}
 
-		if (fields.contains("quantidade")) {
-			lbErrorQuantidade.setText(errors.get("quantidade"));
-
-		}
 		if (fields.contains("fornecedores")) {
 			lbErrorFornecedor.setText(errors.get("fornecedores"));
-
-		}
-		if (fields.contains("categorias")) {
-			lbErrorCategoria.setText(errors.get("categorias"));
 
 		}
 
@@ -201,12 +170,8 @@ public class CadastroProdutosTelaFormControladora implements Initializable {
 
 	public void criarListaComboBox() {
 
-		listFor = servicoForn.buscarFornecedores();
 		listCat = servicoCat.buscarCategorias();
 
-		for (Pessoa listPes : listFor) {
-			cbFornecedor.getItems().add(listPes.getNome());
-		}
 		for (Categorias listCate : listCat) {
 			cbCategoria.getItems().add(listCate.getNome());
 		}
