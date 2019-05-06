@@ -173,7 +173,7 @@ public class CadastroProdutosTelaFormControladora implements Initializable {
 		listCat = servicoCat.buscarCategorias();
 
 		for (Categorias listCate : listCat) {
-			cbCategoria.getItems().add(listCate.getNome());
+			cbCategoria.getItems().add(listCate.getNomeCategorias());
 		}
 
 	}

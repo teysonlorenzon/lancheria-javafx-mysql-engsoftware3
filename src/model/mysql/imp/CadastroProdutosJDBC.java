@@ -165,7 +165,6 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 			List<Produtos> list = new ArrayList<>();
 
 			while (rs.next()) {
-
 				Produtos obj = new Produtos();
 				obj.setIdProdutos(rs.getInt("IdProdutos"));
 				obj.setNome(rs.getString("Nome"));

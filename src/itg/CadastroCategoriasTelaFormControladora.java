@@ -97,7 +97,7 @@ public class CadastroCategoriasTelaFormControladora implements Initializable {
 			throw exception;
 		}
 
-		obj.setNome(txtNome.getText());
+		obj.setNomeCategorias(txtNome.getText());
 
 		return obj;
 
@@ -135,7 +135,7 @@ public class CadastroCategoriasTelaFormControladora implements Initializable {
 	public void updateFormDataCategorias() {
 
 		txtIdCategorias.setText(String.valueOf(entidade.getIdCategorias()));
-		txtNome.setText(entidade.getNome());
+		txtNome.setText(entidade.getNomeCategorias());
 
 	}
 

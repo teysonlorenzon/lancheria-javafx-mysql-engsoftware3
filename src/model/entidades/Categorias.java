@@ -7,15 +7,15 @@ public class Categorias implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Integer idCategorias;
-	private String nome;
+	private String nomeCategorias;
 	
 	public Categorias(){
 		
 	}
 
-	public Categorias(Integer idCategorias, String nome) {
+	public Categorias(Integer idCategorias, String nomeCategorias) {
 		this.idCategorias = idCategorias;
-		this.nome = nome;
+		this.nomeCategorias = nomeCategorias;
 	}
 
 	public Integer getIdCategorias() {
@@ -26,17 +26,17 @@ public class Categorias implements Serializable {
 		this.idCategorias = idCategorias;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getNomeCategorias() {
+		return nomeCategorias;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setNomeCategorias(String nomeCategorias) {
+		this.nomeCategorias = nomeCategorias;
 	}
 
 	@Override
 	public String toString() {
-		return "Categorias [idCategorias=" + idCategorias + ", nomeC=" + nome + "]";
+		return "Categorias [idCategorias=" + idCategorias + ", nomeCategorias=" + nomeCategorias + "]";
 	}
 	
 	

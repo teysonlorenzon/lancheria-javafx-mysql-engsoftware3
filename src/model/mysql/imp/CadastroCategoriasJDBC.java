@@ -33,7 +33,7 @@ public class CadastroCategoriasJDBC implements CadastroCategoriasMYSQL {
 			st = conn.prepareStatement("INSERT INTO categorias " + "(Nome) " + "VALUES " + "(?)",
 					Statement.RETURN_GENERATED_KEYS);
 
-			st.setString(1, obj.getNome());
+			st.setString(1, obj.getNomeCategorias());
 
 			int rowsAffected = st.executeUpdate();
 
@@ -62,7 +62,7 @@ public class CadastroCategoriasJDBC implements CadastroCategoriasMYSQL {
 
 			st = conn.prepareStatement("UPDATE categorias " + "SET Nome = ?" + "WHERE IdCategorias = ?");
 
-			st.setString(1, obj.getNome());
+			st.setString(1, obj.getNomeCategorias());
 			st.setInt(2, obj.getIdCategorias());
 			st.executeUpdate();
 
@@ -102,7 +102,7 @@ public class CadastroCategoriasJDBC implements CadastroCategoriasMYSQL {
 			while (rs.next()) {
 				Categorias obj = new Categorias();
 				obj.setIdCategorias(rs.getInt("IdCategorias"));
-				obj.setNome(rs.getString("Nome"));
+				obj.setNomeCategorias(rs.getString("Nome"));
 
 				return obj;
 			}
@@ -130,7 +130,7 @@ public class CadastroCategoriasJDBC implements CadastroCategoriasMYSQL {
 
 				Categorias obj = new Categorias();
 				obj.setIdCategorias(rs.getInt("IdCategorias"));
-				obj.setNome(rs.getString("Nome"));
+				obj.setNomeCategorias(rs.getString("Nome"));
 
 				return obj;
 
@@ -162,7 +162,7 @@ public class CadastroCategoriasJDBC implements CadastroCategoriasMYSQL {
 
 				Categorias obj = new Categorias();
 				obj.setIdCategorias(rs.getInt("IdCategorias"));
-				obj.setNome(rs.getString("Nome"));
+				obj.setNomeCategorias(rs.getString("Nome"));
 
 				list.add(obj);
 
@@ -193,7 +193,7 @@ public class CadastroCategoriasJDBC implements CadastroCategoriasMYSQL {
 			while (rs.next()) {
 				Categorias obj = new Categorias();
 				obj.setIdCategorias(rs.getInt("IdCategorias"));
-				obj.setNome(rs.getString("Nome"));
+				obj.setNomeCategorias(rs.getString("Nome"));
 
 				list.add(obj);
 			}
@@ -222,7 +222,7 @@ public class CadastroCategoriasJDBC implements CadastroCategoriasMYSQL {
 
 				Categorias obj = new Categorias();
 				obj.setIdCategorias(rs.getInt("IdCategorias"));
-				obj.setNome(rs.getString("Nome"));
+				obj.setNomeCategorias(rs.getString("Nome"));
 
 				list.add(obj);
 			}

@@ -2,23 +2,28 @@ package model.entidades;
 
 import java.io.Serializable;
 
-public class Produtos implements Serializable {
+public class Produtos extends Categorias implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private Integer idProdutos;
 	private String nome;
-	private Integer idCategorias;
-	private String nomeCategorias;
+
 
 	public Produtos() {
 	}
 
-	public Produtos(String nome, Integer idCategorias, String nomeCategorias) {
+
+
+
+
+	public Produtos(Integer idCategorias, String nomeCategorias, Integer idProdutos, String nome) {
+		super(idCategorias, nomeCategorias);
+		this.idProdutos = idProdutos;
 		this.nome = nome;
-		this.idCategorias = idCategorias;
-		this.nomeCategorias = nomeCategorias;
 	}
+
+
 
 	public Integer getIdProdutos() {
 		return idProdutos;
@@ -36,26 +41,15 @@ public class Produtos implements Serializable {
 		this.nome = nome;
 	}
 
-	public Integer getIdCategorias() {
-		return idCategorias;
-	}
 
-	public void setIdCategorias(Integer idCategorias) {
-		this.idCategorias = idCategorias;
-	}
-
-	public String getNomeCategorias() {
-		return nomeCategorias;
-	}
-
-	public void setNomeCategorias(String nomeCategorias) {
-		this.nomeCategorias = nomeCategorias;
-	}
 
 	@Override
 	public String toString() {
-		return "Produtos [idProdutos=" + idProdutos + ", nome=" + nome + ", idCategorias=" + idCategorias
-				+ ", nomeCategorias=" + nomeCategorias + "]";
+		return "Produtos [idProdutos=" + idProdutos + ", nome=" + nome + "]";
 	}
+
+
+
+	
 
 }
