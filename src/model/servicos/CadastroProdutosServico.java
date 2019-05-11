@@ -44,4 +44,9 @@ public class CadastroProdutosServico {
 		return contrato.acharListPorId(id);
 
 	}
+	public List<Produtos> buscarListProdutosPorCategorias(Integer id) {
+		return contrato.acharProdutoPorCategoria(id);
+
+	}
+
 }

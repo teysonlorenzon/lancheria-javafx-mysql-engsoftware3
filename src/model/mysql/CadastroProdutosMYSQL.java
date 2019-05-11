@@ -16,5 +16,6 @@ public interface CadastroProdutosMYSQL {
 	List<Produtos> acharListPorNome(String nome);
 	List<Produtos> acharListPorId(Integer id);
 	List<Produtos> acharTudo();
+	List<Produtos> acharProdutoPorCategoria(Integer id);
 	
 }

@@ -107,7 +107,7 @@ public class CadastroProdutosTelaFormControladora implements Initializable {
 			throw exception;
 		}
 
-		obj.setNome(txtNome.getText());
+		obj.setNomeProdutos(txtNome.getText());
 		obj.setIdCategorias(obj3.getIdCategorias());
 
 		return obj;
@@ -149,7 +149,7 @@ public class CadastroProdutosTelaFormControladora implements Initializable {
 	public void updateFormDataProdutos() {
 
 		txtIdProdutos.setText(String.valueOf(entidade.getIdProdutos()));
-		txtNome.setText(entidade.getNome());
+		txtNome.setText(entidade.getNomeProdutos());
 		cbCategoria.valueProperty().set(entidade.getNomeCategorias());
 
 	}

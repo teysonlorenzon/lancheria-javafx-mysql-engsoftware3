@@ -1,15 +1,26 @@
 package itg.util;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.InputMismatchException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.imageio.ImageIO;
+
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class Utilitarios {
@@ -164,11 +175,50 @@ public class Utilitarios {
 
 	}
 
-
 	public static boolean validarEmail(String email) {
 		Matcher matcher = pattern.matcher(email);
 		return matcher.matches();
 	}
 
-	
+	public static void SalvarImagem(ImageView img) {
+		try {
+
+			WritableImage image = img.snapshot(new SnapshotParameters(), null);
+			FileChooser fileChooser = new FileChooser();
+			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("IMAGE files (*.png)", "*.png");
+			fileChooser.getExtensionFilters().add(extFilter);
+			File file = fileChooser.showSaveDialog(null);
+
+			try {
+				if (file != null) {
+					ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		} catch (Exception erro) {
+		}
+	}
+
+	public static URL buscarImagem(ImageView imagem) {
+		try {
+
+			WritableImage image = imagem.snapshot(new SnapshotParameters(), null);
+			FileChooser fileChooser = new FileChooser();
+			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
+					"IMAGE files (*.png), (*.bmp), (*.jpg)", "*.bmp", "*.png", "*.jpg");
+			fileChooser.getExtensionFilters().add(extFilter);
+			File file = fileChooser.showOpenDialog(null);
+			if (file != null) {
+				URL url = file.toURI().toURL();
+				imagem.setImage(new Image(url.toExternalForm()));
+				return url;
+			}
+
+		} catch (Exception erro) {
+		}
+		return null;
+	}
+
 }

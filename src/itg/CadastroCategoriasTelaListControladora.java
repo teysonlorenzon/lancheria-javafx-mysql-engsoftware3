@@ -193,7 +193,7 @@ public class CadastroCategoriasTelaListControladora implements Initializable, Da
 	public void initializarNodes() {
 
 		tcIdCategoria.setCellValueFactory(new PropertyValueFactory<>("idCategorias"));
-		tcNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+		tcNome.setCellValueFactory(new PropertyValueFactory<>("nomeCategorias"));
 
 		Stage stage = (Stage) LoginTelaControladora.getMenuScene().getWindow();
 		tbCadastroCategorias.prefHeightProperty().bind(stage.heightProperty());

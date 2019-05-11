@@ -2,7 +2,7 @@ package model.entidades;
 
 import java.io.Serializable;
 
-public class Categorias implements Serializable {
+public class Categorias extends Pessoa implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -13,10 +13,16 @@ public class Categorias implements Serializable {
 		
 	}
 
-	public Categorias(Integer idCategorias, String nomeCategorias) {
+	public Categorias(Integer idPessoa, String nome, String cidade, String endereco, Integer numero, String bairro,
+			String cep, String uf, String complemento, String email, String telefoneFixo, String telefoneCelular,
+			Integer idCategorias, String nomeCategorias) {
+		super(idPessoa, nome, cidade, endereco, numero, bairro, cep, uf, complemento, email, telefoneFixo,
+				telefoneCelular);
 		this.idCategorias = idCategorias;
 		this.nomeCategorias = nomeCategorias;
 	}
+
+
 
 	public Integer getIdCategorias() {
 		return idCategorias;

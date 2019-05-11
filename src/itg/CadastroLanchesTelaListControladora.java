@@ -39,18 +39,17 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entidades.Categorias;
-import model.entidades.Pessoa;
-import model.entidades.Produtos;
-import model.servicos.CadastroProdutosServico;
+import model.entidades.Lanches;
+import model.servicos.CadastroLanchesServico;
 
-public class CadastroProdutosTelaListControladora implements Initializable, DataChangeListener {
+public class CadastroLanchesTelaListControladora implements Initializable, DataChangeListener {
 
-	private CadastroProdutosServico servicoProd;
-	private ObservableList<Produtos> obsList;
+	private CadastroLanchesServico servicoProd;
+	private ObservableList<Lanches> obsList;
 	private String condicao = "tudo";
-	private Produtos entidade;
+	private Lanches entidade;
 	private List<CheckBox> chlist = new ArrayList<>();
-	private List<Produtos> list = new ArrayList<>();
+	private List<Lanches> list = new ArrayList<>();
 
 	public void setCondicao(String condicao) {
 		this.condicao = condicao;
@@ -61,15 +60,17 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 	}
 
 	@FXML
-	private TableView<Produtos> tbCadastroProdutos;
+	private TableView<Lanches> tbCadastroLanches;
 	@FXML
-	private TableColumn<Produtos, Integer> tcIdProdutos;
+	private TableColumn<Lanches, Integer> tcIdLanches;
 	@FXML
-	private TableColumn<Categorias, String> tcCategorias;
+	private TableColumn<Lanches, String> tcNome;
 	@FXML
-	private TableColumn<Produtos, String> tcNome;
+	private TableColumn<Lanches, String> tcDescricao;
 	@FXML
-	private TableColumn<Produtos, Produtos> tcSelecionar;
+	private TableColumn<Lanches, String> tcValorLanche;
+	@FXML
+	private TableColumn<Lanches, Lanches> tcSelecionar;
 
 	@FXML
 	private TextField txtPesquisarId;
@@ -162,7 +163,7 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 		actionBts();
 		actionToolBar();
 		Stage parentStage = Utilitarios.currentStage(event);
-		criarForm("/itg/CadastroProdutosFormTela.fxml", parentStage);
+		criarForm("/itg/CadastroLanchesFormTela.fxml", parentStage);
 
 	}
 
@@ -171,7 +172,7 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 		txt.setText("");
 	}
 
-	public void setCadastroProdutosServico(CadastroProdutosServico servicoProd) {
+	public void setCadastroLanchesServico(CadastroLanchesServico servicoProd) {
 		this.servicoProd = servicoProd;
 	}
 
@@ -180,22 +181,22 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 		if (getCondicao().equals("tudo")) {
 			int cont = 0;
 
-			list = servicoProd.buscarProdutos();
+			list = servicoProd.buscarLanches();
 			obsList = FXCollections.observableArrayList(list);
-			tbCadastroProdutos.setItems(obsList);
+			tbCadastroLanches.setItems(obsList);
 			initSelecionarCheckBox();
 		}
 
 		else if (getCondicao().equals("id")) {
 			list = servicoProd.buscarListPorId((Integer.parseInt(txtPesquisarId.getText())));
 			obsList = FXCollections.observableArrayList(list);
-			tbCadastroProdutos.setItems(obsList);
+			tbCadastroLanches.setItems(obsList);
 			initSelecionarCheckBox();
 
 		} else if (getCondicao().equals("nome")) {
 			list = servicoProd.buscarListPorNome(txtPesquisarNome.getText());
 			obsList = FXCollections.observableArrayList(list);
-			tbCadastroProdutos.setItems(obsList);
+			tbCadastroLanches.setItems(obsList);
 			initSelecionarCheckBox();
 		}
 
@@ -203,13 +204,14 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 
 	public void initializarNodes() {
 
-		tcIdProdutos.setCellValueFactory(new PropertyValueFactory<>("idProdutos"));
-		tcNome.setCellValueFactory(new PropertyValueFactory<>("nomeProdutos"));
+		tcIdLanches.setCellValueFactory(new PropertyValueFactory<>("idLanches"));
+		tcNome.setCellValueFactory(new PropertyValueFactory<>("nomeLanches"));
+		tcDescricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
+		tcValorLanche.setCellValueFactory(new PropertyValueFactory<>("valorLanche"));
 
-		tcCategorias.setCellValueFactory(new PropertyValueFactory<>("nomeCategorias"));
 
 		Stage stage = (Stage) LoginTelaControladora.getMenuScene().getWindow();
-		tbCadastroProdutos.prefHeightProperty().bind(stage.heightProperty());
+		tbCadastroLanches.prefHeightProperty().bind(stage.heightProperty());
 
 	}
 
@@ -251,7 +253,7 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 			Alertas.showAlert("Atenção", null, "Selecione um cliente", AlertType.WARNING);
 		}
 
-		criarFormProdutos(entidade, "/itg/CadastroProdutosFormTela.fxml", parentStage);
+		criarFormLanches(entidade, "/itg/CadastroLanchesFormTela.fxml", parentStage);
 
 	}
 
@@ -266,18 +268,18 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 		}
 	}
 
-	private void criarFormProdutos(Produtos obj, String absoluteName, Stage parentStage) {
+	private void criarFormLanches(Lanches obj, String absoluteName, Stage parentStage) {
 		try {
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
-			CadastroProdutosTelaFormControladora controller = loader.getController();
+			CadastroLanchesTelaFormControladora controller = loader.getController();
 
 			controller.subscribeDataChangeListener(this);
 
-			controller.setProdutos(obj);
-			controller.updateFormDataProdutos();
+			controller.setLanches(obj);
+			controller.updateFormDataLanches();
 
 			setCondicao("tudo");
 			Stage dialogStage = new Stage();
@@ -298,8 +300,8 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
-			CadastroProdutosTelaFormControladora controller = loader.getController();
-			controller.setCadastroProdutosServico(new CadastroProdutosServico());
+			CadastroLanchesTelaFormControladora controller = loader.getController();
+			controller.setCadastroLanchesServico(new CadastroLanchesServico());
 			controller.subscribeDataChangeListener(this);
 
 			Stage dialogStage = new Stage();
@@ -318,12 +320,12 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 	private void initSelecionarCheckBox() {
 
 		tcSelecionar.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-		tcSelecionar.setCellFactory(param -> new TableCell<Produtos, Produtos>() {
+		tcSelecionar.setCellFactory(param -> new TableCell<Lanches, Lanches>() {
 
 			private final CheckBox chkSelecionar = new CheckBox("");
 
 			@Override
-			protected void updateItem(Produtos obj, boolean empty) {
+			protected void updateItem(Lanches obj, boolean empty) {
 
 				super.updateItem(obj, empty);
 				if (obj == null) {
@@ -343,7 +345,7 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 
 	}
 
-	private void checkBoxSelecionado(Produtos obj) {
+	private void checkBoxSelecionado(Lanches obj) {
 		entidade = obj;
 
 		for (CheckBox listar : chlist) {
@@ -368,7 +370,7 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 
 	}
 
-	private void removeEntity(Produtos obj) {
+	private void removeEntity(Lanches obj) {
 
 		Optional<ButtonType> result = Alertas.showConfirmation("Confirmação", "Tem certeza em excluir o item?");
 
@@ -377,7 +379,7 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 			try {
 
 				setCondicao("tudo");
-				servicoProd.excluirProdutos(obj);
+				servicoProd.excluirLanches(obj);
 				updateTableView();
 
 			} catch (DbIntegrityException e) {

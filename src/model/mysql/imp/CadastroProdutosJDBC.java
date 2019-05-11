@@ -29,10 +29,10 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 		PreparedStatement st = null;
 
 		try {
-			st = conn.prepareStatement("INSERT INTO produtos " + "(Nome, IdCategorias) "
-					+ "VALUES " + "(?, ?)", Statement.RETURN_GENERATED_KEYS);
+			st = conn.prepareStatement("INSERT INTO produtos " + "(Nome, IdCategorias) " + "VALUES " + "(?, ?)",
+					Statement.RETURN_GENERATED_KEYS);
 
-			st.setString(1, obj.getNome());
+			st.setString(1, obj.getNomeProdutos());
 			st.setInt(2, obj.getIdCategorias());
 
 			int rowsAffected = st.executeUpdate();
@@ -62,7 +62,7 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 
 			st = conn.prepareStatement("UPDATE produtos " + "SET Nome = ?, IdCategorias = ? " + "WHERE IdProdutos = ?");
 
-			st.setString(1, obj.getNome());
+			st.setString(1, obj.getNomeProdutos());
 			st.setInt(2, obj.getIdCategorias());
 			st.setInt(3, obj.getIdProdutos());
 			st.executeUpdate();
@@ -104,7 +104,7 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 			while (rs.next()) {
 				Produtos obj = new Produtos();
 				obj.setIdProdutos(rs.getInt("IdProdutos"));
-				obj.setNome(rs.getString("Nome"));
+				obj.setNomeProdutos(rs.getString("Nome"));
 				obj.setIdCategorias(rs.getInt("IdCategorias"));
 
 				return obj;
@@ -133,7 +133,7 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 
 				Produtos obj = new Produtos();
 				obj.setIdProdutos(rs.getInt("IdProdutos"));
-				obj.setNome(rs.getString("Nome"));
+				obj.setNomeProdutos(rs.getString("Nome"));
 				obj.setIdCategorias(rs.getInt("IdCategorias"));
 
 				return obj;
@@ -155,9 +155,8 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT p.IdProdutos, p.Nome, c.Nome as nomeC " +
-					"FROM produtos p " + 
-					"LEFT JOIN categorias c on c.IdCategorias = p.IdCategorias " + "WHERE p.Nome = ?");
+			st = conn.prepareStatement("SELECT p.IdProdutos, p.Nome, c.Nome as nomeC " + "FROM produtos p "
+					+ "LEFT JOIN categorias c on c.IdCategorias = p.IdCategorias " + "WHERE p.Nome = ?");
 
 			st.setString(1, nome);
 			rs = st.executeQuery();
@@ -167,7 +166,7 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 			while (rs.next()) {
 				Produtos obj = new Produtos();
 				obj.setIdProdutos(rs.getInt("IdProdutos"));
-				obj.setNome(rs.getString("Nome"));
+				obj.setNomeProdutos(rs.getString("Nome"));
 				obj.setNomeCategorias(rs.getString("nomeC"));
 
 				list.add(obj);
@@ -189,9 +188,8 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT p.IdProdutos, p.Nome, c.Nome as nomeC " +
-					"FROM produtos p " + 
-					"LEFT JOIN categorias c on c.IdCategorias = p.IdCategorias " + "WHERE p.idProdutos= ?");
+			st = conn.prepareStatement("SELECT p.IdProdutos, p.Nome, c.Nome as nomeC " + "FROM produtos p "
+					+ "LEFT JOIN categorias c on c.IdCategorias = p.IdCategorias " + "WHERE p.idProdutos= ?");
 
 			st.setInt(1, id);
 			rs = st.executeQuery();
@@ -202,7 +200,7 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 
 				Produtos obj = new Produtos();
 				obj.setIdProdutos(rs.getInt("IdProdutos"));
-				obj.setNome(rs.getString("Nome"));
+				obj.setNomeProdutos(rs.getString("Nome"));
 				obj.setNomeCategorias(rs.getString("nomeC"));
 				list.add(obj);
 
@@ -223,9 +221,8 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT p.IdProdutos, p.Nome, c.Nome as nomeC " +
-					"FROM produtos p " + 
-					"LEFT JOIN categorias c on c.IdCategorias = p.IdCategorias ");
+			st = conn.prepareStatement("SELECT p.IdProdutos, p.Nome, c.Nome as nomeC " + "FROM produtos p "
+					+ "LEFT JOIN categorias c on c.IdCategorias = p.IdCategorias ");
 			rs = st.executeQuery();
 			List<Produtos> listProd = new ArrayList<>();
 
@@ -233,13 +230,13 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 
 				Produtos obj = new Produtos();
 				obj.setIdProdutos(rs.getInt("IdProdutos"));
-				obj.setNome(rs.getString("Nome"));
+				obj.setNomeProdutos(rs.getString("Nome"));
 				obj.setNomeCategorias(rs.getString("nomeC"));
 
 				listProd.add(obj);
 
 			}
-					
+
 			return listProd;
 
 		} catch (SQLException e) {
@@ -249,6 +246,36 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 			DB.closeResultSet(rs);
 		}
 	}
-	
+
+	@Override
+	public List<Produtos> acharProdutoPorCategoria(Integer id) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("SELECT * FROM produtos " + "WHERE IdCategorias = ?");
+			st.setInt(1, id);
+			rs = st.executeQuery();
+			List<Produtos> listProd = new ArrayList<>();
+
+			while (rs.next()) {
+
+				Produtos obj = new Produtos();
+				obj.setIdProdutos(rs.getInt("IdProdutos"));
+				obj.setNomeProdutos(rs.getString("Nome"));
+
+
+				listProd.add(obj);
+
+			}
+			
+			return listProd;
+
+		} catch (SQLException e) {
+			throw new DbException("Erro ao buscar Lista de Dados da tabela produtos no banco");
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+	}
 
 }

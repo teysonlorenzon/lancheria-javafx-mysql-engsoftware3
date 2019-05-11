@@ -23,6 +23,7 @@ import model.servicos.CadastroCategoriasServico;
 import model.servicos.CadastroClientesServico;
 import model.servicos.CadastroFornecedoresServico;
 import model.servicos.CadastroFuncionariosServico;
+import model.servicos.CadastroLanchesServico;
 import model.servicos.CadastroProdutosServico;
 import model.servicos.UsuariosLoginServico;
 
@@ -65,6 +66,8 @@ public class InicialTelaControladora implements Initializable {
 	private MenuItem miCadFornecedores;
 	@FXML
 	private MenuItem miCadProdutos;
+	@FXML
+	private MenuItem miCadLanches;
 
 	@FXML
 	private Menu mnInicio;
@@ -115,6 +118,16 @@ public class InicialTelaControladora implements Initializable {
 		});
 
 	}
+	
+	@FXML
+	public void onMenuLanches() {
+		carregarTela("/itg/CadastroLanchesTela.fxml", (CadastroLanchesTelaListControladora controller) -> {
+			controller.setCadastroLanchesServico(new CadastroLanchesServico());
+			controller.updateTableView();
+		});
+
+	}
+	
 	@FXML
 	public void onMenuProdutos() {
 		carregarTela("/itg/CadastroProdutosTela.fxml", (CadastroProdutosTelaListControladora controller) -> {
