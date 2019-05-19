@@ -7,22 +7,27 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import com.mysql.jdbc.StringUtils;
-
 import db.DbException;
 import itg.listeners.DataChangeListener;
 import itg.util.Alertas;
 import itg.util.Mascaras;
 import itg.util.Restricao;
 import itg.util.Utilitarios;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import model.entidades.Categorias;
@@ -37,6 +42,10 @@ public class CadastroLanchesTelaFormControladora implements Initializable {
 
 	private Lanches entidade;
 	private List<Produtos> listProd = new ArrayList<>();
+	private ObservableList<Produtos> obsList;
+	private List<String> arrayListView = new ArrayList<>();
+	private ObservableList<String> atualizaListView;
+
 	private Categorias listCat;
 	private URL url;
 
@@ -50,16 +59,11 @@ public class CadastroLanchesTelaFormControladora implements Initializable {
 	@FXML
 	private TextField txtNome;
 	@FXML
-	private TextField txtDescricao;
+	private ListView<String> lvDescricao;
 	@FXML
 	private TextField txtValor;
 	@FXML
 	private ImageView imgLanche;
-
-	@FXML
-	private ComboBox cbAddProdutos;
-	@FXML
-	private ComboBox cbRmProdutos;
 
 	@FXML
 	private Button btConfirmar;
@@ -67,6 +71,15 @@ public class CadastroLanchesTelaFormControladora implements Initializable {
 	private Button btCancelar;
 	@FXML
 	private Button btAdcionarImagem;
+
+	@FXML
+	private TableView<Produtos> tbIngredientes;
+	@FXML
+	private TableColumn<Produtos, Produtos> tcAdicionar;
+	@FXML
+	private TableColumn<Produtos, Produtos> tcRetirar;
+	@FXML
+	private TableColumn<Produtos, Produtos> tcIngredientes;
 
 	@FXML
 	private Label lbErrorNome;
@@ -81,30 +94,25 @@ public class CadastroLanchesTelaFormControladora implements Initializable {
 		url = Utilitarios.buscarImagem(imgLanche);
 	}
 
-	@FXML
-	public void onCbAddProdutos() {
+	public void onTcAdicionar(Produtos obj) {
 		
-		if (!StringUtils.isNullOrEmpty(txtDescricao.getText())) {
-			txtDescricao.setText(txtDescricao.getText() + ",");
-		}
-		txtDescricao.setText(txtDescricao.getText() + (String) cbAddProdutos.valueProperty().get());
+			if (!arrayListView.contains(obj.getNomeProdutos())) {
+				arrayListView.add(obj.getNomeProdutos());
+				atualizaListView = FXCollections.observableArrayList(arrayListView);
+				lvDescricao.setItems(atualizaListView);
+			} else {
+				Alertas.showAlert("Restrição", "Não é possivel adicionar o mesmo produto a lista", null, AlertType.WARNING);
+			}
 		
 		
-		
-
 	}
 
-	@FXML
-	public void onCbRmProdutos() {
-		String seraRemovido = String.valueOf(cbRmProdutos.valueProperty().get());
-		String naoRemove = txtDescricao.getText();
-		if (naoRemove.equals(seraRemovido)) {
-			txtDescricao.setText(naoRemove.replaceAll(seraRemovido, ""));
-		} else {
+	public void onTcRemover(Produtos obj) {
 
-			seraRemovido = "," + seraRemovido;
-			txtDescricao.setText(naoRemove.replaceAll(seraRemovido, ""));
-		}
+		arrayListView.remove(obj.getNomeProdutos());
+		atualizaListView = FXCollections.observableArrayList(arrayListView);
+		lvDescricao.setItems(atualizaListView);
+
 	}
 
 	@FXML
@@ -148,7 +156,8 @@ public class CadastroLanchesTelaFormControladora implements Initializable {
 		if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {
 			exception.addError("nome", "campo obrigatório");
 		}
-		if (txtDescricao.getText() == null || txtDescricao.getText().trim().equals("")) {
+
+		if (String.valueOf(lvDescricao.getItems()).equals("[]")) {
 			exception.addError("descricao", "campo obrigatório");
 		}
 		if (txtValor.getText() == null || txtValor.getText().trim().equals("")) {
@@ -165,7 +174,8 @@ public class CadastroLanchesTelaFormControladora implements Initializable {
 		}
 
 		obj.setNomeLanches(txtNome.getText());
-		obj.setDescricao(txtDescricao.getText());
+
+		obj.setDescricao(String.valueOf(lvDescricao.getItems()).replace("[", "").replace("]", ""));
 		obj.setValorLanche(Double.parseDouble(txtValor.getText()));
 
 		return obj;
@@ -192,8 +202,8 @@ public class CadastroLanchesTelaFormControladora implements Initializable {
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		updateTableView();
 		initializeNodes();
-		criarListaComboBox();
 
 	}
 
@@ -205,12 +215,23 @@ public class CadastroLanchesTelaFormControladora implements Initializable {
 
 	}
 
+	private void converteStringParaList(String descri) {
+		String[] array = descri.split(",");
+
+		for (int i = 0; i < array.length; i++) {
+			arrayListView.add(array[i]);
+		}
+		atualizaListView = FXCollections.observableArrayList(arrayListView);
+		lvDescricao.setItems(atualizaListView);
+
+	}
+
 	public void updateFormDataLanches() {
 
 		txtIdLanches.setText(String.valueOf(entidade.getIdLanches()));
 		txtNome.setText(entidade.getNomeLanches());
 		txtValor.setText(String.valueOf(entidade.getValorLanche()));
-		txtDescricao.setText(entidade.getDescricao());
+		converteStringParaList(entidade.getDescricao());
 		imgLanche.setImage(new Image(entidade.getLinkImgLanche()));
 
 	}
@@ -233,16 +254,57 @@ public class CadastroLanchesTelaFormControladora implements Initializable {
 
 	}
 
-	public void criarListaComboBox() {
+	public void updateTableView() {
 
 		listCat = servicoCat.buscarNome("Ingredientes");
 		listProd = servicoProd.buscarListProdutosPorCategorias(listCat.getIdCategorias());
+		obsList = FXCollections.observableArrayList(listProd);
+		tbIngredientes.setItems(obsList);
+		initializarNodes();
+		initEditButtons();
+		initRemoveButtons();
 
-		for (Produtos listProdutos : listProd) {
-			cbAddProdutos.getItems().add(listProdutos.getNomeProdutos());
-			cbRmProdutos.getItems().add(listProdutos.getNomeProdutos());
-		}
+	}
 
+	public void initializarNodes() {
+
+		tcIngredientes.setCellValueFactory(new PropertyValueFactory<>("nomeProdutos"));
+	}
+
+	private void initEditButtons() {
+		tcAdicionar.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tcAdicionar.setCellFactory(param -> new TableCell<Produtos, Produtos>() {
+			private final Button button = new Button("+");
+
+			@Override
+			protected void updateItem(Produtos obj, boolean empty) {
+				super.updateItem(obj, empty);
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(button);
+				button.setOnAction(event -> onTcAdicionar(obj));
+			}
+		});
+	}
+
+	private void initRemoveButtons() {
+		tcRetirar.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tcRetirar.setCellFactory(param -> new TableCell<Produtos, Produtos>() {
+			private final Button button = new Button("-");
+
+			@Override
+			protected void updateItem(Produtos obj, boolean empty) {
+				super.updateItem(obj, empty);
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(button);
+				button.setOnAction(event -> onTcRemover(obj));
+			}
+		});
 	}
 
 }

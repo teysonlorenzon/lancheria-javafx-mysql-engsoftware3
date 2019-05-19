@@ -3,6 +3,7 @@ package model.mysql;
 import db.DB;
 import model.mysql.imp.CadastroCategoriasJDBC;
 import model.mysql.imp.CadastroClientesJDBC;
+import model.mysql.imp.CadastroEntradaJDBC;
 import model.mysql.imp.CadastroFornecedoresJDBC;
 import model.mysql.imp.CadastroFuncionariosJDBC;
 import model.mysql.imp.CadastroLanchesJDBC;
@@ -42,6 +43,10 @@ public class ConexaoTabelas {
 	
 	public static CadastroLanchesMYSQL criarCadastroLanchesMYSQL(){
 		return new CadastroLanchesJDBC(DB.getConnection());
+	}
+	
+	public static CadastroEntradaMYSQL criarCadastroEntradaMYSQL(){
+		return new CadastroEntradaJDBC(DB.getConnection());
 	}
 	
 	

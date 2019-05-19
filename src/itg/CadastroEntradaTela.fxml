@@ -15,9 +15,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="577.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itg.CadastroProdutosTelaListControladora">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="577.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itg.CadastroEntradaTelaListControladora">
    <children>
-      <Label text="Produtos">
+      <Label text="Entrada">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
@@ -49,12 +49,15 @@
             </GridPane>
         </items>
       </ToolBar>
-      <TableView fx:id="tbCadastroProdutos" prefHeight="200.0" prefWidth="1297.0">
+      <TableView fx:id="tbCadastroEntrada" prefHeight="200.0" prefWidth="1297.0">
         <columns>
             <TableColumn fx:id="tcSelecionar" prefWidth="35.0" />
-          <TableColumn fx:id="tcIdProdutos" prefWidth="36.0" text="Id" />
-          <TableColumn fx:id="tcNome" prefWidth="106.0" text="Nome" />
-            <TableColumn fx:id="tcCategorias" prefWidth="75.0" text="Categoria" />
+          <TableColumn fx:id="tcIdEntrada" prefWidth="36.0" text="Id" />
+          <TableColumn fx:id="tcProduto" prefWidth="106.0" text="Produtos" />
+            <TableColumn fx:id="tcData" prefWidth="107.0" text="Data de Entrada" />
+            <TableColumn fx:id="tcQuantidade" prefWidth="75.0" text="Quantidade" />
+            <TableColumn fx:id="tcValor" prefWidth="75.0" text="Valor" />
+            <TableColumn fx:id="tcFornecedor" prefWidth="75.0" text="Fornecedor" />
         </columns>
       </TableView>
       <ToolBar fx:id="tbEditar" prefHeight="40.0" prefWidth="200.0">

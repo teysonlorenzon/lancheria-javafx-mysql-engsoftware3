@@ -14,10 +14,12 @@ import db.DbIntegrityException;
 import model.entidades.Lanches;
 import model.entidades.Produtos;
 import model.mysql.CadastroLanchesMYSQL;
+import model.servicos.CadastroProdutosServico;
 
 public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 
 	private Connection conn; // seta conxão com banco
+	private CadastroProdutosServico service = new CadastroProdutosServico();
 
 	public CadastroLanchesJDBC(Connection conn) {
 		this.conn = conn;
@@ -26,15 +28,16 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 	@Override
 	public void inserirLanches(Lanches obj) {
 		PreparedStatement st = null;
+		PreparedStatement st2 = null;
 
 		try {
-			st = conn.prepareStatement("INSERT INTO lanches " + "(Nome, Descricao, LinkImgLanche, ValorLanche) "
-					+ "VALUES " + "(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+			st = conn.prepareStatement(
+					"INSERT INTO lanches " + "(Nome, LinkImgLanche, ValorLanche) " + "VALUES " + "(?, ?, ?)",
+					Statement.RETURN_GENERATED_KEYS);
 
 			st.setString(1, obj.getNomeLanches());
-			st.setString(2, obj.getDescricao());
-			st.setString(3, obj.getLinkImgLanche());
-			st.setDouble(4, obj.getValorLanche());
+			st.setString(2, obj.getLinkImgLanche());
+			st.setDouble(3, obj.getValorLanche());
 
 			int rowsAffected = st.executeUpdate();
 
@@ -48,10 +51,25 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 				throw new DbException("Unexpected error! No rows affected!");
 			}
 
+			st2 = conn.prepareStatement("INSERT INTO itenslanche (IdLanche, IdProduto, Quantidade) " + "VALUES (?, ?, ?)");
+
+			String guarda = obj.getDescricao();
+			Produtos result = new Produtos();
+			String[] stArray = guarda.split(", ");
+
+			for (int i = 0; i < stArray.length; i++) {
+				result = service.buscarNome(stArray[i]);
+				st2.setInt(1, obj.getIdLanches());
+				st2.setInt(2, result.getIdProdutos());
+				st2.setInt(3, 1);
+				st2.executeUpdate();
+			}
+
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
+			DB.closeStatement(st2);
 		}
 
 	}
@@ -59,22 +77,43 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 	@Override
 	public void atualizarLanches(Lanches obj) {
 		PreparedStatement st = null;
+		PreparedStatement st2 = null;
+		PreparedStatement st3 = null;
 		try {
 
-			st = conn.prepareStatement("UPDATE lanches "
-					+ "SET Nome = ?, Descricao = ?, LinkImgLanche = ?, ValorLanche = ? " + "WHERE IdLanches = ?");
+			st = conn.prepareStatement(
+					"UPDATE lanches " + "SET Nome = ?, LinkImgLanche = ?, ValorLanche = ? " + "WHERE IdLanches = ?");
 
 			st.setString(1, obj.getNomeLanches());
-			st.setString(2, obj.getDescricao());
-			st.setString(3, obj.getLinkImgLanche());
-			st.setDouble(4, obj.getValorLanche());
-			st.setInt(5, obj.getIdLanches());
+			st.setString(2, obj.getLinkImgLanche());
+			st.setDouble(3, obj.getValorLanche());
+			st.setInt(4, obj.getIdLanches());
 			st.executeUpdate();
 
+			st2 = conn.prepareStatement("DELETE FROM itenslanche WHERE IdLanche= ?");
+			st2.setInt(1, obj.getIdLanches());
+			st2.executeUpdate();
+
+			st3 = conn.prepareStatement("INSERT INTO itenslanche (IdLanche, IdProduto, Quantidade) " + "VALUES (?, ?, ?)");
+
+			String guarda = obj.getDescricao();
+			Produtos result = new Produtos();
+			String[] stArray = guarda.split(", ");
+
+			for (int i = 0; i < stArray.length; i++) {
+				result = service.buscarNome(stArray[i]);
+				st3.setInt(1, obj.getIdLanches());
+				st3.setInt(2, result.getIdProdutos());
+				st3.setInt(3, 1);
+				st3.executeUpdate();
+			}
+			
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
+			DB.closeStatement(st2);
+			DB.closeStatement(st3);
 		}
 
 	}
@@ -82,15 +121,23 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 	@Override
 	public void deletarLanches(Integer id) {
 		PreparedStatement st = null;
+		PreparedStatement st2 = null;
 		try {
-			st = conn.prepareStatement("DELETE FROM lanches WHERE IdLanches= ?");
+			
+			st = conn.prepareStatement("DELETE FROM itenslanche WHERE IdLanche= ?");
 			st.setInt(1, id);
 			st.executeUpdate();
+
+			st2 = conn.prepareStatement("DELETE FROM lanches WHERE IdLanches= ?");
+			st2.setInt(1, id);
+			st2.executeUpdate();
+			
 
 		} catch (SQLException e) {
 			throw new DbIntegrityException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
+			DB.closeStatement(st2);
 		}
 
 	}
@@ -100,7 +147,11 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM lanches " + "WHERE Nome = ?");
+			st = conn.prepareStatement(
+					"SELECT l.IdLanches,l.Nome, group_concat(p.nome) as Produto, l.ValorLanche,l.LinkImgLanche "
+							+ "FROM lanches as l " + "LEFT JOIN itenslanche il on l.IdLanches = il.IdLanche "
+							+ "LEFT JOIN produtos p on p.IdProdutos = il.IdProduto " + "WHERE l.Nome = ? "
+							+ "GROUP BY l.Nome");
 
 			st.setString(1, nome);
 			rs = st.executeQuery();
@@ -109,7 +160,7 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 				Lanches obj = new Lanches();
 				obj.setIdLanches(rs.getInt("IdLanches"));
 				obj.setNomeLanches(rs.getString("Nome"));
-				obj.setDescricao(rs.getString("Descricao"));
+				obj.setDescricao(rs.getString("Produto"));
 				obj.setLinkImgLanche(rs.getString("LinkImgLanche"));
 				obj.setValorLanche(rs.getDouble("ValorLanche"));
 
@@ -130,7 +181,11 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM lanches " + "WHERE IdLanches = ?");
+			st = conn.prepareStatement(
+					"SELECT l.IdLanches,l.Nome, group_concat(p.nome) as Produto, l.ValorLanche,l.LinkImgLanche "
+							+ "FROM lanches as l " + "LEFT JOIN itenslanche il on l.IdLanches = il.IdLanche "
+							+ "LEFT JOIN produtos p on p.IdProdutos = il.IdProduto " + "WHERE l.IdLanches = ? "
+							+ "GROUP BY l.Nome");
 
 			st.setInt(1, id);
 			rs = st.executeQuery();
@@ -139,7 +194,7 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 				Lanches obj = new Lanches();
 				obj.setIdLanches(rs.getInt("IdLanches"));
 				obj.setNomeLanches(rs.getString("Nome"));
-				obj.setDescricao(rs.getString("Descricao"));
+				obj.setDescricao(rs.getString("Produto"));
 				obj.setLinkImgLanche(rs.getString("LinkImgLanche"));
 				obj.setValorLanche(rs.getDouble("ValorLanche"));
 
@@ -161,7 +216,11 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM lanches " + "WHERE Nome = ?");
+			st = conn.prepareStatement(
+					"SELECT l.IdLanches,l.Nome, group_concat(p.nome) as Produto, l.ValorLanche,l.LinkImgLanche "
+							+ "FROM lanches as l " + "LEFT JOIN itenslanche il on l.IdLanches = il.IdLanche "
+							+ "LEFT JOIN produtos p on p.IdProdutos = il.IdProduto " + "WHERE l.Nome = ? "
+							+ "GROUP BY l.Nome");
 
 			st.setString(1, nome);
 			rs = st.executeQuery();
@@ -171,7 +230,7 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 				Lanches obj = new Lanches();
 				obj.setIdLanches(rs.getInt("IdLanches"));
 				obj.setNomeLanches(rs.getString("Nome"));
-				obj.setDescricao(rs.getString("Descricao"));
+				obj.setDescricao(rs.getString("Produto"));
 				obj.setLinkImgLanche(rs.getString("LinkImgLanche"));
 				obj.setValorLanche(rs.getDouble("ValorLanche"));
 
@@ -194,7 +253,11 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM lanches " + "WHERE IdLanches = ?");
+			st = conn.prepareStatement(
+					"SELECT l.IdLanches,l.Nome, group_concat(p.nome) as Produto, l.ValorLanche,l.LinkImgLanche "
+							+ "FROM lanches as l " + "LEFT JOIN itenslanche il on l.IdLanches = il.IdLanche "
+							+ "LEFT JOIN produtos p on p.IdProdutos = il.IdProduto " + "WHERE l.IdLanches = ? "
+							+ "GROUP BY l.Nome");
 
 			st.setInt(1, id);
 			rs = st.executeQuery();
@@ -204,7 +267,7 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 				Lanches obj = new Lanches();
 				obj.setIdLanches(rs.getInt("IdLanches"));
 				obj.setNomeLanches(rs.getString("Nome"));
-				obj.setDescricao(rs.getString("Descricao"));
+				obj.setDescricao(rs.getString("Produto"));
 				obj.setLinkImgLanche(rs.getString("LinkImgLanche"));
 				obj.setValorLanche(rs.getDouble("ValorLanche"));
 
@@ -227,7 +290,10 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM lanches ");
+			st = conn.prepareStatement(
+					"SELECT l.IdLanches,l.Nome, group_concat(p.nome) as Produto, l.ValorLanche,l.LinkImgLanche "
+							+ "FROM lanches as l " + "LEFT JOIN itenslanche il on l.IdLanches = il.IdLanche "
+							+ "LEFT JOIN produtos p on p.IdProdutos = il.IdProduto " + "GROUP BY l.Nome");
 
 			rs = st.executeQuery();
 			List<Lanches> list = new ArrayList<>();
@@ -236,7 +302,7 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 				Lanches obj = new Lanches();
 				obj.setIdLanches(rs.getInt("IdLanches"));
 				obj.setNomeLanches(rs.getString("Nome"));
-				obj.setDescricao(rs.getString("Descricao"));
+				obj.setDescricao(rs.getString("Produto"));
 				obj.setLinkImgLanche(rs.getString("LinkImgLanche"));
 				obj.setValorLanche(rs.getDouble("ValorLanche"));
 
