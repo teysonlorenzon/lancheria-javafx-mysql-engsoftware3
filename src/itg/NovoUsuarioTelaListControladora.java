@@ -51,6 +51,8 @@ public class NovoUsuarioTelaListControladora implements Initializable, DataChang
 	@FXML
 	private TableColumn<UsuariosLogin, UsuariosLogin> tcExcluir;
 	@FXML
+	private TableColumn<UsuariosLogin, String> tcFuncionarios;
+	@FXML
 	private Button btNovo;
 
 	private ObservableList<UsuariosLogin> obsList;
@@ -78,6 +80,7 @@ public class NovoUsuarioTelaListControladora implements Initializable, DataChang
 		tcUsuario.setCellValueFactory(new PropertyValueFactory<>("usuario"));
 		tcSenha.setCellValueFactory(new PropertyValueFactory<>("senha"));
 		tcNivel.setCellValueFactory(new PropertyValueFactory<>("nivel"));
+		tcFuncionarios.setCellValueFactory(new PropertyValueFactory<>("nome"));
 
 		Stage stage = (Stage) LoginTelaControladora.getMenuScene().getWindow();
 		tbNovoUsuario.prefHeightProperty().bind(stage.heightProperty());
@@ -92,6 +95,7 @@ public class NovoUsuarioTelaListControladora implements Initializable, DataChang
 		List<UsuariosLogin> list = servico.buscarTudo();
 		obsList = FXCollections.observableArrayList(list);
 		tbNovoUsuario.setItems(obsList);
+		
 		initEditButtons();
 		initRemoveButtons();
 	}
@@ -172,7 +176,7 @@ public class NovoUsuarioTelaListControladora implements Initializable, DataChang
 				throw new IllegalStateException("Servico está nulo");
 			}
 			try {
-				servico.excluir(obj);
+				servico.excluirUsuario(obj);
 				updateTableView();
 			} catch (DbIntegrityException e) {
 				Alertas.showAlert("Erro ao remover objeto", null, e.getMessage(), AlertType.ERROR);

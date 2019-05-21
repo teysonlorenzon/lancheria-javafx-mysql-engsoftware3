@@ -114,7 +114,7 @@ public class TrocarSenhaTelaControladora implements Initializable {
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-
+		
 	}
 
 	private void notifyDataChangeListeners() {

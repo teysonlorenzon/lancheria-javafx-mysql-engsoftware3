@@ -14,10 +14,14 @@ public class UsuariosLoginServico {
 		return contrato.acharTudo();
 	}
 
+	public void excluirUsuario(UsuariosLogin obj) {
+		contrato.deletarPorId(obj.getId());
+	}
+
 	public UsuariosLogin buscarUsuarioSenha(String usuario, String senha) {
 		return contrato.verificaUsuarioSenha(usuario, senha);
 	}
-	
+
 	public UsuariosLogin buscarUsuario(String usuario) {
 		return contrato.acharPorUsuario(usuario);
 	}
@@ -25,20 +29,14 @@ public class UsuariosLoginServico {
 	public UsuariosLogin buscarId(Integer id) {
 		return contrato.acharPorId(id);
 	}
-	
+
 	public void iniciarUpdateOuIserir(UsuariosLogin obj) {
 		if (obj.getId() == null) {
-			
+
 			contrato.inserir(obj);
 		} else {
 			contrato.atualizar(obj);
 		}
 	}
-	
-	public void excluir(UsuariosLogin obj) {
-		contrato.deletarPorId(obj.getId());
-	}
-	
-	
-	
+
 }

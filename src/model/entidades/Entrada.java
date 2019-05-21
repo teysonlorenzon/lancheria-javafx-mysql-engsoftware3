@@ -11,8 +11,10 @@ public class Entrada  implements Serializable {
 	private Integer quantidade;
 	private Integer idProdutos;
 	private Integer idFornecedores;
+	private Integer idFuncionario;
 	private String nomeProdutos;
 	private String nomeFornecedores;
+	private String nomeFuncionario;
 
 
 	public Entrada() {
@@ -21,15 +23,18 @@ public class Entrada  implements Serializable {
 
 
 	public Entrada(Integer idEntrada, Double valorUnitario, String dataEntrada, Integer quantidade, Integer idProdutos,
-			Integer idFornecedores, String nomeProdutos, String nomeFornecedores) {
+			Integer idFornecedores, Integer idFuncionario, String nomeProdutos, String nomeFornecedores,
+			String nomeFuncionario) {
 		this.idEntrada = idEntrada;
 		this.valorUnitario = valorUnitario;
 		this.dataEntrada = dataEntrada;
 		this.quantidade = quantidade;
 		this.idProdutos = idProdutos;
 		this.idFornecedores = idFornecedores;
+		this.idFuncionario = idFuncionario;
 		this.nomeProdutos = nomeProdutos;
 		this.nomeFornecedores = nomeFornecedores;
+		this.nomeFuncionario = nomeFuncionario;
 	}
 
 
@@ -93,6 +98,16 @@ public class Entrada  implements Serializable {
 	}
 
 
+	public Integer getIdFuncionario() {
+		return idFuncionario;
+	}
+
+
+	public void setIdFuncionario(Integer idFuncionario) {
+		this.idFuncionario = idFuncionario;
+	}
+
+
 	public String getNomeProdutos() {
 		return nomeProdutos;
 	}
@@ -113,13 +128,26 @@ public class Entrada  implements Serializable {
 	}
 
 
+	public String getNomeFuncionario() {
+		return nomeFuncionario;
+	}
+
+
+	public void setNomeFuncionario(String nomeFuncionario) {
+		this.nomeFuncionario = nomeFuncionario;
+	}
+
+
 	@Override
 	public String toString() {
 		return "Entrada [idEntrada=" + idEntrada + ", valorUnitario=" + valorUnitario + ", dataEntrada=" + dataEntrada
 				+ ", quantidade=" + quantidade + ", idProdutos=" + idProdutos + ", idFornecedores=" + idFornecedores
-				+ ", nomeProdutos=" + nomeProdutos + ", nomeFornecedores=" + nomeFornecedores + "]";
+				+ ", idFuncionario=" + idFuncionario + ", nomeProdutos=" + nomeProdutos + ", nomeFornecedores="
+				+ nomeFornecedores + ", nomeFuncionario=" + nomeFuncionario + "]";
 	}
 
+
+	
 
 
 }

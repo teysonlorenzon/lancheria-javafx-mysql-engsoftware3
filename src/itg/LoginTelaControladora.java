@@ -30,9 +30,14 @@ public class LoginTelaControladora implements Initializable {
 	private static Stage menuStage = new Stage();
 	private static Scene menuScene;
 	private static Integer guardaid;
+	private static String guardaFunc;
 	
 	public static Integer getIdUsuarioLogado() {
 		return guardaid;
+	}
+	
+	public static String getGuardaFuncionario() {
+		return guardaFunc;
 	}
 
 	public static Stage getMenuSage() {

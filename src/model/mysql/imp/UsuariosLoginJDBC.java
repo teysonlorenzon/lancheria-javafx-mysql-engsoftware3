@@ -27,12 +27,14 @@ public class UsuariosLoginJDBC implements UsuariosLoginMYSQL {
 	public void inserir(UsuariosLogin obj) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("INSERT INTO login " + "(Usuario, Senha, Nivel) " + "VALUES " + "(?, ?, ?)",
+			st = conn.prepareStatement(
+					"INSERT INTO login " + "(Usuario, Senha, Nivel, IdFuncionario) " + "VALUES " + "(?, ?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
 
 			st.setString(1, obj.getUsuario());
 			st.setString(2, obj.getSenha());
 			st.setString(3, obj.getNivel());
+			st.setInt(4, obj.getIdPessoa());
 
 			int rowsAffected = st.executeUpdate();
 
@@ -57,14 +59,13 @@ public class UsuariosLoginJDBC implements UsuariosLoginMYSQL {
 	public void atualizar(UsuariosLogin obj) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("UPDATE login " +
-			"SET Usuario = ?, Senha = ?, Nivel = ? " + 
-			"WHERE Id = ?");
+			st = conn.prepareStatement("UPDATE login " + "SET Usuario = ?, Senha = ?, Nivel = ? , IdFuncionario = ? " + "WHERE Id = ?");
 
 			st.setString(1, obj.getUsuario());
 			st.setString(2, obj.getSenha());
 			st.setString(3, obj.getNivel());
-			st.setInt(4, obj.getId());
+			st.setInt(4, obj.getIdPessoa());
+			st.setInt(5, obj.getId());
 
 			st.executeUpdate();
 		} catch (SQLException e) {
@@ -93,14 +94,16 @@ public class UsuariosLoginJDBC implements UsuariosLoginMYSQL {
 			DB.closeStatement(st);
 		}
 	}
-
-
 	@Override
 	public UsuariosLogin acharPorId(Integer id) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM login WHERE Id = ?");
+			st = conn.prepareStatement("SELECT l.Id, l.Usuario, l.Senha, l.Nivel, f.Nome as Funcionario " + 
+					"FROM login l " +
+					"LEFT JOIN funcionarios f on l.IdFuncionario = f.IdFuncionarios " + 
+					"WHERE l.Id = ?" +
+					"ORDER BY l.Usuario");
 			st.setInt(1, id);
 			rs = st.executeQuery();
 			if (rs.next()) {
@@ -109,6 +112,7 @@ public class UsuariosLoginJDBC implements UsuariosLoginMYSQL {
 				obj.setUsuario(rs.getString("Usuario"));
 				obj.setSenha(rs.getString("Senha"));
 				obj.setNivel(rs.getString("Nivel"));
+				obj.setNome(rs.getString("Funcionario"));
 				return obj;
 			}
 			return null;
@@ -121,14 +125,17 @@ public class UsuariosLoginJDBC implements UsuariosLoginMYSQL {
 
 		}
 	}
-	
 
 	@Override
 	public List<UsuariosLogin> acharTudo() {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM login ORDER BY Usuario");
+			st = conn.prepareStatement(
+					"SELECT l.Id, l.Usuario, l.Senha, l.Nivel, f.Nome as Funcionario " + 
+							"FROM login l " +
+							"LEFT JOIN funcionarios f on l.IdFuncionario = f.IdFuncionarios " + 
+							"ORDER BY l.Usuario");
 			rs = st.executeQuery();
 
 			List<UsuariosLogin> list = new ArrayList<>();
@@ -139,6 +146,7 @@ public class UsuariosLoginJDBC implements UsuariosLoginMYSQL {
 				obj.setUsuario(rs.getString("Usuario"));
 				obj.setSenha(rs.getString("Senha"));
 				obj.setNivel(rs.getString("Nivel"));
+				obj.setNome(rs.getString("Funcionario"));
 				list.add(obj);
 			}
 			return list;
@@ -156,7 +164,12 @@ public class UsuariosLoginJDBC implements UsuariosLoginMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM login WHERE Usuario = ? and Senha = ?");
+			st = conn.prepareStatement("SELECT l.Id, l.Usuario, l.Senha, l.Nivel, f.Nome as Funcionario " + 
+					"FROM login l " +
+					"LEFT JOIN funcionarios f on l.IdFuncionario = f.IdFuncionarios " + 
+					"WHERE l.Usuario = ? and l.Senha = ?" +
+					"ORDER BY l.Usuario"
+					);
 			st.setString(1, nome);
 			st.setString(2, senha);
 			rs = st.executeQuery();
@@ -166,6 +179,7 @@ public class UsuariosLoginJDBC implements UsuariosLoginMYSQL {
 				obj.setUsuario(rs.getString("Usuario"));
 				obj.setSenha(rs.getString("Senha"));
 				obj.setNivel(rs.getString("Nivel"));
+				obj.setNome(rs.getString("Funcionario"));
 				return obj;
 			}
 			return null;
@@ -184,7 +198,11 @@ public class UsuariosLoginJDBC implements UsuariosLoginMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM login WHERE Usuario = ?");
+			st = conn.prepareStatement("SELECT l.Id, l.Usuario, l.Senha, l.Nivel, f.Nome as Funcionario " + 
+					"FROM login l " +
+					"LEFT JOIN funcionarios f on l.IdFuncionario = f.IdFuncionarios " + 
+					"WHERE l.Usuario = ?" +
+					"ORDER BY l.Usuario");
 			st.setString(1, usuario);
 			rs = st.executeQuery();
 			if (rs.next()) {
@@ -193,6 +211,7 @@ public class UsuariosLoginJDBC implements UsuariosLoginMYSQL {
 				obj.setUsuario(rs.getString("Usuario"));
 				obj.setSenha(rs.getString("Senha"));
 				obj.setNivel(rs.getString("Nivel"));
+				obj.setNome(rs.getString("Funcionario"));
 				return obj;
 			}
 			return null;

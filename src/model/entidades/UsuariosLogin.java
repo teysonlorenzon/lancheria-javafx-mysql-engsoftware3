@@ -2,7 +2,7 @@ package model.entidades;
 
 import java.io.Serializable;
 
-public class UsuariosLogin implements Serializable {
+public class UsuariosLogin extends Pessoa implements Serializable {
 
 
 	private static final long serialVersionUID = 1L;
@@ -11,17 +11,25 @@ public class UsuariosLogin implements Serializable {
 	private String usuario;
 	private String senha;
 	private String nivel;
+	
 
 	public UsuariosLogin() {
 
 	}
 
-	public UsuariosLogin(Integer id, String nome, String senha, String nivel) {
+
+	public UsuariosLogin(Integer idPessoa, String nome, String cidade, String endereco, Integer numero, String bairro,
+			String cep, String uf, String complemento, String email, String telefoneFixo, String telefoneCelular,
+			Integer id, String usuario, String senha, String nivel) {
+		super(idPessoa, nome, cidade, endereco, numero, bairro, cep, uf, complemento, email, telefoneFixo,
+				telefoneCelular);
 		this.id = id;
-		this.usuario = nome;
+		this.usuario = usuario;
 		this.senha = senha;
 		this.nivel = nivel;
 	}
+
+
 
 	public Integer getId() {
 		return id;

@@ -30,8 +30,9 @@
           <TableColumn fx:id="tcUsuario" prefWidth="89.0" text="Usuário" />
             <TableColumn fx:id="tcSenha" prefWidth="103.0" text="Senha" />
             <TableColumn fx:id="tcNivel" text="Nível" />
+            <TableColumn fx:id="tcFuncionarios" prefWidth="75.0" text="Funcionário" />
             <TableColumn fx:id="tcEditar" prefWidth="66.0" />
-            <TableColumn fx:id="tcExcluir" prefWidth="67.0" />
+            <TableColumn fx:id="tcExcluir" prefWidth="75.0" />
         </columns>
       </TableView>
    </children>

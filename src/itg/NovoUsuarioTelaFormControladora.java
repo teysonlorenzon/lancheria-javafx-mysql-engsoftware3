@@ -17,12 +17,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import model.entidades.Pessoa;
 import model.entidades.UsuariosLogin;
 import model.exception.ValidationException;
+import model.servicos.CadastroFuncionariosServico;
 import model.servicos.UsuariosLoginServico;
 
 public class NovoUsuarioTelaFormControladora implements Initializable {
@@ -30,10 +33,13 @@ public class NovoUsuarioTelaFormControladora implements Initializable {
 	private UsuariosLogin entidade;
 
 	private UsuariosLoginServico servico;
+	private CadastroFuncionariosServico servicoFunc = new CadastroFuncionariosServico();
+	
 
 	private String nivel = "";
 
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
+	private List<Pessoa> listFunc = new ArrayList<>();
 
 	@FXML
 	private TextField txtId;
@@ -43,6 +49,9 @@ public class NovoUsuarioTelaFormControladora implements Initializable {
 	private PasswordField pswSenha;
 	@FXML
 	private PasswordField pswReSenha;
+	
+	@FXML
+	private ComboBox cbFuncionarios;
 
 	@FXML
 	private Label lbErroNome;
@@ -50,6 +59,8 @@ public class NovoUsuarioTelaFormControladora implements Initializable {
 	private Label lbErroSenha;
 	@FXML
 	private Label lbErroReSenha;
+	@FXML
+	private Label lbErroCategoria;
 
 	@FXML
 	private Button btConfirmar;
@@ -100,6 +111,7 @@ public class NovoUsuarioTelaFormControladora implements Initializable {
 
 	private UsuariosLogin getFormData() {
 		UsuariosLogin obj = new UsuariosLogin();
+		Pessoa obj2 = new Pessoa();
 
 		ValidationException exception = new ValidationException("Erro de Validação");
 
@@ -111,6 +123,9 @@ public class NovoUsuarioTelaFormControladora implements Initializable {
 
 		if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {
 			exception.addError("nome", "campo vazio");
+		}
+		if (cbFuncionarios.valueProperty().get() == null || cbFuncionarios.valueProperty().get().equals("")) {
+			exception.addError("categorias", "campo obrigatório");
 		}
 
 		if (pswSenha.getText() == null || pswSenha.getText().trim().equals("")) {
@@ -140,6 +155,8 @@ public class NovoUsuarioTelaFormControladora implements Initializable {
 				obj.setNivel("Usuario");
 			}
 		}
+		obj2 = servicoFunc.buscarNome((String) cbFuncionarios.valueProperty().get());
+		obj.setIdPessoa(obj2.getIdPessoa());
 
 		if (exception.getErrors().size() > 0) {
 			throw exception;
@@ -192,6 +209,7 @@ public class NovoUsuarioTelaFormControladora implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		initializeNodes();
+		criarListaComboBox();
 
 	}
 
@@ -206,6 +224,7 @@ public class NovoUsuarioTelaFormControladora implements Initializable {
 		}
 		txtId.setText(String.valueOf(entidade.getId()));
 		txtNome.setText(entidade.getUsuario());
+		cbFuncionarios.valueProperty().set(entidade.getNome());
 	}
 
 	private void setErrorMessage(Map<String, String> errors) {
@@ -222,6 +241,19 @@ public class NovoUsuarioTelaFormControladora implements Initializable {
 			lbErroReSenha.setText(errors.get("resenha"));
 
 		}
+		if(fields.contains("categorias")) {
+			lbErroCategoria.setText(errors.get("categorias"));
+		}
+	}
+	
+	public void criarListaComboBox() {
+
+		listFunc = servicoFunc.buscarFuncionarios();
+
+		for (Pessoa list : listFunc) {
+			cbFuncionarios.getItems().add(list.getNome());
+		}
+
 	}
 
 }
