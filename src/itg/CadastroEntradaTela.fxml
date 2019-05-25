@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="577.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itg.CadastroEntradaTelaListControladora">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="452.0" prefWidth="597.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itg.CadastroEntradaTelaListControladora">
    <children>
       <Label text="Entrada">
          <font>
@@ -58,6 +58,7 @@
             <TableColumn fx:id="tcQuantidade" prefWidth="75.0" text="Quantidade" />
             <TableColumn fx:id="tcValor" prefWidth="75.0" text="Valor" />
             <TableColumn fx:id="tcFornecedor" prefWidth="75.0" text="Fornecedor" />
+            <TableColumn fx:id="tcFuncionario" prefWidth="75.0" text="Funcionário" />
         </columns>
       </TableView>
       <ToolBar fx:id="tbEditar" prefHeight="40.0" prefWidth="200.0">

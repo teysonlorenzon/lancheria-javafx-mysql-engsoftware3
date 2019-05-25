@@ -20,27 +20,44 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import model.entidades.Categorias;
 import model.entidades.Entrada;
+import model.entidades.Pessoa;
+import model.entidades.Produtos;
 import model.exception.ValidationException;
-import model.servicos.CadastroCategoriasServico;
 import model.servicos.CadastroEntradaServico;
+import model.servicos.CadastroFornecedoresServico;
+import model.servicos.CadastroFuncionariosServico;
+import model.servicos.CadastroProdutosServico;
 
 public class CadastroEntradaTelaFormControladora implements Initializable {
 
+	LoginTelaControladora ltc = new LoginTelaControladora(); 
+	
 	private Entrada entidade;
-	private List<Categorias> listCat = new ArrayList<>();
+	private List<Produtos> listProd = new ArrayList<>();
+	private List<Pessoa> listFornec = new ArrayList<>();
 
 	private CadastroEntradaServico servico = new CadastroEntradaServico();
-	private CadastroCategoriasServico servicoCat = new CadastroCategoriasServico();
+	private CadastroProdutosServico servicoProd= new CadastroProdutosServico();
+	private CadastroFuncionariosServico servicoFunc= new CadastroFuncionariosServico();
+	private CadastroFornecedoresServico servicoFornec = new CadastroFornecedoresServico();
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
 	@FXML
 	private TextField txtIdEntrada;
 	@FXML
-	private TextField txtNome;
+	private TextField txtDataEntrada;
 	@FXML
-	private ComboBox cbCategoria;
+	private TextField txtQuantidade;
+	@FXML
+	private TextField txtValor;
+	@FXML
+	private TextField txtNomeFuncionario;
+
+	@FXML
+	private ComboBox cbFornecedores;
+	@FXML
+	private ComboBox cbProdutos;
 
 	@FXML
 	private Button btConfirmar;
@@ -48,9 +65,15 @@ public class CadastroEntradaTelaFormControladora implements Initializable {
 	private Button btCancelar;
 
 	@FXML
-	private Label lbErrorNome;
+	private Label lbErrorDataEntrada;
 	@FXML
 	private Label lbErrorFornecedor;
+	@FXML
+	private Label lbErrorProduto;
+	@FXML
+	private Label lbErrorQuantidade;
+	@FXML
+	private Label lbErrorValor;
 
 	@FXML
 	public void onBtConfirmarAction(ActionEvent event) {
@@ -82,7 +105,8 @@ public class CadastroEntradaTelaFormControladora implements Initializable {
 
 	private Entrada getFormDataEntrada() {
 		Entrada obj = new Entrada();
-		Categorias obj3 = new Categorias();
+		Pessoa obj2 = new Pessoa();
+		Produtos obj3 = new Produtos();
 		ValidationException exception = new ValidationException("Erro de Validação");
 
 		if (txtIdEntrada.getText() == null || txtIdEntrada.getText().trim().equals("")) {
@@ -90,22 +114,41 @@ public class CadastroEntradaTelaFormControladora implements Initializable {
 			obj.setIdEntrada(Integer.parseInt(txtIdEntrada.getText()));
 		}
 
-		if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {
-			exception.addError("nome", "campo obrigatório");
+		if (txtDataEntrada.getText() == null || txtDataEntrada.getText().trim().equals("")) {
+			exception.addError("dataentrada", "campo obrigatório");
 		}
 
-		if (cbCategoria.valueProperty().get() == null || cbCategoria.valueProperty().get().equals("")) {
-			exception.addError("categorias", "campo obrigatório");
+		if (txtQuantidade.getText() == null || txtQuantidade.getText().trim().equals("")) {
+			exception.addError("quantidade", "campo obrigatório");
 		}
 
-		obj3 = servicoCat.buscarNome((String) cbCategoria.valueProperty().get());
+		if (txtValor.getText() == null || txtValor.getText().trim().equals("")) {
+			exception.addError("valor", "campo obrigatório");
+		}
+
+		if (cbFornecedores.valueProperty().get() == null || cbFornecedores.valueProperty().get().equals("")) {
+			exception.addError("fornecedores", "campo obrigatório");
+		}
+
+		if (cbProdutos.valueProperty().get() == null || cbProdutos.valueProperty().get().equals("")) {
+			exception.addError("produtos", "campo obrigatório");
+		}
+
+		obj3 = servicoProd.buscarNome((String) cbProdutos.valueProperty().get());
+		obj.setIdProdutos(obj3.getIdProdutos());
+		obj2 = servicoFornec.buscarNome((String) cbFornecedores.valueProperty().get());
+		obj.setIdFornecedores(obj2.getIdPessoa());
+		obj2 = servicoFunc.buscarNome(txtNomeFuncionario.getText());
+		obj.setIdFuncionario(obj2.getIdPessoa());
 
 		if (exception.getErrors().size() > 0) {
 			throw exception;
 		}
 
-		//obj.setNomeEntrada(txtNome.getText());
-		//obj.setIdCategorias(obj3.getIdCategorias());
+		obj.setDataEntrada(txtDataEntrada.getText());
+		obj.setQuantidade(Integer.parseInt(txtQuantidade.getText()));
+		obj.setValorUnitario(Double.parseDouble(txtValor.getText()));
+		
 
 		return obj;
 
@@ -133,44 +176,62 @@ public class CadastroEntradaTelaFormControladora implements Initializable {
 	public void initialize(URL url, ResourceBundle rb) {
 		initializeNodes();
 		criarListaComboBox();
+		txtNomeFuncionario.setText(ltc.getGuardaFuncionario());
 
 	}
 
 	private void initializeNodes() {
 
 		Mascaras.numericField(txtIdEntrada);
-		Mascaras.maxField(txtNome, 40);
+		Mascaras.dateField(txtDataEntrada);
+		Mascaras.numericField(txtQuantidade);
+		Mascaras.numericField(txtValor);
 
 	}
 
 	public void updateFormDataEntrada() {
 
 		txtIdEntrada.setText(String.valueOf(entidade.getIdEntrada()));
-	//	txtNome.setText(entidade.getNomeEntrada());
-		//cbCategoria.valueProperty().set(entidade.getNomeCategorias());
+		txtDataEntrada.setText(entidade.getDataEntrada());
+		txtQuantidade.setText(String.valueOf(entidade.getQuantidade()));
+		txtValor.setText(String.valueOf(entidade.getValorUnitario()));
+		txtNomeFuncionario.setText(entidade.getNomeFuncionario());
+		cbFornecedores.valueProperty().set(entidade.getNomeFornecedores());
+		cbProdutos.valueProperty().set(entidade.getNomeProdutos());
 
 	}
 
 	private void setErrorMessage(Map<String, String> errors) {
 		Set<String> fields = errors.keySet();
-		if (fields.contains("nome")) {
-			lbErrorNome.setText(errors.get("nome"));
-
+		if (fields.contains("dataentrada")) {
+			lbErrorDataEntrada.setText(errors.get("dataentrada"));
 		}
-
+		if (fields.contains("quantidade")) {
+			lbErrorQuantidade.setText(errors.get("quantidade"));
+		}
+		if (fields.contains("valor")) {
+			lbErrorValor.setText(errors.get("valor"));
+		}
+		if (fields.contains("produtos")) {
+			lbErrorProduto.setText(errors.get("produtos"));
+		}
+	
 		if (fields.contains("fornecedores")) {
 			lbErrorFornecedor.setText(errors.get("fornecedores"));
-
 		}
 
 	}
 
 	public void criarListaComboBox() {
 
-		listCat = servicoCat.buscarCategorias();
+		listProd = servicoProd.buscarProdutos();
+		listFornec = servicoFornec.buscarFornecedores();
 
-		for (Categorias listCate : listCat) {
-			cbCategoria.getItems().add(listCate.getNomeCategorias());
+		for (Produtos listPro : listProd) {
+			cbProdutos.getItems().add(listPro.getNomeProdutos());
+		}
+		for (Pessoa listFor : listFornec) {
+			cbFornecedores.getItems().add(listFor.getNome());
 		}
 
 	}

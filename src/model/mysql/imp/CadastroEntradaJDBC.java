@@ -27,7 +27,7 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 		PreparedStatement st = null;
 
 		try {
-			st = conn.prepareStatement("INSERT INTO estoqueentrada " + "(DataEntrada, ValorUnitario, Quantidade, IdProdutos, IdFornecedores) " + "VALUES " + "(?, ?, ?, ?, ?)",
+			st = conn.prepareStatement("INSERT INTO estoqueentrada " + "(DataEntrada, ValorUnitario, Quantidade, IdProdutos, IdFornecedores, IdFuncionarios) " + "VALUES " + "(?, ?, ?, ?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
 
 			st.setString(1, obj.getDataEntrada());
@@ -35,6 +35,7 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 			st.setInt(3, obj.getQuantidade());
 			st.setInt(4, obj.getIdProdutos());
 			st.setInt(5, obj.getIdFornecedores());
+			st.setInt(6, obj.getIdFuncionario());
 
 			int rowsAffected = st.executeUpdate();
 
@@ -61,7 +62,7 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 		PreparedStatement st = null;
 		try {
 
-			st = conn.prepareStatement("UPDATE estoqueentrada " + "SET DataEntrada = ?, ValorUnitario = ?, Quantidade = ?, IdProdutos = ?, IdFornecedores = ? " + 
+			st = conn.prepareStatement("UPDATE estoqueentrada " + "SET DataEntrada = ?, ValorUnitario = ?, Quantidade = ?, IdProdutos = ?, IdFornecedores = ?, IdFuncionarios = ? " + 
 			"WHERE IdEntrada = ?");
 
 			st.setString(1, obj.getDataEntrada());
@@ -69,7 +70,8 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 			st.setInt(3, obj.getQuantidade());
 			st.setInt(4, obj.getIdProdutos());
 			st.setInt(5, obj.getIdFornecedores());
-			st.setInt(6, obj.getIdEntrada());
+			st.setInt(6, obj.getIdFuncionario());
+			st.setInt(7, obj.getIdEntrada());
 			st.executeUpdate();
 
 		} catch (SQLException e) {
@@ -101,10 +103,11 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT SELECT e.IdEntrada, e.DataEntrada, e.ValorUnitario, e.Quantidade, p.Nome as nomeP, f.Nome as nomeF " + 
+			st = conn.prepareStatement("SELECT e.IdEntrada, e.DataEntrada, e.ValorUnitario, e.Quantidade, p.Nome as nomeP, f.Nome as nomeF , func.Nome as NomeFunc " + 
 					"FROM estoqueentrada e " +
 					"LEFT JOIN produtos p on p.IdProdutos = e.IdProdutos " +
 					"LEFT JOIN fornecedores f on f.IdFornecedores = e.IdFornecedores " +
+					"LEFT JOIN funcionarios func on func.IdFuncionarios = e.IdFuncionarios " +
 					"WHERE e.Nome = ?");
 
 			st.setString(1, nome);
@@ -118,6 +121,7 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 				obj.setValorUnitario(rs.getDouble("ValorUnitario"));
 				obj.setNomeFornecedores(rs.getString("nomeF"));
 				obj.setNomeProdutos(rs.getString("nomeP"));
+				obj.setNomeFuncionario(rs.getString("NomeFunc"));
 
 				return obj;
 			}
@@ -136,10 +140,11 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT SELECT e.IdEntrada, e.DataEntrada, e.ValorUnitario, e.Quantidade, p.Nome as nomeP, f.Nome as nomeF " + 
+			st = conn.prepareStatement("SELECT e.IdEntrada, e.DataEntrada, e.ValorUnitario, e.Quantidade, p.Nome as nomeP, f.Nome as nomeF , func.Nome as NomeFunc " + 
 					"FROM estoqueentrada e " +
 					"LEFT JOIN produtos p on p.IdProdutos = e.IdProdutos " +
-					"LEFT JOIN fornecedores f on f.IdFornecedores = e.IdFornecedores" + 
+					"LEFT JOIN fornecedores f on f.IdFornecedores = e.IdFornecedores " +
+					"LEFT JOIN funcionarios func on func.IdFuncionarios = e.IdFuncionarios " + 
 					"WHERE e.IdEntrada = ?");
 
 			st.setInt(1, id);
@@ -154,6 +159,7 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 				obj.setValorUnitario(rs.getDouble("ValorUnitario"));
 				obj.setNomeFornecedores(rs.getString("nomeF"));
 				obj.setNomeProdutos(rs.getString("nomeP"));
+				obj.setNomeFuncionario(rs.getString("NomeFunc"));
 
 				return obj;
 
@@ -174,8 +180,11 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT p.IdEntrada, p.Nome, c.Nome as nomeC " + "FROM Entrada p "
-					+ "LEFT JOIN categorias c on c.IdCategorias = p.IdCategorias " + "WHERE p.Nome = ?");
+			st = conn.prepareStatement("SELECT e.IdEntrada, e.DataEntrada, e.ValorUnitario, e.Quantidade, p.Nome as nomeP, f.Nome as nomeF , func.Nome as NomeFunc " + 
+					"FROM estoqueentrada e " +
+					"LEFT JOIN produtos p on p.IdProdutos = e.IdProdutos " +
+					"LEFT JOIN fornecedores f on f.IdFornecedores = e.IdFornecedores " +
+					"LEFT JOIN funcionarios func on func.IdFuncionarios = e.IdFuncionarios " + "WHERE p.Nome = ?");
 
 			st.setString(1, nome);
 			rs = st.executeQuery();
@@ -190,6 +199,7 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 				obj.setValorUnitario(rs.getDouble("ValorUnitario"));
 				obj.setNomeFornecedores(rs.getString("nomeF"));
 				obj.setNomeProdutos(rs.getString("nomeP"));
+				obj.setNomeFuncionario(rs.getString("NomeFunc"));
 
 				list.add(obj);
 
@@ -210,10 +220,11 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT SELECT e.IdEntrada, e.DataEntrada, e.ValorUnitario, e.Quantidade, p.Nome as nomeP, f.Nome as nomeF " + 
+			st = conn.prepareStatement("SELECT e.IdEntrada, e.DataEntrada, e.ValorUnitario, e.Quantidade, p.Nome as nomeP, f.Nome as nomeF , func.Nome as NomeFunc " + 
 					"FROM estoqueentrada e " +
 					"LEFT JOIN produtos p on p.IdProdutos = e.IdProdutos " +
-					"LEFT JOIN fornecedores f on f.IdFornecedores = e.IdFornecedores" + 
+					"LEFT JOIN fornecedores f on f.IdFornecedores = e.IdFornecedores " +
+					"LEFT JOIN funcionarios func on func.IdFuncionarios = e.IdFuncionarios " + 
 					"WHERE p.IdEntrada= ?");
 
 			st.setInt(1, id);
@@ -230,6 +241,7 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 				obj.setValorUnitario(rs.getDouble("ValorUnitario"));
 				obj.setNomeFornecedores(rs.getString("nomeF"));
 				obj.setNomeProdutos(rs.getString("nomeP"));
+				obj.setNomeFuncionario(rs.getString("NomeFunc"));
 				list.add(obj);
 
 			}
@@ -249,12 +261,13 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT e.IdEntrada, e.DataEntrada, e.ValorUnitario, e.Quantidade, p.Nome as nomeP, f.Nome as nomeF " + 
+			st = conn.prepareStatement("SELECT e.IdEntrada, e.DataEntrada, e.ValorUnitario, e.Quantidade, p.Nome as nomeP, f.Nome as nomeF , func.Nome as nomeFunc " + 
 					"FROM estoqueentrada e " +
 					"LEFT JOIN produtos p on p.IdProdutos = e.IdProdutos " +
-					"LEFT JOIN fornecedores f on f.IdFornecedores = e.IdFornecedores");
+					"LEFT JOIN fornecedores f on f.IdFornecedores = e.IdFornecedores " +
+					"LEFT JOIN funcionarios func on func.IdFuncionarios = e.IdFuncionarios");
 			rs = st.executeQuery();
-			List<Entrada> listProd = new ArrayList<>();
+			List<Entrada> listEntrada = new ArrayList<>();
 
 			while (rs.next()) {
 
@@ -265,12 +278,13 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 				obj.setValorUnitario(rs.getDouble("ValorUnitario"));
 				obj.setNomeFornecedores(rs.getString("nomeF"));
 				obj.setNomeProdutos(rs.getString("nomeP"));
+				obj.setNomeFuncionario(rs.getString("nomeFunc"));
 
-				listProd.add(obj);
+				listEntrada.add(obj);
 
 			}
 
-			return listProd;
+			return listEntrada;
 
 		} catch (SQLException e) {
 			throw new DbException("Erro ao buscar Lista de Dados da tabela Entrada no banco");

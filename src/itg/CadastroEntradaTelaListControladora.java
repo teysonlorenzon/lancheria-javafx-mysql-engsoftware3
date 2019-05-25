@@ -75,6 +75,8 @@ public class CadastroEntradaTelaListControladora implements Initializable, DataC
 	@FXML
 	private TableColumn<Entrada, String> tcFornecedor;
 	@FXML
+	private TableColumn<Entrada, String> tcFuncionario;
+	@FXML
 	private TableColumn<Entrada, Entrada> tcSelecionar;
 
 	@FXML
@@ -215,6 +217,7 @@ public class CadastroEntradaTelaListControladora implements Initializable, DataC
 		tcQuantidade.setCellValueFactory(new PropertyValueFactory<>("quantidade"));
 		tcValor.setCellValueFactory(new PropertyValueFactory<>("valorUnitario"));
 		tcFornecedor.setCellValueFactory(new PropertyValueFactory<>("nomeFornecedores"));
+		tcFuncionario.setCellValueFactory(new PropertyValueFactory<>("nomeFuncionario"));
 
 		Stage stage = (Stage) LoginTelaControladora.getMenuScene().getWindow();
 		tbCadastroEntrada.prefHeightProperty().bind(stage.heightProperty());
