@@ -26,6 +26,7 @@ import model.servicos.CadastroFornecedoresServico;
 import model.servicos.CadastroFuncionariosServico;
 import model.servicos.CadastroLanchesServico;
 import model.servicos.CadastroProdutosServico;
+import model.servicos.EstoqueServico;
 import model.servicos.UsuariosLoginServico;
 
 public class InicialTelaControladora implements Initializable {
@@ -71,6 +72,9 @@ public class InicialTelaControladora implements Initializable {
 	private MenuItem miCadLanches;
 	@FXML
 	private MenuItem miCadEntrada;
+	@FXML
+	private MenuItem miEstoque;
+	
 
 	@FXML
 	private Menu mnInicio;
@@ -110,6 +114,15 @@ public class InicialTelaControladora implements Initializable {
 		IOException e) {
 			Alertas.showAlert("IO exception", "Erro ao carregar tela", e.getMessage(), AlertType.ERROR);
 		}
+	}
+	
+	@FXML
+	public void onMenuEstoque() {
+		carregarTela("/itg/EstoqueTela.fxml", (EstoqueTelaListControladora controller) -> {
+			controller.setEstoqueServico(new EstoqueServico());
+			controller.updateTableView();
+		});
+
 	}
 	
 	@FXML

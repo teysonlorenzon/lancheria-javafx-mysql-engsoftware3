@@ -40,17 +40,17 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entidades.Categorias;
 import model.entidades.Pessoa;
-import model.entidades.Entrada;
+import model.entidades.Estoque;
 import model.servicos.CadastroEntradaServico;
 
 public class CadastroEntradaTelaListControladora implements Initializable, DataChangeListener {
 
 	private CadastroEntradaServico servicoProd;
-	private ObservableList<Entrada> obsList;
+	private ObservableList<Estoque> obsList;
 	private String condicao = "tudo";
-	private Entrada entidade;
+	private Estoque entidade;
 	private List<CheckBox> chlist = new ArrayList<>();
-	private List<Entrada> list = new ArrayList<>();
+	private List<Estoque> list = new ArrayList<>();
 
 	public void setCondicao(String condicao) {
 		this.condicao = condicao;
@@ -61,23 +61,23 @@ public class CadastroEntradaTelaListControladora implements Initializable, DataC
 	}
 
 	@FXML
-	private TableView<Entrada> tbCadastroEntrada;
+	private TableView<Estoque> tbCadastroEntrada;
 	@FXML
-	private TableColumn<Entrada, Integer> tcIdEntrada;
+	private TableColumn<Estoque, Integer> tcIdEntrada;
 	@FXML
-	private TableColumn<Entrada, String> tcProduto;
+	private TableColumn<Estoque, String> tcProduto;
 	@FXML
-	private TableColumn<Entrada, String> tcData;
+	private TableColumn<Estoque, String> tcData;
 	@FXML
-	private TableColumn<Entrada, String> tcValor;
+	private TableColumn<Estoque, String> tcValor;
 	@FXML
-	private TableColumn<Entrada, String> tcQuantidade;
+	private TableColumn<Estoque, String> tcQuantidade;
 	@FXML
-	private TableColumn<Entrada, String> tcFornecedor;
+	private TableColumn<Estoque, String> tcFornecedor;
 	@FXML
-	private TableColumn<Entrada, String> tcFuncionario;
+	private TableColumn<Estoque, String> tcFuncionario;
 	@FXML
-	private TableColumn<Entrada, Entrada> tcSelecionar;
+	private TableColumn<Estoque, Estoque> tcSelecionar;
 
 	@FXML
 	private TextField txtPesquisarId;
@@ -277,7 +277,7 @@ public class CadastroEntradaTelaListControladora implements Initializable, DataC
 		}
 	}
 
-	private void criarFormEntrada(Entrada obj, String absoluteName, Stage parentStage) {
+	private void criarFormEntrada(Estoque obj, String absoluteName, Stage parentStage) {
 		try {
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
@@ -329,12 +329,12 @@ public class CadastroEntradaTelaListControladora implements Initializable, DataC
 	private void initSelecionarCheckBox() {
 
 		tcSelecionar.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-		tcSelecionar.setCellFactory(param -> new TableCell<Entrada, Entrada>() {
+		tcSelecionar.setCellFactory(param -> new TableCell<Estoque, Estoque>() {
 
 			private final CheckBox chkSelecionar = new CheckBox("");
 
 			@Override
-			protected void updateItem(Entrada obj, boolean empty) {
+			protected void updateItem(Estoque obj, boolean empty) {
 
 				super.updateItem(obj, empty);
 				if (obj == null) {
@@ -354,7 +354,7 @@ public class CadastroEntradaTelaListControladora implements Initializable, DataC
 
 	}
 
-	private void checkBoxSelecionado(Entrada obj) {
+	private void checkBoxSelecionado(Estoque obj) {
 		entidade = obj;
 
 		for (CheckBox listar : chlist) {
@@ -379,7 +379,7 @@ public class CadastroEntradaTelaListControladora implements Initializable, DataC
 
 	}
 
-	private void removeEntity(Entrada obj) {
+	private void removeEntity(Estoque obj) {
 
 		Optional<ButtonType> result = Alertas.showConfirmation("Confirmação", "Tem certeza em excluir o item?");
 

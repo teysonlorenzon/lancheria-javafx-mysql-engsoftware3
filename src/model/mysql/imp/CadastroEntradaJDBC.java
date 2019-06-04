@@ -11,7 +11,7 @@ import java.util.List;
 import db.DB;
 import db.DbException;
 import db.DbIntegrityException;
-import model.entidades.Entrada;
+import model.entidades.Estoque;
 import model.mysql.CadastroEntradaMYSQL;
 
 public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
@@ -23,8 +23,10 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 	}
 
 	@Override
-	public void inserirEntrada(Entrada obj ) {
+	public void inserirEntrada(Estoque obj ) {
 		PreparedStatement st = null;
+		PreparedStatement st2 = null;
+		
 
 		try {
 			st = conn.prepareStatement("INSERT INTO estoqueentrada " + "(DataEntrada, ValorUnitario, Quantidade, IdProdutos, IdFornecedores, IdFuncionarios) " + "VALUES " + "(?, ?, ?, ?, ?, ?)",
@@ -48,18 +50,40 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 			} else {
 				throw new DbException("Unexpected error! No rows affected!");
 			}
+			
+			st2 = conn.prepareStatement("INSERT INTO estoque" + "(Quantidade, IdProduto, IdEntrada) " + "VALUES " + "(?, ?, ?)",
+					Statement.RETURN_GENERATED_KEYS);
+			
+			st2.setInt(1, obj.getQuantidade());
+			st2.setInt(2, obj.getIdProdutos());
+			st2.setInt(3, obj.getIdEntrada());
+			
+			int rowsAffected2 = st2.executeUpdate();
 
+			if (rowsAffected2 > 0) {
+				ResultSet rs = st2.getGeneratedKeys();
+				if (rs.next()) {
+					int id = rs.getInt(1);
+					obj.setIdEntrada(id);
+				}
+			} else {
+				throw new DbException("Unexpected error! No rows affected!");
+			}
+		
+		
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
+			DB.closeStatement(st2);
 		}
 
 	}
 
 	@Override
-	public void atualizarEntrada(Entrada obj) {
+	public void atualizarEntrada(Estoque obj) {
 		PreparedStatement st = null;
+		PreparedStatement st2 = null;
 		try {
 
 			st = conn.prepareStatement("UPDATE estoqueentrada " + "SET DataEntrada = ?, ValorUnitario = ?, Quantidade = ?, IdProdutos = ?, IdFornecedores = ?, IdFuncionarios = ? " + 
@@ -73,11 +97,19 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 			st.setInt(6, obj.getIdFuncionario());
 			st.setInt(7, obj.getIdEntrada());
 			st.executeUpdate();
+			
+			st2 = conn.prepareStatement("UPDATE estoque " + "SET Quantidade = ?, IdProduto = ? " + 
+					"WHERE IdEntrada = ?");
+			st2.setInt(1, obj.getQuantidade());
+			st2.setInt(2, obj.getIdProdutos());
+			st2.setInt(3, obj.getIdEntrada());
+			st2.executeUpdate();
 
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
+			DB.closeStatement(st2);
 		}
 
 	}
@@ -85,21 +117,29 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 	@Override
 	public void deletarEntrada(Integer id) {
 		PreparedStatement st = null;
+		PreparedStatement st2 = null;
 		try {
-			st = conn.prepareStatement("DELETE FROM estoqueentrada WHERE IdEntrada= ?");
+			st = conn.prepareStatement("DELETE FROM estoque WHERE IdEntrada = ?");
 			st.setInt(1, id);
 			st.executeUpdate();
+			
+			st2 = conn.prepareStatement("DELETE FROM estoqueentrada WHERE IdEntrada= ?");
+			st2.setInt(1, id);
+			st2.executeUpdate();
+			
+		
 
 		} catch (SQLException e) {
 			throw new DbIntegrityException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
+			DB.closeStatement(st2);
 		}
 
 	}
 
 	@Override
-	public Entrada acharPorNome(String nome) {
+	public Estoque acharPorNome(String nome) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
@@ -114,7 +154,7 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 			rs = st.executeQuery();
 
 			while (rs.next()) {
-				Entrada obj = new Entrada();
+				Estoque obj = new Estoque();
 				obj.setIdEntrada(rs.getInt("IdEntrada"));
 				obj.setQuantidade(rs.getInt("Quantidade"));
 				obj.setDataEntrada(rs.getString("DataEntrada"));
@@ -136,7 +176,7 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 	}
 
 	@Override
-	public Entrada acharPorId(Integer id) {
+	public Estoque acharPorId(Integer id) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
@@ -152,7 +192,7 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 
 			while (rs.next()) {
 
-				Entrada obj = new Entrada();
+				Estoque obj = new Estoque();
 				obj.setIdEntrada(rs.getInt("IdEntrada"));
 				obj.setQuantidade(rs.getInt("Quantidade"));
 				obj.setDataEntrada(rs.getString("DataEntrada"));
@@ -176,7 +216,7 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 	}
 
 	@Override
-	public List<Entrada> acharListPorNome(String nome) {
+	public List<Estoque> acharListPorNome(String nome) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
@@ -189,10 +229,10 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 			st.setString(1, nome);
 			rs = st.executeQuery();
 
-			List<Entrada> list = new ArrayList<>();
+			List<Estoque> list = new ArrayList<>();
 
 			while (rs.next()) {
-				Entrada obj = new Entrada();
+				Estoque obj = new Estoque();
 				obj.setIdEntrada(rs.getInt("IdEntrada"));
 				obj.setQuantidade(rs.getInt("Quantidade"));
 				obj.setDataEntrada(rs.getString("DataEntrada"));
@@ -216,7 +256,7 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 	}
 
 	@Override
-	public List<Entrada> acharListPorId(Integer id) {
+	public List<Estoque> acharListPorId(Integer id) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
@@ -230,11 +270,11 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 			st.setInt(1, id);
 			rs = st.executeQuery();
 
-			List<Entrada> list = new ArrayList<>();
+			List<Estoque> list = new ArrayList<>();
 
 			while (rs.next()) {
 
-				Entrada obj = new Entrada();
+				Estoque obj = new Estoque();
 				obj.setIdEntrada(rs.getInt("IdEntrada"));
 				obj.setQuantidade(rs.getInt("Quantidade"));
 				obj.setDataEntrada(rs.getString("DataEntrada"));
@@ -257,7 +297,7 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 	}
 
 	@Override
-	public List<Entrada> acharTudo() {
+	public List<Estoque> acharTudo() {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
@@ -267,11 +307,11 @@ public class CadastroEntradaJDBC implements CadastroEntradaMYSQL {
 					"LEFT JOIN fornecedores f on f.IdFornecedores = e.IdFornecedores " +
 					"LEFT JOIN funcionarios func on func.IdFuncionarios = e.IdFuncionarios");
 			rs = st.executeQuery();
-			List<Entrada> listEntrada = new ArrayList<>();
+			List<Estoque> listEntrada = new ArrayList<>();
 
 			while (rs.next()) {
 
-				Entrada obj = new Entrada();
+				Estoque obj = new Estoque();
 				obj.setIdEntrada(rs.getInt("IdEntrada"));
 				obj.setQuantidade(rs.getInt("Quantidade"));
 				obj.setDataEntrada(rs.getString("DataEntrada"));

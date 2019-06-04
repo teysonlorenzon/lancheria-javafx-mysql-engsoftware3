@@ -37,9 +37,7 @@
                   </Menu>
                   <Menu mnemonicParsing="false" text="Estoque">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Entrada" />
-                        <MenuItem mnemonicParsing="false" text="Saída" />
-                        <MenuItem mnemonicParsing="false" text="Tudo" />
+                        <MenuItem fx:id="miEstoque" mnemonicParsing="false" onAction="#onMenuEstoque" text="Tudo" />
                     </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Administrador">

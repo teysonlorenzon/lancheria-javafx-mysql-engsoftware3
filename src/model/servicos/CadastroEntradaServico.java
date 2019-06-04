@@ -2,14 +2,14 @@ package model.servicos;
 
 import java.util.List;
 
-import model.entidades.Entrada;
+import model.entidades.Estoque;
 import model.mysql.CadastroEntradaMYSQL;
 import model.mysql.ConexaoTabelas;
 
 public class CadastroEntradaServico {
 	private CadastroEntradaMYSQL contrato = ConexaoTabelas.criarCadastroEntradaMYSQL();
 
-	public void iniciarUpdateOuIserirEntrada(Entrada obj) {
+	public void iniciarUpdateOuIserirEntrada(Estoque obj) {
 		if (obj.getIdEntrada() == null) {
 
 			contrato.inserirEntrada(obj);
@@ -18,29 +18,29 @@ public class CadastroEntradaServico {
 		}
 	}
 
-	public void excluirEntrada(Entrada obj) {
+	public void excluirEntrada(Estoque obj) {
 		contrato.deletarEntrada(obj.getIdEntrada());
 	}
 
-	public List<Entrada> buscarEntrada() {
+	public List<Estoque> buscarEntrada() {
 		return contrato.acharTudo();
 
 	}
 
-	public Entrada buscarNome(String nome) {
+	public Estoque buscarNome(String nome) {
 		return contrato.acharPorNome(nome);
 	}
 
-	public Entrada buscarId(Integer id) {
+	public Estoque buscarId(Integer id) {
 		return contrato.acharPorId(id);
 	}
 
-	public List<Entrada> buscarListPorNome(String nome) {
+	public List<Estoque> buscarListPorNome(String nome) {
 		return contrato.acharListPorNome(nome);
 
 	}
 
-	public List<Entrada> buscarListPorId(Integer id) {
+	public List<Estoque> buscarListPorId(Integer id) {
 		return contrato.acharListPorId(id);
 
 	}

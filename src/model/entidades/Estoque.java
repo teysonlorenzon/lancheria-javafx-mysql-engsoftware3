@@ -2,7 +2,7 @@ package model.entidades;
 
 import java.io.Serializable;
 
-public class Entrada  implements Serializable {
+public class Estoque  implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Integer idEntrada;
@@ -17,12 +17,12 @@ public class Entrada  implements Serializable {
 	private String nomeFuncionario;
 
 
-	public Entrada() {
+	public Estoque() {
 
 	}
 
 
-	public Entrada(Integer idEntrada, Double valorUnitario, String dataEntrada, Integer quantidade, Integer idProdutos,
+	public Estoque(Integer idEntrada, Double valorUnitario, String dataEntrada, Integer quantidade, Integer idProdutos,
 			Integer idFornecedores, Integer idFuncionario, String nomeProdutos, String nomeFornecedores,
 			String nomeFuncionario) {
 		this.idEntrada = idEntrada;

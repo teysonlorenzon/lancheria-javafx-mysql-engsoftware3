@@ -8,6 +8,7 @@ import model.mysql.imp.CadastroFornecedoresJDBC;
 import model.mysql.imp.CadastroFuncionariosJDBC;
 import model.mysql.imp.CadastroLanchesJDBC;
 import model.mysql.imp.CadastroProdutosJDBC;
+import model.mysql.imp.EstoqueJDBC;
 import model.mysql.imp.UsuariosLoginJDBC;
 
 public class ConexaoTabelas {
@@ -47,6 +48,10 @@ public class ConexaoTabelas {
 	
 	public static CadastroEntradaMYSQL criarCadastroEntradaMYSQL(){
 		return new CadastroEntradaJDBC(DB.getConnection());
+	}
+	
+	public static EstoqueMYSQL criarEstoqueMYSQL(){
+		return new EstoqueJDBC(DB.getConnection());
 	}
 	
 	

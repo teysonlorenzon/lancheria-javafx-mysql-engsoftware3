@@ -20,7 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import model.entidades.Entrada;
+import model.entidades.Estoque;
 import model.entidades.Pessoa;
 import model.entidades.Produtos;
 import model.exception.ValidationException;
@@ -33,7 +33,7 @@ public class CadastroEntradaTelaFormControladora implements Initializable {
 
 	LoginTelaControladora ltc = new LoginTelaControladora(); 
 	
-	private Entrada entidade;
+	private Estoque entidade;
 	private List<Produtos> listProd = new ArrayList<>();
 	private List<Pessoa> listFornec = new ArrayList<>();
 
@@ -103,8 +103,8 @@ public class CadastroEntradaTelaFormControladora implements Initializable {
 
 	}
 
-	private Entrada getFormDataEntrada() {
-		Entrada obj = new Entrada();
+	private Estoque getFormDataEntrada() {
+		Estoque obj = new Estoque();
 		Pessoa obj2 = new Pessoa();
 		Produtos obj3 = new Produtos();
 		ValidationException exception = new ValidationException("Erro de Validação");
@@ -160,7 +160,7 @@ public class CadastroEntradaTelaFormControladora implements Initializable {
 
 	}
 
-	public void setEntrada(Entrada entidade) {
+	public void setEntrada(Estoque entidade) {
 		this.entidade = entidade;
 	}
 

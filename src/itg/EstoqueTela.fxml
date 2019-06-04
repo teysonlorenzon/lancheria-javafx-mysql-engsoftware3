@@ -28,7 +28,7 @@
         <items>
             <MenuButton fx:id="mbPesquisar" mnemonicParsing="false" text="Pesquisar">
                <items>
-                  <MenuItem fx:id="miNome" mnemonicParsing="false" onAction="#onBtMenuItemNome" text="Nome" />
+                  <MenuItem fx:id="miProduto" mnemonicParsing="false" onAction="#onBtMenuItemProduto" text="Produto" />
                   <MenuItem fx:id="miTudo" mnemonicParsing="false" onAction="#onBtMenuItemTudo" text="Tudo" />
                </items>
             </MenuButton>
@@ -40,14 +40,14 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <TextField fx:id="txtPesquisarNome" prefHeight="25.0" prefWidth="158.0" />
+                  <TextField fx:id="txtPesquisarProduto" prefHeight="25.0" prefWidth="158.0" />
                </children>
             </GridPane>
         </items>
       </ToolBar>
       <TableView fx:id="tbEstoque" prefHeight="200.0" prefWidth="1297.0">
         <columns>
-          <TableColumn fx:id="tcNomeProdutos" prefWidth="106.0" text="Produto" />
+          <TableColumn fx:id="tcProduto" prefWidth="106.0" text="Produto" />
             <TableColumn fx:id="tcQuantidade" prefWidth="86.0" text="Quantidade" />
         </columns>
       </TableView>
