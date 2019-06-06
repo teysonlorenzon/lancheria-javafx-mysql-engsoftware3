@@ -53,15 +53,17 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 
 			st2 = conn.prepareStatement("INSERT INTO itenslanche (IdLanche, IdProduto, Quantidade) " + "VALUES (?, ?, ?)");
 
-			String guarda = obj.getDescricao();
+			String stNome = obj.getDescricao();
+			String stQuant = obj.getQuantidade();
 			Produtos result = new Produtos();
-			String[] stArray = guarda.split(", ");
+			String[] stArrayNome = stNome.split(",");
+			String[] stArrayQuant = stQuant.split(",");
 
-			for (int i = 0; i < stArray.length; i++) {
-				result = service.buscarNome(stArray[i]);
+			for (int i = 0; i < stArrayNome.length; i++) {
+				result = service.buscarNome(stArrayNome[i]);
 				st2.setInt(1, obj.getIdLanches());
 				st2.setInt(2, result.getIdProdutos());
-				st2.setInt(3, 1);
+				st2.setInt(3, Integer.parseInt(stArrayQuant[i]));
 				st2.executeUpdate();
 			}
 
@@ -96,15 +98,17 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 
 			st3 = conn.prepareStatement("INSERT INTO itenslanche (IdLanche, IdProduto, Quantidade) " + "VALUES (?, ?, ?)");
 
-			String guarda = obj.getDescricao();
+			String stNome = obj.getDescricao();
+			String stQuant = obj.getQuantidade();
 			Produtos result = new Produtos();
-			String[] stArray = guarda.split(", ");
+			String[] stArrayNome = stNome.split(",");
+			String[] stArrayQuant = stQuant.split(",");
 
-			for (int i = 0; i < stArray.length; i++) {
-				result = service.buscarNome(stArray[i]);
+			for (int i = 0; i < stArrayNome.length; i++) {
+				result = service.buscarNome(stArrayNome[i]);
 				st3.setInt(1, obj.getIdLanches());
 				st3.setInt(2, result.getIdProdutos());
-				st3.setInt(3, 1);
+				st3.setInt(3, Integer.parseInt(stArrayQuant[i]));
 				st3.executeUpdate();
 			}
 			
@@ -148,7 +152,7 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-					"SELECT l.IdLanches,l.Nome, group_concat(p.nome) as Produto, l.ValorLanche,l.LinkImgLanche "
+					"SELECT l.IdLanches,l.Nome, group_concat(il.Quantidade,' ',p.nome) as Produto, l.ValorLanche,l.LinkImgLanche "
 							+ "FROM lanches as l " + "LEFT JOIN itenslanche il on l.IdLanches = il.IdLanche "
 							+ "LEFT JOIN produtos p on p.IdProdutos = il.IdProduto " + "WHERE l.Nome = ? "
 							+ "GROUP BY l.Nome");
@@ -182,7 +186,7 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-					"SELECT l.IdLanches,l.Nome, group_concat(p.nome) as Produto, l.ValorLanche,l.LinkImgLanche "
+					"SELECT l.IdLanches,l.Nome, group_concat(il.Quantidade,' ',p.nome) as Produto, l.ValorLanche,l.LinkImgLanche "
 							+ "FROM lanches as l " + "LEFT JOIN itenslanche il on l.IdLanches = il.IdLanche "
 							+ "LEFT JOIN produtos p on p.IdProdutos = il.IdProduto " + "WHERE l.IdLanches = ? "
 							+ "GROUP BY l.Nome");
@@ -217,7 +221,7 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-					"SELECT l.IdLanches,l.Nome, group_concat(p.nome) as Produto, l.ValorLanche,l.LinkImgLanche "
+					"SELECT l.IdLanches,l.Nome, group_concat(il.Quantidade,' ',p.nome) as Produto, l.ValorLanche,l.LinkImgLanche "
 							+ "FROM lanches as l " + "LEFT JOIN itenslanche il on l.IdLanches = il.IdLanche "
 							+ "LEFT JOIN produtos p on p.IdProdutos = il.IdProduto " + "WHERE l.Nome = ? "
 							+ "GROUP BY l.Nome");
@@ -254,10 +258,12 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-					"SELECT l.IdLanches,l.Nome, group_concat(p.nome) as Produto, l.ValorLanche,l.LinkImgLanche "
-							+ "FROM lanches as l " + "LEFT JOIN itenslanche il on l.IdLanches = il.IdLanche "
-							+ "LEFT JOIN produtos p on p.IdProdutos = il.IdProduto " + "WHERE l.IdLanches = ? "
-							+ "GROUP BY l.Nome");
+					"SELECT l.IdLanches,l.Nome, group_concat(il.Quantidade,' ',p.nome) as Produto, l.ValorLanche,l.LinkImgLanche " + 
+							"FROM lanches as l " +
+							"LEFT JOIN itenslanche il on l.IdLanches = il.IdLanche " +
+							"LEFT JOIN produtos p on p.IdProdutos = il.IdProduto " +
+							"WHERE l.IdLanches = ? " +
+							"GROUP BY l.Nome");
 
 			st.setInt(1, id);
 			rs = st.executeQuery();
@@ -291,9 +297,11 @@ public class CadastroLanchesJDBC implements CadastroLanchesMYSQL {
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-					"SELECT l.IdLanches,l.Nome, group_concat(p.nome) as Produto, l.ValorLanche,l.LinkImgLanche "
-							+ "FROM lanches as l " + "LEFT JOIN itenslanche il on l.IdLanches = il.IdLanche "
-							+ "LEFT JOIN produtos p on p.IdProdutos = il.IdProduto " + "GROUP BY l.Nome");
+					"SELECT l.IdLanches,l.Nome, group_concat(il.Quantidade,' ',p.nome) as Produto, l.ValorLanche,l.LinkImgLanche " + 
+					"FROM lanches as l " +
+					"LEFT JOIN itenslanche il on l.IdLanches = il.IdLanche " +
+					"LEFT JOIN produtos p on p.IdProdutos = il.IdProduto " +
+					"GROUP BY l.Nome");
 
 			rs = st.executeQuery();
 			List<Lanches> list = new ArrayList<>();

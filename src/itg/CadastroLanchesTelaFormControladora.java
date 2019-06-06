@@ -2,6 +2,7 @@ package itg;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -88,6 +89,9 @@ public class CadastroLanchesTelaFormControladora implements Initializable {
 	@FXML
 	private Label lbErrorValor;
 
+	private Map<String, Integer> quantidadePorItem = new HashMap<String, Integer>();
+	private List<String> st = new ArrayList<>();
+
 	@FXML
 	public void onBtAdcionarImagem() {
 
@@ -95,24 +99,38 @@ public class CadastroLanchesTelaFormControladora implements Initializable {
 	}
 
 	public void onTcAdicionar(Produtos obj) {
-		
-			if (!arrayListView.contains(obj.getNomeProdutos())) {
-				arrayListView.add(obj.getNomeProdutos());
-				atualizaListView = FXCollections.observableArrayList(arrayListView);
-				lvDescricao.setItems(atualizaListView);
-			} else {
-				Alertas.showAlert("Restrição", "Não é possivel adicionar o mesmo produto a lista", null, AlertType.WARNING);
-			}
-		
-		
-	}
 
-	public void onTcRemover(Produtos obj) {
+		Integer value = 0;
+		Integer pegaIndex = 0;
+		if (quantidadePorItem.containsKey(obj.getNomeProdutos())) {
+			value = quantidadePorItem.get(obj.getNomeProdutos());
+			pegaIndex = arrayListView.indexOf(obj.getNomeProdutos() + " | " + String.valueOf(value));
+			quantidadePorItem.put(obj.getNomeProdutos(), value + 1);
+			arrayListView.set(pegaIndex, obj.getNomeProdutos() + " | " + String.valueOf(value + 1));
 
-		arrayListView.remove(obj.getNomeProdutos());
+		} else {
+			quantidadePorItem.putIfAbsent(obj.getNomeProdutos(), 1); // criou
+			value = quantidadePorItem.get(obj.getNomeProdutos());
+			arrayListView.add(obj.getNomeProdutos() + " | " + String.valueOf(value));
+		}
 		atualizaListView = FXCollections.observableArrayList(arrayListView);
 		lvDescricao.setItems(atualizaListView);
 
+	}
+
+	public void onTcRemover(Produtos obj) {
+		Integer value = quantidadePorItem.get(obj.getNomeProdutos());
+		Integer pegaIndex = arrayListView.indexOf(obj.getNomeProdutos() + " | " + String.valueOf(value));
+
+		if (quantidadePorItem.get(obj.getNomeProdutos()) > 1) {
+			arrayListView.set(pegaIndex, obj.getNomeProdutos() + " | " + String.valueOf(value - 1));
+			quantidadePorItem.put(obj.getNomeProdutos(), value - 1);
+		} else {
+			arrayListView.remove(obj.getNomeProdutos() + " | " + String.valueOf(value));
+			quantidadePorItem.remove(obj.getNomeProdutos());
+		}
+		atualizaListView = FXCollections.observableArrayList(arrayListView);
+		lvDescricao.setItems(atualizaListView);
 	}
 
 	@FXML
@@ -144,6 +162,8 @@ public class CadastroLanchesTelaFormControladora implements Initializable {
 	}
 
 	private Lanches getFormDataLanches() {
+		String stNome = "";
+		String stQuant = "";
 		Lanches obj = new Lanches();
 		Categorias obj3 = new Categorias();
 		ValidationException exception = new ValidationException("Erro de Validação");
@@ -173,9 +193,21 @@ public class CadastroLanchesTelaFormControladora implements Initializable {
 			obj.setLinkImgLanche(String.valueOf(url));
 		}
 
+		for (String key : quantidadePorItem.keySet()) {
+			if (stNome.equals("") && stQuant.equals("")) {
+				stNome = key;
+				stQuant = String.valueOf(quantidadePorItem.get(key));
+			} else {
+				stNome += "," + key;
+				stQuant += "," + String.valueOf(quantidadePorItem.get(key));
+			}
+
+		}
+
+		obj.setQuantidade(stQuant);
 		obj.setNomeLanches(txtNome.getText());
 
-		obj.setDescricao(String.valueOf(lvDescricao.getItems()).replace("[", "").replace("]", ""));
+		obj.setDescricao(stNome);
 		obj.setValorLanche(Double.parseDouble(txtValor.getText()));
 
 		return obj;
@@ -216,10 +248,18 @@ public class CadastroLanchesTelaFormControladora implements Initializable {
 	}
 
 	private void converteStringParaList(String descri) {
-		String[] array = descri.split(",");
+		String stNumero = descri.replaceAll("\\D", "");
+		String stDesc = descri;
+		for (int i = 0; i < stNumero.length(); i++) {
 
-		for (int i = 0; i < array.length; i++) {
-			arrayListView.add(array[i]);
+			char numero = stNumero.charAt(i);
+			String converte = String.valueOf(numero);
+			String re = converte + " ";
+			String cortou = stDesc.replace(re, "");
+			String array[] = cortou.split(",");
+			quantidadePorItem.putIfAbsent(array[i], Integer.parseInt(converte));
+			Integer value = quantidadePorItem.get(array[i]);
+			arrayListView.add(array[i] + " | " + String.valueOf(value));
 		}
 		atualizaListView = FXCollections.observableArrayList(arrayListView);
 		lvDescricao.setItems(atualizaListView);

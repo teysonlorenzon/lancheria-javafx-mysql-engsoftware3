@@ -1,6 +1,8 @@
 package model.entidades;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Lanches extends Pessoa implements Serializable {
 
@@ -10,6 +12,7 @@ public class Lanches extends Pessoa implements Serializable {
 	private String descricao;
 	private String linkImgLanche;
 	private Double valorLanche;
+	private String quantidade;
 
 	public Lanches() {
 
@@ -17,7 +20,8 @@ public class Lanches extends Pessoa implements Serializable {
 
 	public Lanches(Integer idPessoa, String nome, String cidade, String endereco, Integer numero, String bairro,
 			String cep, String uf, String complemento, String email, String telefoneFixo, String telefoneCelular,
-			Integer idLanches, String nomeLanches, String descricao, String linkImgLanche, Double valorLanche) {
+			Integer idLanches, String nomeLanches, String descricao, String linkImgLanche, Double valorLanche,
+			String quantidade) {
 		super(idPessoa, nome, cidade, endereco, numero, bairro, cep, uf, complemento, email, telefoneFixo,
 				telefoneCelular);
 		this.idLanches = idLanches;
@@ -25,6 +29,7 @@ public class Lanches extends Pessoa implements Serializable {
 		this.descricao = descricao;
 		this.linkImgLanche = linkImgLanche;
 		this.valorLanche = valorLanche;
+		this.quantidade = quantidade;
 	}
 
 	public Integer getIdLanches() {
@@ -59,10 +64,6 @@ public class Lanches extends Pessoa implements Serializable {
 		this.linkImgLanche = linkImgLanche;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 	public Double getValorLanche() {
 		return valorLanche;
 	}
@@ -71,10 +72,22 @@ public class Lanches extends Pessoa implements Serializable {
 		this.valorLanche = valorLanche;
 	}
 
+	public String getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(String quantidade) {
+		this.quantidade = quantidade;
+	}
+
 	@Override
 	public String toString() {
 		return "Lanches [idLanches=" + idLanches + ", nomeLanches=" + nomeLanches + ", descricao=" + descricao
-				+ ", linkImgLanche=" + linkImgLanche + ", valorLanche=" + valorLanche + "]";
+				+ ", linkImgLanche=" + linkImgLanche + ", valorLanche=" + valorLanche + ", quantidade=" + quantidade
+				+ "]";
 	}
 
+
 }
+
+	
