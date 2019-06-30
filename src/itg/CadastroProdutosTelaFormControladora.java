@@ -11,6 +11,7 @@ import db.DbException;
 import itg.listeners.DataChangeListener;
 import itg.util.Alertas;
 import itg.util.Mascaras;
+import itg.util.Restricao;
 import itg.util.Utilitarios;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,7 +26,6 @@ import model.entidades.Pessoa;
 import model.entidades.Produtos;
 import model.exception.ValidationException;
 import model.servicos.CadastroCategoriasServico;
-import model.servicos.CadastroFornecedoresServico;
 import model.servicos.CadastroProdutosServico;
 
 public class CadastroProdutosTelaFormControladora implements Initializable {
@@ -43,6 +43,8 @@ public class CadastroProdutosTelaFormControladora implements Initializable {
 	@FXML
 	private TextField txtNome;
 	@FXML
+	private TextField txtPreco;
+	@FXML
 	private ComboBox cbCategoria;
 
 	@FXML
@@ -53,7 +55,9 @@ public class CadastroProdutosTelaFormControladora implements Initializable {
 	@FXML
 	private Label lbErrorNome;
 	@FXML
-	private Label lbErrorFornecedor;
+	private Label lbErrorCategoria;
+	@FXML
+	private Label lbErrorPreco;
 
 	@FXML
 	public void onBtConfirmarAction(ActionEvent event) {
@@ -96,7 +100,9 @@ public class CadastroProdutosTelaFormControladora implements Initializable {
 		if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {
 			exception.addError("nome", "campo obrigatório");
 		}
-
+		if (txtPreco.getText() == null || txtPreco.getText().trim().equals("")) {
+			exception.addError("preco", "campo obrigatório");
+		}
 		if (cbCategoria.valueProperty().get() == null || cbCategoria.valueProperty().get().equals("")) {
 			exception.addError("categorias", "campo obrigatório");
 		}
@@ -109,6 +115,7 @@ public class CadastroProdutosTelaFormControladora implements Initializable {
 
 		obj.setNomeProdutos(txtNome.getText());
 		obj.setIdCategorias(obj3.getIdCategorias());
+		obj.setPreco(Double.parseDouble(txtPreco.getText()));
 
 		return obj;
 
@@ -143,6 +150,7 @@ public class CadastroProdutosTelaFormControladora implements Initializable {
 
 		Mascaras.numericField(txtIdProdutos);
 		Mascaras.maxField(txtNome, 40);
+		Restricao.setTextFieldDouble(txtPreco);
 
 	}
 
@@ -151,6 +159,7 @@ public class CadastroProdutosTelaFormControladora implements Initializable {
 		txtIdProdutos.setText(String.valueOf(entidade.getIdProdutos()));
 		txtNome.setText(entidade.getNomeProdutos());
 		cbCategoria.valueProperty().set(entidade.getNomeCategorias());
+		txtPreco.setText(String.valueOf(entidade.getPreco()));
 
 	}
 
@@ -161,8 +170,12 @@ public class CadastroProdutosTelaFormControladora implements Initializable {
 
 		}
 
-		if (fields.contains("fornecedores")) {
-			lbErrorFornecedor.setText(errors.get("fornecedores"));
+		if (fields.contains("categorias")) {
+			lbErrorCategoria.setText(errors.get("categorias"));
+
+		}
+		if (fields.contains("preco")) {
+			lbErrorPreco.setText(errors.get("preco"));
 
 		}
 

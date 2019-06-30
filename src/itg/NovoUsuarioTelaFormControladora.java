@@ -138,7 +138,7 @@ public class NovoUsuarioTelaFormControladora implements Initializable {
 			if (pswSenha.getText().trim().equals(pswReSenha.getText())) {
 				obj.setSenha(Utilitarios.cripMd5(pswSenha.getText()));
 			} else {
-				Alertas.showAlert("Erro", null, "Senhas não conferem", AlertType.ERROR);
+				exception.addError("resenha", "senhas não conferem");
 			}
 
 		}

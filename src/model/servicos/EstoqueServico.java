@@ -20,5 +20,9 @@ public class EstoqueServico {
 
 	}
 
+	public Estoque buscarProd(Integer id) {
+		return contrato.acharProduto(id);
+	} 
+
 	
 }

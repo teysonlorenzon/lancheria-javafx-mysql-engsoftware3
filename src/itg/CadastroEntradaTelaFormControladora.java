@@ -1,7 +1,10 @@
 package itg;
 
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -16,6 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -36,6 +40,7 @@ public class CadastroEntradaTelaFormControladora implements Initializable {
 	private Estoque entidade;
 	private List<Produtos> listProd = new ArrayList<>();
 	private List<Pessoa> listFornec = new ArrayList<>();
+	private Integer armazenaQuantUpdate = 0;
 
 	private CadastroEntradaServico servico = new CadastroEntradaServico();
 	private CadastroProdutosServico servicoProd= new CadastroProdutosServico();
@@ -177,6 +182,9 @@ public class CadastroEntradaTelaFormControladora implements Initializable {
 		initializeNodes();
 		criarListaComboBox();
 		txtNomeFuncionario.setText(ltc.getGuardaFuncionario());
+		DateFormat dtFormat = new SimpleDateFormat("dd/MM/yyyy");
+		Date dtAtual = new Date();
+		txtDataEntrada.setText(dtFormat.format(dtAtual));
 
 	}
 
@@ -198,6 +206,8 @@ public class CadastroEntradaTelaFormControladora implements Initializable {
 		txtNomeFuncionario.setText(entidade.getNomeFuncionario());
 		cbFornecedores.valueProperty().set(entidade.getNomeFornecedores());
 		cbProdutos.valueProperty().set(entidade.getNomeProdutos());
+		
+		armazenaQuantUpdate = entidade.getQuantidade();
 
 	}
 

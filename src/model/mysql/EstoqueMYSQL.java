@@ -8,5 +8,6 @@ public interface EstoqueMYSQL {
 
 	List<Estoque> acharTudo();
 	List<Estoque> acharListPorProduto(String nome);
+	Estoque acharProduto(Integer id);
 
 }

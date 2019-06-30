@@ -28,10 +28,9 @@ public class EstoqueJDBC implements EstoqueMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT p.Nome as Produto, sum(e.Quantidade) as Quantidade " +
-					"FROM estoque as e " +
-					"LEFT JOIN produtos as p on e.IdProduto = p.IdProdutos " +
-					"GROUP BY p.Nome");
+			st = conn.prepareStatement(
+					"SELECT p.Nome as Produto, sum(e.Quantidade) as Quantidade " + "FROM estoque as e "
+							+ "LEFT JOIN produtos as p on e.IdProduto = p.IdProdutos " + "GROUP BY p.Nome");
 			rs = st.executeQuery();
 			List<Estoque> listEntrada = new ArrayList<>();
 
@@ -60,11 +59,9 @@ public class EstoqueJDBC implements EstoqueMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT p.Nome as Produto, sum(e.Quantidade) as Quantidade " +
-					"FROM estoque as e " +
-					"LEFT JOIN produtos as p on e.IdProduto = p.IdProdutos " +
-					"GROUP BY p.Nome " +
-					"WHERE p.Nome = ?");
+			st = conn.prepareStatement("SELECT p.Nome as Produto, sum(e.Quantidade) as Quantidade "
+					+ "FROM estoque as e " + "LEFT JOIN produtos as p on e.IdProduto = p.IdProdutos "
+					+ "GROUP BY p.Nome " + "WHERE p.Nome = ?");
 			st.setString(1, nome);
 			rs = st.executeQuery();
 			List<Estoque> listEntrada = new ArrayList<>();
@@ -89,6 +86,29 @@ public class EstoqueJDBC implements EstoqueMYSQL {
 		}
 	}
 
-	
+	@Override
+	public Estoque acharProduto(Integer id) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("SELECT Quantidade, IdProduto " + "FROM estoque " + "WHERE IdProduto = ?");
+			st.setInt(1, id);
+			rs = st.executeQuery();
+			while (rs.next()) {
+				Estoque obj = new Estoque();
+				obj.setIdProdutos(rs.getInt("IdProduto"));
+				obj.setQuantidade(rs.getInt("Quantidade"));
+				return obj;
+			}
+
+			return null;
+
+		} catch (SQLException e) {
+			throw new DbException("Erro ao buscar Lista de Dados da tabela Entrada no banco");
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+	}
 
 }

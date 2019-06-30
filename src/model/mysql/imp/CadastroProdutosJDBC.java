@@ -29,11 +29,12 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 		PreparedStatement st = null;
 
 		try {
-			st = conn.prepareStatement("INSERT INTO produtos " + "(Nome, IdCategorias) " + "VALUES " + "(?, ?)",
+			st = conn.prepareStatement("INSERT INTO produtos " + "(Nome, IdCategorias, Preco) " + "VALUES " + "(?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
 
 			st.setString(1, obj.getNomeProdutos());
 			st.setInt(2, obj.getIdCategorias());
+			st.setDouble(3, obj.getPreco());
 
 			int rowsAffected = st.executeUpdate();
 
@@ -60,11 +61,12 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 		PreparedStatement st = null;
 		try {
 
-			st = conn.prepareStatement("UPDATE produtos " + "SET Nome = ?, IdCategorias = ? " + "WHERE IdProdutos = ?");
+			st = conn.prepareStatement("UPDATE produtos " + "SET Nome = ?, IdCategorias = ? , Preco = ?" + "WHERE IdProdutos = ?");
 
 			st.setString(1, obj.getNomeProdutos());
 			st.setInt(2, obj.getIdCategorias());
-			st.setInt(3, obj.getIdProdutos());
+			st.setDouble(3, obj.getPreco());
+			st.setInt(4, obj.getIdProdutos());
 			st.executeUpdate();
 
 		} catch (SQLException e) {
@@ -106,6 +108,7 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 				obj.setIdProdutos(rs.getInt("IdProdutos"));
 				obj.setNomeProdutos(rs.getString("Nome"));
 				obj.setIdCategorias(rs.getInt("IdCategorias"));
+				obj.setPreco(rs.getDouble("Preco"));
 
 				return obj;
 			}
@@ -135,6 +138,7 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 				obj.setIdProdutos(rs.getInt("IdProdutos"));
 				obj.setNomeProdutos(rs.getString("Nome"));
 				obj.setIdCategorias(rs.getInt("IdCategorias"));
+				obj.setPreco(rs.getDouble("Preco"));
 
 				return obj;
 
@@ -155,7 +159,7 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT p.IdProdutos, p.Nome, c.Nome as nomeC " + "FROM produtos p "
+			st = conn.prepareStatement("SELECT p.IdProdutos, p.Nome, c.Nome as nomeC, p.Preco " + "FROM produtos p "
 					+ "LEFT JOIN categorias c on c.IdCategorias = p.IdCategorias " + "WHERE p.Nome = ?");
 
 			st.setString(1, nome);
@@ -168,6 +172,7 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 				obj.setIdProdutos(rs.getInt("IdProdutos"));
 				obj.setNomeProdutos(rs.getString("Nome"));
 				obj.setNomeCategorias(rs.getString("nomeC"));
+				obj.setPreco(rs.getDouble("Preco"));
 
 				list.add(obj);
 
@@ -188,7 +193,7 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT p.IdProdutos, p.Nome, c.Nome as nomeC " + "FROM produtos p "
+			st = conn.prepareStatement("SELECT p.IdProdutos, p.Nome, c.Nome as nomeC, p.Preco " + "FROM produtos p "
 					+ "LEFT JOIN categorias c on c.IdCategorias = p.IdCategorias " + "WHERE p.idProdutos= ?");
 
 			st.setInt(1, id);
@@ -202,6 +207,7 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 				obj.setIdProdutos(rs.getInt("IdProdutos"));
 				obj.setNomeProdutos(rs.getString("Nome"));
 				obj.setNomeCategorias(rs.getString("nomeC"));
+				obj.setPreco(rs.getDouble("Preco"));
 				list.add(obj);
 
 			}
@@ -221,7 +227,7 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT p.IdProdutos, p.Nome, c.Nome as nomeC " + "FROM produtos p "
+			st = conn.prepareStatement("SELECT p.IdProdutos, p.Nome, c.Nome as nomeC, p.Preco " + "FROM produtos p "
 					+ "LEFT JOIN categorias c on c.IdCategorias = p.IdCategorias ");
 			rs = st.executeQuery();
 			List<Produtos> listProd = new ArrayList<>();
@@ -232,6 +238,7 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 				obj.setIdProdutos(rs.getInt("IdProdutos"));
 				obj.setNomeProdutos(rs.getString("Nome"));
 				obj.setNomeCategorias(rs.getString("nomeC"));
+				obj.setPreco(rs.getDouble("Preco"));
 
 				listProd.add(obj);
 
@@ -262,6 +269,7 @@ public class CadastroProdutosJDBC implements CadastroProdutosMYSQL {
 				Produtos obj = new Produtos();
 				obj.setIdProdutos(rs.getInt("IdProdutos"));
 				obj.setNomeProdutos(rs.getString("Nome"));
+				obj.setPreco(rs.getDouble("Preco"));
 
 
 				listProd.add(obj);

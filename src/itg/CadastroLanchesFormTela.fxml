@@ -38,19 +38,19 @@
          <children>
             <Label text="Nome:" textFill="#101010" GridPane.rowIndex="1">
                <font>
-                  <Font name="System Bold Italic" size="15.0" />
+                  <Font name="System Bold Italic" size="12.0" />
                </font></Label>
             <Label text="Id:">
                <font>
-                  <Font name="System Bold Italic" size="15.0" />
+                  <Font name="System Bold Italic" size="12.0" />
                </font></Label>
             <Label text="Valor:" GridPane.rowIndex="2">
                <font>
-                  <Font name="System Bold Italic" size="15.0" />
+                  <Font name="System Bold Italic" size="12.0" />
                </font></Label>
             <Label text="Descrição:" GridPane.rowIndex="3">
                <font>
-                  <Font name="System Bold Italic" size="15.0" />
+                  <Font name="System Bold Italic" size="12.0" />
                </font></Label>
             <TextField fx:id="txtIdLanches" editable="false" prefHeight="25.0" prefWidth="112.0" GridPane.columnIndex="1" />
             <TextField fx:id="txtNome" GridPane.columnIndex="1" GridPane.rowIndex="1" />

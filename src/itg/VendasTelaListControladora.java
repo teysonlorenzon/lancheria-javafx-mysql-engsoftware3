@@ -38,19 +38,17 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.entidades.Categorias;
-import model.entidades.Pessoa;
-import model.entidades.Produtos;
-import model.servicos.CadastroProdutosServico;
+import model.entidades.Vendas;
+import model.servicos.VendasServico;
 
-public class CadastroProdutosTelaListControladora implements Initializable, DataChangeListener {
+public class VendasTelaListControladora implements Initializable, DataChangeListener {
 
-	private CadastroProdutosServico servicoProd;
-	private ObservableList<Produtos> obsList;
+	private VendasServico servico;
+	private ObservableList<Vendas> obsList;
 	private String condicao = "tudo";
-	private Produtos entidade;
+	private Vendas entidade;
 	private List<CheckBox> chlist = new ArrayList<>();
-	private List<Produtos> list = new ArrayList<>();
+	private List<Vendas> list = new ArrayList<>();
 
 	public void setCondicao(String condicao) {
 		this.condicao = condicao;
@@ -61,26 +59,28 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 	}
 
 	@FXML
-	private TableView<Produtos> tbCadastroProdutos;
+	private TableView<Vendas> tbCadastroVendas;
 	@FXML
-	private TableColumn<Produtos, Integer> tcIdProdutos;
+	private TableColumn<Vendas, Integer> tcIdVendas;
 	@FXML
-	private TableColumn<Categorias, String> tcCategorias;
+	private TableColumn<Vendas, String> tcLanche;
 	@FXML
-	private TableColumn<Produtos, String> tcNome;
+	private TableColumn<Vendas, String> tcDataSaida;
 	@FXML
-	private TableColumn<Produtos, Produtos> tcSelecionar;
+	private TableColumn<Vendas, String> tcValorVenda;
 	@FXML
-	private TableColumn<Produtos, Double> tcPreco;
+	private TableColumn<Vendas, String> tcFuncionario;
+	@FXML
+	private TableColumn<Vendas, String> tcCliente;
 	
+	@FXML
+	private TableColumn<Vendas, Vendas> tcSelecionar;
 
 	@FXML
 	private TextField txtPesquisarId;
-	@FXML
-	private TextField txtPesquisarNome;
+	
 
-	@FXML
-	private Button btEditar;
+
 	@FXML
 	private Button btExcluir;
 	@FXML
@@ -110,32 +110,22 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 	public void onBtMenuItemTudo() {
 		mbPesquisar.setText("Pesquisar");
 		setarInicioTxtPesquisar(txtPesquisarId);
-		setarInicioTxtPesquisar(txtPesquisarNome);
 		setCondicao("tudo");
 		onBtPesquisarAction();
 
 	}
 
-	@FXML
-	public void onBtMenuItemNome() {
-		mbPesquisar.setText("Nome");
-		setarInicioTxtPesquisar(txtPesquisarId);
-		txtPesquisarNome.setVisible(true);
-		txtPesquisarNome.setText("");
-		setCondicao("nome");
-	}
+
 
 	@FXML
 	public void onBtMenuItemId() {
 		mbPesquisar.setText("Id");
-		setarInicioTxtPesquisar(txtPesquisarNome);
 		txtPesquisarId.setVisible(true);
 		txtPesquisarId.setText("");
 		setCondicao("id");
 	}
 
 	public void actionToolBar() {
-		btEditar.setVisible(false);
 		btExcluir.setVisible(false);
 		btCancelarSelecao.setVisible(false);
 		tbEditar.setVisible(false);
@@ -165,7 +155,7 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 		actionBts();
 		actionToolBar();
 		Stage parentStage = Utilitarios.currentStage(event);
-		criarForm("/itg/CadastroProdutosFormTela.fxml", parentStage);
+		criarForm("/itg/VendasFormTela.fxml", parentStage);
 
 	}
 
@@ -174,8 +164,8 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 		txt.setText("");
 	}
 
-	public void setCadastroProdutosServico(CadastroProdutosServico servicoProd) {
-		this.servicoProd = servicoProd;
+	public void setVendasServico(VendasServico servico) {
+		this.servico = servico;
 	}
 
 	public void updateTableView() {
@@ -183,37 +173,35 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 		if (getCondicao().equals("tudo")) {
 			int cont = 0;
 
-			list = servicoProd.buscarProdutos();
+			list = servico.buscarVendas();
 			obsList = FXCollections.observableArrayList(list);
-			tbCadastroProdutos.setItems(obsList);
+			tbCadastroVendas.setItems(obsList);
 			initSelecionarCheckBox();
 		}
 
 		else if (getCondicao().equals("id")) {
-			list = servicoProd.buscarListPorId((Integer.parseInt(txtPesquisarId.getText())));
+			list = servico.buscarListPorId((Integer.parseInt(txtPesquisarId.getText())));
 			obsList = FXCollections.observableArrayList(list);
-			tbCadastroProdutos.setItems(obsList);
+			tbCadastroVendas.setItems(obsList);
 			initSelecionarCheckBox();
 
-		} else if (getCondicao().equals("nome")) {
-			list = servicoProd.buscarListPorNome(txtPesquisarNome.getText());
-			obsList = FXCollections.observableArrayList(list);
-			tbCadastroProdutos.setItems(obsList);
-			initSelecionarCheckBox();
 		}
 
 	}
 
 	public void initializarNodes() {
 
-		tcIdProdutos.setCellValueFactory(new PropertyValueFactory<>("idProdutos"));
-		tcNome.setCellValueFactory(new PropertyValueFactory<>("nomeProdutos"));
-		tcPreco.setCellValueFactory(new PropertyValueFactory<>("preco"));
+		tcIdVendas.setCellValueFactory(new PropertyValueFactory<>("idSaida"));
+		tcLanche.setCellValueFactory(new PropertyValueFactory<>("nomeLancheSaida"));
+		tcDataSaida.setCellValueFactory(new PropertyValueFactory<>("dataSaida"));
+		tcValorVenda.setCellValueFactory(new PropertyValueFactory<>("valorSaida"));
+		tcCliente.setCellValueFactory(new PropertyValueFactory<>("nomeClienteSaida"));
+		tcFuncionario.setCellValueFactory(new PropertyValueFactory<>("nomeFuncionarioSaida"));
+		
 
-		tcCategorias.setCellValueFactory(new PropertyValueFactory<>("nomeCategorias"));
 
 		Stage stage = (Stage) LoginTelaControladora.getMenuScene().getWindow();
-		tbCadastroProdutos.prefHeightProperty().bind(stage.heightProperty());
+		tbCadastroVendas.prefHeightProperty().bind(stage.heightProperty());
 
 	}
 
@@ -230,11 +218,9 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 
-		Mascaras.maxField(txtPesquisarNome, 60);
 		Mascaras.numericField(txtPesquisarId);
 
 		tecladoEnter(txtPesquisarId);
-		tecladoEnter(txtPesquisarNome);
 
 		initializarNodes();
 		actionToolBar();
@@ -248,16 +234,6 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 		actionBts();
 	}
 
-	@FXML
-	public void onBtEditarAction(ActionEvent event) {
-		Stage parentStage = Utilitarios.currentStage(event);
-		if (entidade == null || entidade.equals("")) {
-			Alertas.showAlert("Atenção", null, "Selecione um cliente", AlertType.WARNING);
-		}
-
-		criarFormProdutos(entidade, "/itg/CadastroProdutosFormTela.fxml", parentStage);
-
-	}
 
 	@FXML
 	public void onBtExcluirAction() {
@@ -270,40 +246,15 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 		}
 	}
 
-	private void criarFormProdutos(Produtos obj, String absoluteName, Stage parentStage) {
-		try {
 
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			Pane pane = loader.load();
-
-			CadastroProdutosTelaFormControladora controller = loader.getController();
-
-			controller.subscribeDataChangeListener(this);
-
-			controller.setProdutos(obj);
-			controller.updateFormDataProdutos();
-
-			setCondicao("tudo");
-			Stage dialogStage = new Stage();
-			dialogStage.setTitle("Entre com as informações");
-			dialogStage.setScene(new Scene(pane));
-			dialogStage.setResizable(false);
-			dialogStage.initOwner(parentStage);
-			dialogStage.initModality(Modality.WINDOW_MODAL);
-			dialogStage.showAndWait();
-
-		} catch (IOException e) {
-			Alertas.showAlert("IO Exception", "Error loding view", e.getMessage(), AlertType.ERROR);
-		}
-	}
 
 	private void criarForm(String absoluteName, Stage parentStage) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
-			CadastroProdutosTelaFormControladora controller = loader.getController();
-			controller.setCadastroProdutosServico(new CadastroProdutosServico());
+			VendasTelaFormControladora controller = loader.getController();
+			controller.setVendasServico(new VendasServico());
 			controller.subscribeDataChangeListener(this);
 
 			Stage dialogStage = new Stage();
@@ -322,12 +273,12 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 	private void initSelecionarCheckBox() {
 
 		tcSelecionar.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-		tcSelecionar.setCellFactory(param -> new TableCell<Produtos, Produtos>() {
+		tcSelecionar.setCellFactory(param -> new TableCell<Vendas, Vendas>() {
 
 			private final CheckBox chkSelecionar = new CheckBox("");
 
 			@Override
-			protected void updateItem(Produtos obj, boolean empty) {
+			protected void updateItem(Vendas obj, boolean empty) {
 
 				super.updateItem(obj, empty);
 				if (obj == null) {
@@ -347,7 +298,7 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 
 	}
 
-	private void checkBoxSelecionado(Produtos obj) {
+	private void checkBoxSelecionado(Vendas obj) {
 		entidade = obj;
 
 		for (CheckBox listar : chlist) {
@@ -363,7 +314,6 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 				listar.setDisable(true);
 				listar.setSelected(false);
 			}
-			btEditar.setVisible(true);
 			btExcluir.setVisible(true);
 			btCancelarSelecao.setVisible(true);
 			tbEditar.setVisible(true);
@@ -372,7 +322,7 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 
 	}
 
-	private void removeEntity(Produtos obj) {
+	private void removeEntity(Vendas obj) {
 
 		Optional<ButtonType> result = Alertas.showConfirmation("Confirmação", "Tem certeza em excluir o item?");
 
@@ -381,7 +331,7 @@ public class CadastroProdutosTelaListControladora implements Initializable, Data
 			try {
 
 				setCondicao("tudo");
-				servicoProd.excluirProdutos(obj);
+				servico.excluirVendas(obj);
 				updateTableView();
 
 			} catch (DbIntegrityException e) {

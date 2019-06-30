@@ -15,9 +15,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="577.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itg.CadastroLanchesTelaListControladora">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="597.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itg.VendasTelaListControladora">
    <children>
-      <Label text="Lanches">
+      <Label text="Vendas">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
@@ -31,7 +31,6 @@
             <MenuButton fx:id="mbPesquisar" mnemonicParsing="false" text="Pesquisar">
                <items>
                   <MenuItem fx:id="miId" mnemonicParsing="false" onAction="#onBtMenuItemId" text="Id" />
-                  <MenuItem fx:id="miNome" mnemonicParsing="false" onAction="#onBtMenuItemNome" text="Nome" />
                   <MenuItem fx:id="miTudo" mnemonicParsing="false" onAction="#onBtMenuItemTudo" text="Tudo" />
                </items>
             </MenuButton>
@@ -44,25 +43,25 @@
                </rowConstraints>
                <children>
                   <TextField fx:id="txtPesquisarId" />
-                  <TextField fx:id="txtPesquisarNome" />
                </children>
             </GridPane>
         </items>
       </ToolBar>
-      <TableView fx:id="tbCadastroLanches" prefHeight="200.0" prefWidth="1297.0">
+      <TableView fx:id="tbCadastroVendas" prefHeight="200.0" prefWidth="1297.0">
         <columns>
             <TableColumn fx:id="tcSelecionar" prefWidth="35.0" />
-          <TableColumn fx:id="tcIdLanches" prefWidth="36.0" text="Id" />
-          <TableColumn fx:id="tcNome" prefWidth="106.0" text="Nome" />
-            <TableColumn fx:id="tcDescricao" prefWidth="83.0" text="Descrição" />
-            <TableColumn fx:id="tcValorLanche" prefWidth="75.0" text="Valor" />
+          <TableColumn fx:id="tcIdVendas" prefWidth="36.0" text="Id" />
+          <TableColumn fx:id="tcLanche" prefWidth="106.0" text="Lanche" />
+            <TableColumn fx:id="tcDataSaida" prefWidth="75.0" text="Data Saída" />
+            <TableColumn fx:id="tcValorVenda" prefWidth="99.0" text="Valor da Venda" />
+            <TableColumn fx:id="tcCliente" prefWidth="75.0" text="Cliente" />
+            <TableColumn fx:id="tcFuncionario" prefWidth="75.0" text="Funcionário" />
         </columns>
       </TableView>
       <ToolBar fx:id="tbEditar" prefHeight="40.0" prefWidth="200.0">
         <items>
-          <Button fx:id="btEditar" mnemonicParsing="false" onAction="#onBtEditarAction" text="Editar" />
             <Button fx:id="btExcluir" mnemonicParsing="false" onAction="#onBtExcluirAction" text="Excluir" />
-            <Button fx:id="btCancelarSelecao" mnemonicParsing="false" onAction="#onBtCancelarSelecao" text="Cancelar" />
+            <Button fx:id="btCancelarSelecao" mnemonicParsing="false" text="Cancelar" />
         </items>
       </ToolBar>
    </children>

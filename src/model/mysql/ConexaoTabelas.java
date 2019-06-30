@@ -10,6 +10,7 @@ import model.mysql.imp.CadastroLanchesJDBC;
 import model.mysql.imp.CadastroProdutosJDBC;
 import model.mysql.imp.EstoqueJDBC;
 import model.mysql.imp.UsuariosLoginJDBC;
+import model.mysql.imp.VendasJDBC;
 
 public class ConexaoTabelas {
 
@@ -52,6 +53,9 @@ public class ConexaoTabelas {
 	
 	public static EstoqueMYSQL criarEstoqueMYSQL(){
 		return new EstoqueJDBC(DB.getConnection());
+	}
+	public static VendasMYSQL criarVendasMYSQL(){
+		return new VendasJDBC(DB.getConnection());
 	}
 	
 	

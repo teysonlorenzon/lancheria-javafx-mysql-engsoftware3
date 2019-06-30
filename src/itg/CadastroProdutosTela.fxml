@@ -55,6 +55,7 @@
           <TableColumn fx:id="tcIdProdutos" prefWidth="36.0" text="Id" />
           <TableColumn fx:id="tcNome" prefWidth="106.0" text="Nome" />
             <TableColumn fx:id="tcCategorias" prefWidth="75.0" text="Categoria" />
+            <TableColumn fx:id="tcPreco" prefWidth="75.0" text="Preço" />
         </columns>
       </TableView>
       <ToolBar fx:id="tbEditar" prefHeight="40.0" prefWidth="200.0">

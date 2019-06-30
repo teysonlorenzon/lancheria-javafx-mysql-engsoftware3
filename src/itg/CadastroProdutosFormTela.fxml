@@ -27,12 +27,14 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Nome:" GridPane.rowIndex="1" />
             <Label text="Id:" />
-            <Label text="Categoria:" GridPane.rowIndex="2" />
+            <Label text="Nome:" GridPane.rowIndex="1" />
+            <Label text="Preço:" GridPane.rowIndex="2" />
+            <Label text="Categoria:" GridPane.rowIndex="3" />
             <TextField fx:id="txtIdProdutos" editable="false" prefHeight="25.0" prefWidth="112.0" GridPane.columnIndex="1" />
             <TextField fx:id="txtNome" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <ComboBox fx:id="cbCategoria" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="txtPreco" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ComboBox fx:id="cbCategoria" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" />
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="7.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
                <children>
@@ -48,7 +50,12 @@
                   <Insets left="7.0" />
                </padding>
             </Label>
-            <Label fx:id="lbErrorCategoria" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <Label fx:id="lbErrorPreco" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <padding>
+                  <Insets left="7.0" />
+               </padding>
+            </Label>
+            <Label fx:id="lbErrorCategoria" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="3">
                <padding>
                   <Insets left="7.0" />
                </padding>
