@@ -1,10 +1,13 @@
 package itg;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
+import db.DB;
 import itg.util.Alertas;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +22,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import model.entidades.Produtos;
 import model.servicos.CadastroCategoriasServico;
 import model.servicos.CadastroClientesServico;
 import model.servicos.CadastroEntradaServico;
@@ -27,8 +31,15 @@ import model.servicos.CadastroFuncionariosServico;
 import model.servicos.CadastroLanchesServico;
 import model.servicos.CadastroProdutosServico;
 import model.servicos.EstoqueServico;
+import model.servicos.Relatorio;
 import model.servicos.UsuariosLoginServico;
 import model.servicos.VendasServico;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 
 public class InicialTelaControladora implements Initializable {
 
@@ -77,16 +88,43 @@ public class InicialTelaControladora implements Initializable {
 	private MenuItem miEstoque;
 	@FXML
 	private MenuItem miLanches;
+	@FXML
+	private MenuItem miInicioTela;
+
+	@FXML
+	private MenuItem miRelatorioProdutos;
+	@FXML
+	private MenuItem miRelatorioClientes;
+	@FXML
+	private MenuItem miRelatorioLanches;
+	@FXML
+	private MenuItem miRelatorioFuncionarios;
+	@FXML
+	private MenuItem miRelatorioVendas;
+	@FXML
+	private MenuItem miRelatorioFornecedores;
+	@FXML
+	private MenuItem miRelatorioEstoque;
 
 	@FXML
 	private Menu mnInicio;
 
-	@FXML
-	public void onMenuInicio() {
-		//carregarTelaInicial("/itg/InicialTela.fxml");
+	
+	
+	
 
+	
+	@FXML
+	public void onMenuRelatorioProdutos() {
+		Relatorio.chamarRelatorios("C:/Users/Teyson/JaspersoftWorkspace/MyReports/CadProdutos.jrxml");
 	}
 
+	@FXML
+	public void onMenuInicioTela() {
+
+		carregarTela("/itg/Branco.fxml", x -> {
+		});
+	}
 
 	@FXML
 	public void onMenuItemSobre() {
@@ -117,6 +155,7 @@ public class InicialTelaControladora implements Initializable {
 			Alertas.showAlert("IO exception", "Erro ao carregar tela", e.getMessage(), AlertType.ERROR);
 		}
 	}
+
 	@FXML
 	public void onMenuVendasLanches() {
 		carregarTela("/itg/VendasTela.fxml", (VendasTelaListControladora controller) -> {
@@ -125,7 +164,7 @@ public class InicialTelaControladora implements Initializable {
 		});
 
 	}
-	
+
 	@FXML
 	public void onMenuEstoque() {
 		carregarTela("/itg/EstoqueTela.fxml", (EstoqueTelaListControladora controller) -> {
@@ -134,8 +173,7 @@ public class InicialTelaControladora implements Initializable {
 		});
 
 	}
-	
-	
+
 	@FXML
 	public void onMenuEntrada() {
 		carregarTela("/itg/CadastroEntradaTela.fxml", (CadastroEntradaTelaListControladora controller) -> {
@@ -144,6 +182,7 @@ public class InicialTelaControladora implements Initializable {
 		});
 
 	}
+
 	@FXML
 	public void onMenuNovoUsuario() {
 		carregarTela("/itg/NovoUsuarioTela.fxml", (NovoUsuarioTelaListControladora controller) -> {
@@ -152,7 +191,7 @@ public class InicialTelaControladora implements Initializable {
 		});
 
 	}
-	
+
 	@FXML
 	public void onMenuLanches() {
 		carregarTela("/itg/CadastroLanchesTela.fxml", (CadastroLanchesTelaListControladora controller) -> {
@@ -161,7 +200,7 @@ public class InicialTelaControladora implements Initializable {
 		});
 
 	}
-	
+
 	@FXML
 	public void onMenuProdutos() {
 		carregarTela("/itg/CadastroProdutosTela.fxml", (CadastroProdutosTelaListControladora controller) -> {
@@ -170,7 +209,7 @@ public class InicialTelaControladora implements Initializable {
 		});
 
 	}
-	
+
 	@FXML
 	public void onMenuCategorias() {
 		carregarTela("/itg/CadastroCategoriasTela.fxml", (CadastroCategoriasTelaListControladora controller) -> {

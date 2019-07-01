@@ -12,12 +12,15 @@
          <children>
             <MenuBar>
               <menus>
-                  <Menu fx:id="mnInicio" mnemonicParsing="false" onAction="#onMenuInicio" text="Início" />
-                <Menu mnemonicParsing="false" text="Vendas">
-                  <items>
-                    <MenuItem fx:id="miLanches" mnemonicParsing="false" onAction="#onMenuVendasLanches" text="Lanches" />
-                  </items>
-                </Menu>
+                  <Menu mnemonicParsing="false" text="Início">
+                     <items>
+                        <MenuItem fx:id="miInicioTela" mnemonicParsing="false" onAction="#onMenuInicioTela" text="Voltar" />
+                     </items></Menu>
+                  <Menu mnemonicParsing="false" text="Vendas">
+                    <items>
+                      <MenuItem fx:id="miLanches" mnemonicParsing="false" onAction="#onMenuVendasLanches" text="Tudo" />
+                    </items>
+                  </Menu>
                 <Menu mnemonicParsing="false" text="Cadastros">
                   <items>
                     <MenuItem fx:id="miCadCategorias" mnemonicParsing="false" onAction="#onMenuCategorias" text="Categorias" />
@@ -29,12 +32,6 @@
                         <MenuItem fx:id="miCadEntrada" mnemonicParsing="false" onAction="#onMenuEntrada" text="Entrada" />
                   </items>
                 </Menu>
-                  <Menu mnemonicParsing="false" text="Financeiro">
-                    <items>
-                      <MenuItem mnemonicParsing="false" text="Entrada" />
-                        <MenuItem mnemonicParsing="false" text="Saída" />
-                    </items>
-                  </Menu>
                   <Menu mnemonicParsing="false" text="Estoque">
                     <items>
                         <MenuItem fx:id="miEstoque" mnemonicParsing="false" onAction="#onMenuEstoque" text="Tudo" />
@@ -47,7 +44,7 @@
                   </Menu>
                   <Menu mnemonicParsing="false" text="Relatórios">
                     <items>
-                      <MenuItem mnemonicParsing="false" />
+                      <MenuItem fx:id="miRelatorioProdutos" mnemonicParsing="false" onAction="#onMenuRelatorioProdutos" text="Produtos" />
                     </items>
                   </Menu>
                 <Menu mnemonicParsing="false" text="Ajuda">
