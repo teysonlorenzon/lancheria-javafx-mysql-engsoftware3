@@ -108,7 +108,8 @@ public class InicialTelaControladora implements Initializable {
 
 	@FXML
 	private Menu mnInicio;
-
+	@FXML
+	private Menu mnAdministrador;
 	
 	
 	
@@ -268,8 +269,12 @@ public class InicialTelaControladora implements Initializable {
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		// TODO Auto-generated method stub
-
+		if(LoginTelaControladora.getGuardaNivel().equals("Usuario")) {
+			miCadFuncionarios.setVisible(false);
+			miCadProdutos.setVisible(false);
+			miCadCategorias.setVisible(false);
+			mnAdministrador.setVisible(false);			
+		}
 	}
 
 }

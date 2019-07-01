@@ -31,6 +31,7 @@ public class LoginTelaControladora implements Initializable {
 	private static Scene menuScene;
 	private static Integer guardaid;
 	private static String guardaFunc;
+	private static String nivelFunc;
 	
 	public static Integer getIdUsuarioLogado() {
 		return guardaid;
@@ -40,6 +41,10 @@ public class LoginTelaControladora implements Initializable {
 		return guardaFunc;
 	}
 
+	public static String getGuardaNivel() {
+		return nivelFunc;
+	}
+	
 	public static Stage getMenuSage() {
 		return menuStage;
 	}
@@ -100,6 +105,7 @@ public class LoginTelaControladora implements Initializable {
 		if (ul != null && ul.getUsuario() != null && ul.getSenha() != null) {
 			this.guardaid = ul.getId();
 			this.guardaFunc = ul.getNome();
+			this.nivelFunc = ul.getNivel();
 			return true;
 		} else {
 			return false;

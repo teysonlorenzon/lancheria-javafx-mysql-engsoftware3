@@ -37,7 +37,7 @@
                         <MenuItem fx:id="miEstoque" mnemonicParsing="false" onAction="#onMenuEstoque" text="Tudo" />
                     </items>
                   </Menu>
-                  <Menu mnemonicParsing="false" text="Administrador">
+                  <Menu fx:id="mnAdministrador" mnemonicParsing="false" text="Administrador">
                     <items>
                       <MenuItem fx:id="miNovoUsuario" mnemonicParsing="false" onAction="#onMenuNovoUsuario" text="Novo Usuário" />
                     </items>
